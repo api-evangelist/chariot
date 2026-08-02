@@ -1,0 +1,827 @@
+{
+  "info": {
+    "_postman_id": "82a11852-77f2-433b-99d1-aca754289478",
+    "name": "Chariot FDX Accounts mailbox API",
+    "description": "Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.\n\nContact Support:\n Name: Chariot Development Team\n Email: developers@givechariot.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:19:56.000Z",
+    "updatedAt": "2026-07-28T01:19:57.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-82a11852-77f2-433b-99d1-aca754289478"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "mailbox",
+          "item": [
+            {
+              "name": "upload_url",
+              "item": [
+                {
+                  "name": "Get a Batch Upload URL",
+                  "id": "346c1db2-a13a-40d8-8fc4-3fa05f1e8486",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"location_id\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/mailbox/upload_url",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "mailbox",
+                        "upload_url"
+                      ]
+                    },
+                    "description": "Returns a presigned URL for uploading a mailbox batch.\n\nA batch is a ZIP file containing TIFF images and a CSV index file.\nThe CSV must conform to the [Batch Format](/v2026-01-15/guides/lockbox-providers/batch-format) specification.\n\nThe `location_id` must match the format `po_<number>` (e.g., `po_543`).\nThe returned URL is a presigned S3 URL valid for 15 minutes. Upload the batch ZIP file using an HTTP PUT request to this URL.\n\nSee the [Mail Uploads guide](/v2026-01-15/guides/lockbox-providers/mail-uploads) for details on the upload and rescan process."
+                  },
+                  "response": [
+                    {
+                      "id": "2bc417bc-a5bd-41bc-92cf-15a5c46f9924",
+                      "name": "Successfully generated a presigned upload URL.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"location_id\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/mailbox/upload_url",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "mailbox",
+                            "upload_url"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"url\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:57.000Z",
+                      "updatedAt": "2026-07-28T01:19:57.000Z",
+                      "uid": "35240-2bc417bc-a5bd-41bc-92cf-15a5c46f9924"
+                    },
+                    {
+                      "id": "e3d5b1d6-8c83-49ec-9756-4fe6d64dd076",
+                      "name": "The request is invalid or contains invalid parameters",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"location_id\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/mailbox/upload_url",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "mailbox",
+                            "upload_url"
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:57.000Z",
+                      "updatedAt": "2026-07-28T01:19:57.000Z",
+                      "uid": "35240-e3d5b1d6-8c83-49ec-9756-4fe6d64dd076"
+                    },
+                    {
+                      "id": "2262c6f4-95e8-4ba8-aaf5-5ff30fcc3cdc",
+                      "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"location_id\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/mailbox/upload_url",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "mailbox",
+                            "upload_url"
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:57.000Z",
+                      "updatedAt": "2026-07-28T01:19:57.000Z",
+                      "uid": "35240-2262c6f4-95e8-4ba8-aaf5-5ff30fcc3cdc"
+                    },
+                    {
+                      "id": "6abcc8f9-3bd0-471d-9c76-4523170abb96",
+                      "name": "Access denied",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"location_id\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/mailbox/upload_url",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "mailbox",
+                            "upload_url"
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:57.000Z",
+                      "updatedAt": "2026-07-28T01:19:57.000Z",
+                      "uid": "35240-6abcc8f9-3bd0-471d-9c76-4523170abb96"
+                    },
+                    {
+                      "id": "09c81d02-3b93-4e8f-be53-bc125c878d63",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"location_id\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/mailbox/upload_url",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "mailbox",
+                            "upload_url"
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:57.000Z",
+                      "updatedAt": "2026-07-28T01:19:57.000Z",
+                      "uid": "35240-09c81d02-3b93-4e8f-be53-bc125c878d63"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:19:57.000Z",
+                  "updatedAt": "2026-07-28T01:19:57.000Z",
+                  "uid": "35240-346c1db2-a13a-40d8-8fc4-3fa05f1e8486"
+                }
+              ],
+              "id": "1b77a33c-4f11-4ec5-abfe-de5e453aeb58",
+              "createdAt": "2026-07-28T01:19:57.000Z",
+              "updatedAt": "2026-07-28T01:19:57.000Z",
+              "uid": "35240-1b77a33c-4f11-4ec5-abfe-de5e453aeb58"
+            }
+          ],
+          "id": "480f95fb-010c-4c1a-918b-f3e2680a08d6",
+          "createdAt": "2026-07-28T01:19:57.000Z",
+          "updatedAt": "2026-07-28T01:19:57.000Z",
+          "uid": "35240-480f95fb-010c-4c1a-918b-f3e2680a08d6"
+        },
+        {
+          "name": "lockboxes",
+          "item": [
+            {
+              "name": "fulfill_request",
+              "item": [
+                {
+                  "name": "Fulfill a Lockbox Request",
+                  "id": "40d3fea2-5db2-4d37-9f2c-4455492dc0de",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"request_id\": \"<string>\",\n  \"location_id\": \"<string>\",\n  \"address\": {\n    \"city\": \"<string>\",\n    \"country\": \"<string>\",\n    \"line1\": \"<string>\",\n    \"postal_code\": \"<string>\",\n    \"state\": \"<string>\",\n    \"line2\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/lockboxes/fulfill_request",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "lockboxes",
+                        "fulfill_request"
+                      ]
+                    },
+                    "description": "Notifies Chariot that a new PO box has been provisioned by the lockbox provider.\n\nThe `request_id` is a one-time unique value generated by Chariot for each PO box request.\n\nSee the [Provisioning guide](/v2026-01-15/guides/lockbox-providers/provisioning) for the full provisioning flow."
+                  },
+                  "response": [
+                    {
+                      "id": "6928959c-e25b-4229-9697-bc766c09f073",
+                      "name": "Indicates the PO box has been successfully provisioned.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"request_id\": \"<string>\",\n  \"location_id\": \"<string>\",\n  \"address\": {\n    \"city\": \"<string>\",\n    \"country\": \"<string>\",\n    \"line1\": \"<string>\",\n    \"postal_code\": \"<string>\",\n    \"state\": \"<string>\",\n    \"line2\": \"<string>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/lockboxes/fulfill_request",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "lockboxes",
+                            "fulfill_request"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-07-28T01:19:57.000Z",
+                      "updatedAt": "2026-07-28T01:19:57.000Z",
+                      "uid": "35240-6928959c-e25b-4229-9697-bc766c09f073"
+                    },
+                    {
+                      "id": "4ea84c06-e27c-4b41-9e18-90f6e9e6c24e",
+                      "name": "The request is invalid or contains invalid parameters",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"request_id\": \"<string>\",\n  \"location_id\": \"<string>\",\n  \"address\": {\n    \"city\": \"<string>\",\n    \"country\": \"<string>\",\n    \"line1\": \"<string>\",\n    \"postal_code\": \"<string>\",\n    \"state\": \"<string>\",\n    \"line2\": \"<string>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/lockboxes/fulfill_request",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "lockboxes",
+                            "fulfill_request"
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:57.000Z",
+                      "updatedAt": "2026-07-28T01:19:57.000Z",
+                      "uid": "35240-4ea84c06-e27c-4b41-9e18-90f6e9e6c24e"
+                    },
+                    {
+                      "id": "f49c7f91-0cfc-4083-b47d-d796ef04c34a",
+                      "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"request_id\": \"<string>\",\n  \"location_id\": \"<string>\",\n  \"address\": {\n    \"city\": \"<string>\",\n    \"country\": \"<string>\",\n    \"line1\": \"<string>\",\n    \"postal_code\": \"<string>\",\n    \"state\": \"<string>\",\n    \"line2\": \"<string>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/lockboxes/fulfill_request",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "lockboxes",
+                            "fulfill_request"
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:57.000Z",
+                      "updatedAt": "2026-07-28T01:19:57.000Z",
+                      "uid": "35240-f49c7f91-0cfc-4083-b47d-d796ef04c34a"
+                    },
+                    {
+                      "id": "468220dd-c789-4161-9f62-8e0b7b2886bf",
+                      "name": "Access denied",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"request_id\": \"<string>\",\n  \"location_id\": \"<string>\",\n  \"address\": {\n    \"city\": \"<string>\",\n    \"country\": \"<string>\",\n    \"line1\": \"<string>\",\n    \"postal_code\": \"<string>\",\n    \"state\": \"<string>\",\n    \"line2\": \"<string>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/lockboxes/fulfill_request",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "lockboxes",
+                            "fulfill_request"
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:57.000Z",
+                      "updatedAt": "2026-07-28T01:19:57.000Z",
+                      "uid": "35240-468220dd-c789-4161-9f62-8e0b7b2886bf"
+                    },
+                    {
+                      "id": "cad3a2e5-01bc-4350-ab84-d05d2626de34",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"request_id\": \"<string>\",\n  \"location_id\": \"<string>\",\n  \"address\": {\n    \"city\": \"<string>\",\n    \"country\": \"<string>\",\n    \"line1\": \"<string>\",\n    \"postal_code\": \"<string>\",\n    \"state\": \"<string>\",\n    \"line2\": \"<string>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/lockboxes/fulfill_request",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "lockboxes",
+                            "fulfill_request"
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:57.000Z",
+                      "updatedAt": "2026-07-28T01:19:57.000Z",
+                      "uid": "35240-cad3a2e5-01bc-4350-ab84-d05d2626de34"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:19:57.000Z",
+                  "updatedAt": "2026-07-28T01:19:57.000Z",
+                  "uid": "35240-40d3fea2-5db2-4d37-9f2c-4455492dc0de"
+                }
+              ],
+              "id": "2302c780-22c5-4561-9c26-4912b6a7da26",
+              "createdAt": "2026-07-28T01:19:57.000Z",
+              "updatedAt": "2026-07-28T01:19:57.000Z",
+              "uid": "35240-2302c780-22c5-4561-9c26-4912b6a7da26"
+            }
+          ],
+          "id": "c5245b57-818e-463c-8aa6-9216f005642e",
+          "createdAt": "2026-07-28T01:19:57.000Z",
+          "updatedAt": "2026-07-28T01:19:57.000Z",
+          "uid": "35240-c5245b57-818e-463c-8aa6-9216f005642e"
+        }
+      ],
+      "id": "68b28432-13b6-44cc-accb-57e7029fd1ee",
+      "createdAt": "2026-07-28T01:19:57.000Z",
+      "updatedAt": "2026-07-28T01:19:57.000Z",
+      "uid": "35240-68b28432-13b6-44cc-accb-57e7029fd1ee"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read:bank_accounts sync:connected_accounts",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.givechariot.com/auth/oauth/token",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://dashboard.givechariot.com/oauth/authorize",
+        "type": "string"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.givechariot.com/fdx/v6"
+    }
+  ]
+}

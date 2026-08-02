@@ -1,0 +1,2813 @@
+openapi: 3.0.0
+info:
+  title: Chariot FDX Accounts disbursements API
+  version: '6.0'
+  description: Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.
+  contact:
+    name: Chariot Development Team
+    url: https://givechariot.com/contact
+    email: developers@givechariot.com
+servers:
+- url: https://api.givechariot.com/fdx/v6
+  description: Production
+- url: https://devapi.givechariot.com/fdx/v6
+  description: Staging
+security:
+- oauth2: []
+tags:
+- name: disbursements
+paths:
+  /v1/disbursements:
+    post:
+      summary: Create a disbursement
+      description: 'Create a disbursement to send money to an organization.
+
+        '
+      operationId: createDisbursement
+      tags:
+      - disbursements
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        description: 'A client-generated identifier for the request. Replays with the same key return `409 Conflict`. The successfully created disbursement can later be located via `GET /v1/disbursements?idempotency_key=...`.
+
+
+          We recommend supplying your own unique identifier for the disbursement in your system, so you can later look it up by an ID you already track.'
+        required: false
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/CreateDisbursementRequest'
+      responses:
+        '201':
+          description: The disbursement was created
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Disbursement'
+              examples:
+                DafGrantDisbursement:
+                  $ref: '#/components/examples/DafGrantDisbursement'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      summary: List disbursements
+      description: 'Returns a list of disbursements.
+
+        '
+      operationId: listDisbursements
+      tags:
+      - disbursements
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: organization_id
+        in: query
+        description: The unique identifier for the organization
+        required: false
+        schema:
+          type: string
+        example: org_01jpjenf5q6cawy43yxfcrxhct
+      - name: page_limit
+        in: query
+        description: Limit the size of the list that is returned. The default (and maximum) is 100 objects.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: next_page_token
+        in: query
+        description: A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls and the value of this field should be from the nextPageToken in the previous response.
+        required: false
+        schema:
+          type: string
+      - name: includes
+        in: query
+        description: "A comma separated list of fields to include in the response.\nPossible values include:\n  - `organization`: Include the organization object in the response."
+        required: false
+        schema:
+          type: string
+          example: organization
+      - name: idempotency_key
+        in: query
+        description: Filter to the disbursement created with this exact `Idempotency-Key` header on `POST /v1/disbursements`. Useful for recovering the result of a create request when the response was lost (e.g. network timeout). Returns at most one disbursement. Disbursements created via `POST /v1/disbursements/bulk` cannot be looked up this way.
+        required: false
+        schema:
+          type: string
+          example: 8e91b2f3-d7c4-4a59-9a91-72a40b1f2c3d
+      responses:
+        '200':
+          $ref: '#/components/responses/ListDisbursementsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/disbursements/bulk:
+    post:
+      summary: Create multiple disbursements
+      description: 'Create multiple disbursements in a single request.
+
+        This is useful for batch operations where you need to create many disbursements at once.
+
+
+        All disbursements in the request will be created together. If any disbursement fails validation,
+
+        the entire request will fail and no disbursements will be created.
+
+
+        **Note:** Disbursements created through this endpoint cannot be looked up via `GET /v1/disbursements?idempotency_key=...`. The `idempotency_key` field on the returned disbursements will be `null`.
+
+        '
+      operationId: bulkCreateDisbursements
+      tags:
+      - disbursements
+      security:
+      - bearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/BulkCreateDisbursementsRequest'
+      responses:
+        '201':
+          description: The disbursements were created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - disbursements
+                - count
+                properties:
+                  disbursements:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Disbursement'
+                  count:
+                    type: integer
+                    description: The number of disbursements created
+                    example: 2
+              examples:
+                BulkCreateDisbursements:
+                  $ref: '#/components/examples/BulkCreateDisbursements'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/disbursements/{id}:
+    get:
+      summary: Get a disbursement
+      description: 'Get a disbursement by its unique identifier.
+
+        '
+      operationId: getDisbursement
+      tags:
+      - disbursements
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier for the disbursement
+        required: true
+        schema:
+          type: string
+        example: disbursement_01jpjen1s23s29kkmnjsb6fzga
+      responses:
+        '200':
+          description: The disbursement was retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Disbursement'
+              examples:
+                DafGrantDisbursement:
+                  $ref: '#/components/examples/DafGrantDisbursement'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/disbursements/{id}/approve:
+    post:
+      summary: Approve a disbursement
+      description: 'Approve a disbursement in a pending_approval state.
+
+        If the disbursement is in a different state, this will return a 400 error.
+
+        '
+      operationId: approveDisbursement
+      tags:
+      - disbursements
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier for the disbursement
+        required: true
+        schema:
+          type: string
+        example: disbursement_01jpjen1s23s29kkmnjsb6fzga
+      responses:
+        '200':
+          description: The disbursement was approved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Disbursement'
+              examples:
+                ApprovedDafGrantDisbursement:
+                  $ref: '#/components/examples/ApprovedDafGrantDisbursement'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/disbursements/approve:
+    post:
+      summary: Approve multiple disbursements
+      description: 'Approve multiple disbursements in a single request.
+
+        This is useful for batch approval operations.
+
+
+        All disbursements must be in the `pending_approval` state. If any disbursement
+
+        cannot be approved, the entire request will fail and no disbursements will be approved.
+
+        '
+      operationId: bulkApproveDisbursements
+      tags:
+      - disbursements
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - disbursement_ids
+              properties:
+                disbursement_ids:
+                  type: array
+                  description: Array of disbursement IDs to approve
+                  minItems: 1
+                  items:
+                    type: string
+                    example: disbursement_01jpjen1s23s29kkmnjsb6fzga
+      responses:
+        '200':
+          description: The disbursements were approved
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - disbursements
+                - count
+                properties:
+                  disbursements:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Disbursement'
+                  count:
+                    type: integer
+                    description: The number of disbursements approved
+                    example: 5
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/disbursements/{id}/cancel:
+    post:
+      summary: Cancel a pending disbursement
+      description: 'Cancel a pending disbursement in a pending_approval state.
+
+        If the disbursement is in a different state, this will return a 400 error.
+
+        '
+      operationId: cancelDisbursement
+      tags:
+      - disbursements
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier for the disbursement
+        required: true
+        schema:
+          type: string
+        example: disbursement_01jpjen1s23s29kkmnjsb6fzga
+      responses:
+        '200':
+          description: The disbursement was canceled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Disbursement'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/disbursements/{id}/stop:
+    post:
+      summary: Stop payment for a disbursement
+      description: 'Stop payment for a disbursement sent via check.
+
+
+        This prevents the recipient from depositing the check. If the check has already been deposited, the stop payment request will fail.
+
+
+        **Requirements:**
+
+        - Disbursement must be in `submitted` status
+
+        - Disbursement must be sent via check
+
+        - Check must not have already been deposited
+
+
+        After successfully stopping payment, the disbursement status will be updated to `stopped`.
+
+        '
+      operationId: stopDisbursement
+      tags:
+      - disbursements
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier for the disbursement
+        required: true
+        schema:
+          type: string
+        example: disbursement_01jpjen1s23s29kkmnjsb6fzga
+      requestBody:
+        $ref: '#/components/requestBodies/StopDisbursementRequest'
+      responses:
+        '202':
+          description: The stop payment request was accepted
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '412':
+          $ref: '#/components/responses/PreconditionFailedError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/simulations/disbursements/{id}/complete:
+    post:
+      summary: 'Sandbox: Complete a disbursement'
+      description: 'Simulates successful disbursement completion for testing purposes.
+
+        The disbursement must have a status of `submitted`.
+
+
+        After calling this endpoint, the disbursement status will be updated to `completed`.
+
+
+        <Note title="Sandbox Only" icon="fa-light fa-atom-simple">
+
+        This API is only available in the sandbox environment.
+
+        </Note>
+
+        '
+      operationId: simulateDisbursementCompletion
+      tags:
+      - disbursements
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier for the disbursement
+        required: true
+        schema:
+          type: string
+        example: disbursement_01jpjen1s23s29kkmnjsb6fzga
+      responses:
+        '202':
+          description: The disbursement completion request was accepted
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/simulations/disbursements/{id}/fail:
+    post:
+      summary: 'Sandbox: Fail a disbursement'
+      description: 'Simulates a payment failure or return for testing purposes.
+
+        The disbursement must have a status of `submitted`.
+
+        This only applies for disbursements sent via ACH or check.
+
+
+        - **ACH disbursements**: Status becomes `failed` (payment was returned and cannot be retried)
+
+        - **Check disbursements**: Status becomes `validating_organization` (check was returned). When this happens, Chariot will investigate why the check failed to reach the organization, update any required recipient information (such as mailing address or organization contact details), and automatically reattempt payout once the issue is resolved.
+
+
+        <Note title="Sandbox Only" icon="fa-light fa-atom-simple">
+
+        This API is only available in the sandbox environment.
+
+        </Note>
+
+        '
+      operationId: simulateDisbursementFailure
+      tags:
+      - disbursements
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier for the disbursement
+        required: true
+        schema:
+          type: string
+        example: disbursement_01jpjen1s23s29kkmnjsb6fzga
+      responses:
+        '202':
+          description: The disbursement failure simulation was accepted
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    CheckTransfer:
+      type: object
+      description: A check transfer represents a paper check that is mailed to the receiving organization.
+      required:
+      - transfer_id
+      - amount
+      - status
+      - mailing_address
+      - memo
+      - recipient_name
+      - created_at
+      properties:
+        transfer_id:
+          type: string
+          description: The unique identifier for the check transfer
+          example: check_transfer_01j8rs605a4gctmbm58d87mvsj
+          readOnly: true
+        amount:
+          type: integer
+          format: int64
+          description: The amount of the check transfer in minor currency units (cents)
+          example: 10000
+        status:
+          type: string
+          description: "The lifecycle status of the check.\nThe set of statuses include:\n  - `pending`: The check is pending review by Chariot.\n  - `canceled`: The check has been canceled.\n  - `issued`: The check has been mailed and is pending delivery.\n  - `rejected`: The check was rejected by Chariot.\n  - `deposited`: The check has been deposited by the receiving organization.\n  - `stopped`: A stop payment was requested on the check.\n  - `returned`: The check has been returned by the receiving organization.\n\nTo see a more detailed description of each status and the overall lifecycle of check disbursements,\nsee the \"Transfer Statuses\" section of the Chariot documentation."
+          example: issued
+          enum:
+          - pending
+          - canceled
+          - issued
+          - rejected
+          - deposited
+          - stopped
+          - returned
+        memo:
+          type: string
+          description: The memo on the check. Maximum of 72 characters.
+          example: Disbursement to nonprofit
+        note:
+          type: string
+          description: An optional note for the check
+          example: Please deposit promptly
+        check_number:
+          type: string
+          description: The check number
+          example: '123456789'
+        recipient_name:
+          type: string
+          description: The name that will be printed on the check.
+          example: Charity Good
+        mailing_address:
+          $ref: '#/components/schemas/PostalAddress'
+        bank_of_first_deposit_routing_number:
+          type: string
+          description: The routing number for the bank of first deposit
+          example: 021000089
+        postal_tracking_updates:
+          type: array
+          description: The list of tracking updates for the check
+          items:
+            $ref: '#/components/schemas/PostalTrackingUpdate'
+        submitted_at:
+          type: string
+          format: date-time
+          description: The date and time the check was submitted to the carrier.
+          example: '2020-01-31T23:00:00Z'
+        canceled_at:
+          type: string
+          format: date-time
+          description: The date and time the check was canceled.
+          example: '2020-01-31T23:00:00Z'
+        stopped_at:
+          type: string
+          format: date-time
+          description: The date and time the check was stopped.
+          example: '2020-01-31T23:00:00Z'
+        deposited_at:
+          type: string
+          format: date-time
+          description: The date and time the check was deposited.
+          example: '2020-01-31T23:00:00Z'
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time the check transfer was created
+          example: '2020-01-31T23:00:00Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time the check transfer was last updated
+          example: '2020-01-31T23:00:00Z'
+    DisbursementApproval:
+      type: object
+      description: If your account requires approvals for disbursements and the disbursement was approved, this will contain the details of the approval.
+      properties:
+        approved_by:
+          type: string
+          description: If the disbursement was approved by a user in the dashboard, the email address of that user.
+          example: user@example.com
+        approved_at:
+          type: string
+          format: date-time
+          description: The RFC 3339 date and time at which the Disbursement was approved.
+          example: '2020-01-31T23:00:00Z'
+          readOnly: true
+    DisbursementVerification:
+      type: object
+      description: If the disbursement has been verified by Chariot, this will contain the verification details.
+      properties:
+        verified_at:
+          type: string
+          format: date-time
+          description: The RFC 3339 date and time at which the Disbursement was verified.
+          example: '2020-01-31T23:00:00Z'
+          readOnly: true
+    ProgramDetails:
+      type: object
+      description: Details about the program that the disbursement belongs to.
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the program
+          example: program_01jpjenf5q6cawy43yxfcrxhct
+        name:
+          type: string
+          description: The name of the program
+          example: Annual Grants
+    TransactionCorporateMatch:
+      type: object
+      description: A corporate matching gift. Required when the transaction type is corporate_match.
+      nullable: true
+      required:
+      - company_name
+      properties:
+        company_name:
+          type: string
+          description: 'The name of the company making the matching gift. Maximum length: 255 characters.'
+          maxLength: 255
+          example: Acme Corporation
+    AccountTransfer:
+      type: object
+      description: An account transfer represents an instant, electronic transfer of funds.
+      required:
+      - transfer_id
+      - amount
+      - status
+      - created_at
+      - updated_at
+      properties:
+        transfer_id:
+          type: string
+          description: The unique identifier for the account transfer
+          example: account_transfer_01j8rs605a4gctmbm58d87mvsj
+          readOnly: true
+        amount:
+          type: integer
+          format: int64
+          description: The amount of the account transfer in minor currency units (cents)
+          example: 10000
+        status:
+          type: string
+          description: The status of the account transfer
+          example: complete
+          enum:
+          - pending_approval
+          - canceled
+          - complete
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time the account transfer was created
+          example: '2020-01-31T23:00:00Z'
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time the account transfer was last updated
+          example: '2020-01-31T23:00:00Z'
+          readOnly: true
+    Person:
+      type: object
+      description: A person is an individual who is an officer of a nonprofit.
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: The full name of the person
+        title:
+          type: string
+          description: The title or role of the person with respect to the nonprofit entity
+          example: Executive Director
+    CreateDisbursementInput:
+      type: object
+      description: 'The request to create a disbursement and its corresponding transactions.
+
+        The organization and amount are required.
+
+        The transactions array should contain the list of transactions associated with the disbursement. The amounts
+
+        in the transactions should sum up to the disbursement amount.'
+      required:
+      - organization_id
+      - amount
+      - transactions
+      properties:
+        organization_id:
+          type: string
+          description: The ID of the organization that will receive the disbursement.
+          example: org_1234567890
+        program_id:
+          type: string
+          description: 'The identifier for the program that the disbursement is associated with.
+
+            The program must have grant_disbursement_status enabled.
+
+            If not provided, your grant_disbursement_status enabled program will be used.
+
+            If your Chariot account has multiple grant_disbursement_status enabled programs, you must specify the program_id to use for the disbursement.'
+          example: program_01jpjenf5q6cawy43yxfcrxhct
+          nullable: true
+        amount:
+          type: integer
+          format: int64
+          description: The disbursement amount in USD cents. Must be a positive amount.
+          example: 10000
+        auto_fund:
+          type: boolean
+          description: Enable just-in-time (JIT) funding for this disbursement. When true, Chariot will automatically create an inbound transfer for the disbursement amount when it is approved, eliminating the need to pre-fund your account. This feature must be enabled on your account. Contact Chariot to enable JIT disbursements.
+          example: false
+          default: false
+        bypass_chariot_organization_verification:
+          type: boolean
+          description: 'By default (`false`), the disbursement will remain in the `awaiting_verification` status until
+
+            Chariot''s compliance team has verified the nonprofit.
+
+            If set to `true`, the disbursement will proceed through its normal lifecycle without waiting for
+
+            Chariot to verify the organization. Only set this if you have independently verified the organization
+
+            and do not want to wait for or rely on Chariot''s verification.
+
+            This field is only relevant when disbursing to an organization that was created via a [verification request](/api/verification-requests/create).'
+          default: false
+        transactions:
+          type: array
+          description: 'The list of transactions associated with the disbursement.
+
+            Each transaction is an individual donation to be included in the disbursement.
+
+            Must specify at least one transaction.
+
+
+            The sum of all transaction net amounts (amount - fee_amount) must equal the disbursement amount.'
+          items:
+            type: object
+            description: 'An individual donation to be included in the disbursement.
+
+              '
+            required:
+            - amount
+            - type
+            properties:
+              amount:
+                type: integer
+                format: int64
+                description: 'The gross transaction amount in minor currency units (cents) before any fees are deducted.
+
+                  This represents the total amount of the donation.
+
+                  '
+                example: 10000
+              internal_transaction_id:
+                type: string
+                description: 'A unique identifier for the transaction within the grantmaker''s internal system. Maximum length: 255 characters.'
+                maxLength: 255
+                example: GRANT-001
+              fee_amount:
+                type: integer
+                format: int64
+                description: 'Optional fee amount in minor currency units (cents) to be deducted from the transaction.
+
+                  If provided, the fee amount must be less than the transaction amount.
+
+                  The net amount (amount - fee_amount) will be used when calculating the disbursement total.
+
+                  '
+                example: 500
+                nullable: true
+              type:
+                $ref: '#/components/schemas/DonationType'
+              purpose:
+                type: string
+                description: 'The purpose of the grant. Maximum length: 600 characters.'
+                maxLength: 600
+                example: General operating support
+              note:
+                type: string
+                description: 'A note to the recipient. Maximum length: 600 characters.'
+                maxLength: 600
+                example: Allocate to education
+              recipient_name:
+                type: string
+                description: 'The intended recipient of the grant (for example, a fiscal sponsor''s project). Maximum length: 255 characters.'
+                maxLength: 255
+                example: Clean Water Project
+              donors:
+                $ref: '#/components/schemas/TransactionDonors'
+              daf_grant:
+                $ref: '#/components/schemas/TransactionDafGrant'
+              corporate_match:
+                $ref: '#/components/schemas/TransactionCorporateMatch'
+              metadata:
+                type: object
+                description: Additional metadata for the transaction
+                additionalProperties:
+                  type: string
+    NonprofitClassification:
+      type: object
+      description: A classification of the nonprofit entity as defined by the IRS.
+      properties:
+        group_exemption_number:
+          type: string
+          description: This is a four-digit internal IRS number assigned to central/parent entity holding group exemption letters.
+        subsection_code:
+          $ref: '#/components/schemas/TaxExemptCode'
+        filing_requirement_code:
+          $ref: '#/components/schemas/TaxExemptCode'
+        foundation_code:
+          $ref: '#/components/schemas/TaxExemptCode'
+        affiliation_code:
+          $ref: '#/components/schemas/TaxExemptCode'
+        organization_code:
+          $ref: '#/components/schemas/TaxExemptCode'
+        exempt_status_code:
+          $ref: '#/components/schemas/TaxExemptCode'
+        deductibility_code:
+          $ref: '#/components/schemas/TaxExemptCode'
+        ntee_code:
+          $ref: '#/components/schemas/NteeCode'
+        naics_code:
+          $ref: '#/components/schemas/NaicsCode'
+    PostalTrackingUpdate:
+      type: object
+      description: The postal tracking update for the check
+      required:
+      - id
+      - event_type
+      - created_at
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The unique identifier for the tracking update
+          example: 1
+          readOnly: true
+        event_type:
+          type: string
+          description: "The event type of the tracking update.\nThe set of event types include:\n  - `in_transit`: The check has been processed by the origin facility.\n  - `processed_for_delivery`: The check has been greenlit for delivery at the recipient's nearest postal facility. The check should reach the mailbox within 1-2 business days of this tracking update.\n  - `delivered`: The check has been delivered to the recipient's address.\n  - `returned_to_sender`: The check has been returned to the sender due to barcode, ID tag area, or address errors."
+          example: in_transit
+          enum:
+          - in_transit
+          - processed_for_delivery
+          - delivered
+          - returned_to_sender
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time the tracking update was created
+          example: '2020-01-31T23:00:00Z'
+    ComplianceRequirement:
+      type: object
+      description: A compliance requirement is a requirement that a nonprofit entity must meet in order to be eligible for Chariot services.
+      properties:
+        compliant:
+          type: boolean
+          description: Whether the entity is compliant with the requirement
+          example: true
+        reason:
+          type: string
+          description: The reason for the compliance requirement
+        last_found_at:
+          type: string
+          format: date-time
+          description: The date and time when the compliance requirement was last found
+          example: '2020-01-31T23:00:00Z'
+    NonprofitCompliance:
+      type: object
+      description: 'An object that contains legal information about the nonprofit entity and its tax-exemption status.
+
+        This information is used to comply with regulations and ensure the legitimacy of the nonprofit for purposes of donations and disbursements.'
+      properties:
+        daf_eligible:
+          type: boolean
+          description: Whether the entity is eligible to receive donations from a Donor Advised Fund
+          example: true
+        irs_pub_78:
+          $ref: '#/components/schemas/ComplianceRequirement'
+        ofac:
+          $ref: '#/components/schemas/ComplianceRequirement'
+        foundation_code:
+          $ref: '#/components/schemas/ComplianceRequirement'
+        california_attorney_general_registry:
+          $ref: '#/components/schemas/ComplianceRequirement'
+        california_franchise_tax_board:
+          $ref: '#/components/schemas/ComplianceRequirement'
+    Incorporation:
+      type: object
+      description: Incorporation and IRS determination information for the nonprofit entity.
+      properties:
+        formation_year:
+          type: string
+          format: integer
+          description: The year the organization was incorporated or formed.
+          example: '2005'
+        state:
+          type: string
+          description: The U.S. state where the organization is legally domiciled.
+          example: AZ
+        ruling_date:
+          type: string
+          description: 'The month and year on the IRS ruling or determination letter recognizing the organization''s exempt status.
+
+            Formatted as an ISO 8601 year-month string.'
+          example: 2020-07
+    DisbursementStatus:
+      type: string
+      description: "The lifecycle status of the disbursement.\nPossible values include:\n  - `pending_approval`: The disbursement is awaiting approval from the grantmaker\n  - `canceled`: The disbursement was canceled by the grantmaker\n  - `awaiting_verification`: The disbursement is awaiting verification from Chariot\n  - `rejected`: The disbursement was rejected by Chariot before being submitted\n  - `validating_organization`: Validating recipient organization's payment and contact information before submission.\n  - `awaiting_account_claim`: The disbursement is awaiting account claim by the nonprofit or check delay expiration\n  - `awaiting_balance`: The disbursement is awaiting sufficient grantmaker balance\n  - `submitted`: The disbursement payment has been submitted to the payment network and is being processed\n  - `stopped`: The disbursement payment was stopped after it was submitted\n  - `completed`: The disbursement payment has been completed and funds have been received by the receiving organization\n  - `failed`: The disbursement payment failed or the receiving organization did not receive the payment\n\nTo see a description of each status, see the \"Disbursement Lifecycle\" section of the Chariot documentation."
+      example: pending_approval
+      enum:
+      - pending_approval
+      - canceled
+      - awaiting_verification
+      - rejected
+      - validating_organization
+      - awaiting_account_claim
+      - awaiting_balance
+      - submitted
+      - stopped
+      - completed
+      - failed
+    NteeCode:
+      type: object
+      description: A code that is used to classify the nonprofit entity as defined by the IRS.
+      required:
+      - code
+      - description
+      properties:
+        code:
+          type: string
+          description: The code of the NTEE code
+          example: A
+        description:
+          type: string
+          description: The description of the NTEE code
+          example: Animal Welfare
+        parent_code:
+          type: string
+          description: The parent code of the NTEE code
+          example: A
+        parent_description:
+          type: string
+          description: The description of the parent NTEE code
+          example: Animal Welfare
+    Transaction:
+      type: object
+      description: 'A transaction represents an individual line-item or donation for a recipient nonprofit organization.
+
+        The transaction amount represents the gross amount, and an optional fee can be deducted to calculate the net amount that will be disbursed.
+
+        '
+      required:
+      - amount
+      - net_amount
+      - type
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the transaction
+          example: txn_1LaXpKGUcADgqoEMl0Cx0Ygg
+          readOnly: true
+        amount:
+          type: integer
+          format: int64
+          description: 'The gross transaction amount in minor currency units (cents) before any fees are deducted.
+
+            This represents the total amount of the donation.
+
+            '
+          example: 10000
+        internal_transaction_id:
+          type: string
+          description: A unique identifier for the transaction within the grantmaker's internal system.
+          nullable: true
+          example: GRANT-001
+        fee_amount:
+          type: integer
+          format: int64
+          description: 'The fee amount in minor currency units (cents) to be deducted from the transaction amount.
+
+            This is an optional field. If not provided, no fee will be deducted.
+
+            The fee amount must be less than the transaction amount.
+
+            '
+          example: 500
+          nullable: true
+        net_amount:
+          type: integer
+          format: int64
+          description: 'The net transaction amount in minor currency units (cents) after fees are deducted.
+
+            This is calculated as: net_amount = amount - fee_amount.
+
+            This is the actual amount that will be disbursed to the nonprofit.
+
+            '
+          example: 9500
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/DonationType'
+        purpose:
+          type: string
+          description: The purpose of the grant.
+          nullable: true
+          example: General operating support
+        note:
+          type: string
+          description: A note to the recipient.
+          nullable: true
+          example: Allocate to education
+        recipient_name:
+          type: string
+          description: The intended recipient of the grant (for example, a fiscal sponsor's project).
+          nullable: true
+          example: Clean Water Project
+        donors:
+          $ref: '#/components/schemas/TransactionDonors'
+        daf_grant:
+          $ref: '#/components/schemas/TransactionDafGrant'
+        corporate_match:
+          $ref: '#/components/schemas/TransactionCorporateMatch'
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time the transaction was created
+          example: '2020-01-31T23:00:00Z'
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time the transaction was last updated
+          example: '2020-01-31T23:00:00Z'
+          readOnly: true
+        metadata:
+          type: object
+          description: Additional metadata for the transaction
+          additionalProperties:
+            type: string
+    DisbursementCancelation:
+      type: object
+      description: If your account requires approvals for disbursements and the disbursement was not approved, this will contain the details of the cancelation.
+      properties:
+        canceled_by:
+          type: string
+          description: If the disbursement was canceled by a user in the dashboard, the email address of that user.
+          example: user@example.com
+        canceled_at:
+          type: string
+          format: date-time
+          description: The RFC 3339 date and time at which the Disbursement was canceled.
+          example: '2020-01-31T23:00:00Z'
+          readOnly: true
+    Brand:
+      type: object
+      description: Fair use brand assets that are associated with an organization and can be used for identification and informational purposes.
+      properties:
+        icon_url:
+          type: string
+          description: The URL of the organization's icon
+        logo_url:
+          type: string
+          description: The URL of the organization's logo
+    Disbursement:
+      type: object
+      description: A disbursement moves funds to a verified organization.
+      required:
+      - id
+      - organization_id
+      - program_id
+      - amount
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the disbursement
+          example: disbursement_01jpjen1s23s29kkmnjsb6fzga
+          readOnly: true
+        organization_id:
+          type: string
+          description: The unique identifier for the organization that will receive the payment
+          example: org_01jpjenf5q6cawy43yxfcrxhct
+        organization:
+          $ref: '#/components/schemas/Organization'
+        program_id:
+          type: string
+          description: The unique identifier for the program that the disbursement belongs to
+          example: program_01jpjenf5q6cawy43yxfcrxhct
+        amount:
+          type: integer
+          format: int64
+          description: The payment amount in USD cents. Must be a positive amount.
+          example: 10000
+        description:
+          type: string
+          description: A description for the disbursement
+          example: Annual grant to Acme Inc.
+        auto_fund:
+          type: boolean
+          description: Whether just-in-time (JIT) funding is enabled for this disbursement. When true, Chariot automatically creates an inbound transfer for the disbursement amount when it is approved.
+          example: false
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time the disbursement was created
+          example: '2020-01-31T23:00:00Z'
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time the disbursement was last updated
+          example: '2020-01-31T23:00:00Z'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/DisbursementStatus'
+        cancelation:
+          $ref: '#/components/schemas/DisbursementCancelation'
+        approval:
+          $ref: '#/components/schemas/DisbursementApproval'
+        rejection:
+          $ref: '#/components/schemas/DisbursementRejection'
+        verification:
+          $ref: '#/components/schemas/DisbursementVerification'
+        stop:
+          $ref: '#/components/schemas/DisbursementStop'
+        program_details:
+          $ref: '#/components/schemas/ProgramDetails'
+        transfers:
+          type: array
+          description: 'The list of transfers for the disbursement.
+
+            This can have multiple items if the disbursement''s underlying payment was retried multiple times.
+
+            For example, if a check was returned or stopped and the disbursement was retried as an ACH transfer.
+
+            If the disbursement was not retried, this will have a single item.'
+          items:
+            $ref: '#/components/schemas/DisbursementTransfer'
+        bypass_chariot_organization_verification:
+          type: boolean
+          description: 'Whether the disbursement bypasses Chariot''s organization verification.
+
+            When true, the disbursement proceeds without waiting for Chariot to verify the organization.'
+          example: false
+        transactions:
+          type: array
+          description: The list of transactions for the disbursement
+          items:
+            $ref: '#/components/schemas/Transaction'
+        idempotency_key:
+          type: string
+          description: The `Idempotency-Key` header value the disbursement was created with. Only set for single-create disbursements; bulk-created disbursements omit this field.
+          example: 8e91b2f3-d7c4-4a59-9a91-72a40b1f2c3d
+          readOnly: true
+    TransactionDafGrant:
+      type: object
+      description: A simplified DAF grant object containing the fund name.
+      nullable: true
+      properties:
+        fund_name:
+          type: string
+          description: 'The name of the DAF fund that made the grant. Maximum length: 255 characters.'
+          maxLength: 255
+          example: Smith Family Fund
+    StopDisbursementPaymentReason:
+      type: string
+      description: "The reason for stopping a disbursement payment.\nPossible values include:\n  - `mail_delivery_failure`: The check could not be delivered.\n  - `not_authorized`: The check was not authorized.\n  - `voided`: The check was stopped and voided.\n  - `unknown`: The reason for stopping the disbursement payment is unknown."
+      example: mail_delivery_failure
+      enum:
+      - mail_delivery_failure
+      - not_authorized
+      - voided
+      - unknown
+    Donor:
+      type: object
+      description: The donor information for the transaction
+      properties:
+        full_name:
+          type: string
+          description: 'The full name of the donor. Maximum length: 255 characters.'
+          example: John Doe
+        first_name:
+          type: string
+          description: 'The first name of the donor. Maximum length: 255 characters.'
+          example: John
+        last_name:
+          type: string
+          description: 'The last name of the donor. Maximum length: 255 characters.'
+          example: Doe
+        email:
+          type: string
+          description: 'The email address of the donor. Maximum length: 255 characters.'
+          example: bob@me.com
+        phone:
+          type: string
+          description: 'The phone number of the donor. Maximum length: 20 characters.'
+          example: 415-555-1212
+        address:
+          $ref: '#/components/schemas/Address'
+    DisbursementTransfer:
+      type: object
+      description: 'After a disbursement is submitted, this object contains additional details about the transfer.
+
+        This is useful if you want to track the disbursement over the specific payment rails/networks.
+
+        An account transfer is the preferred transfer method when the receiving organization has a Chariot account at the same bank as the grantmaker.
+
+        An ACH transfer is used when the receiving organization has a Chariot account at a different bank than the grantmaker.
+
+        A check transfer is used when the receiving organization does not have a Chariot account.'
+      properties:
+        account_transfer:
+          $ref: '#/components/schemas/AccountTransfer'
+        ach_transfer:
+          $ref: '#/components/schemas/AchTransfer'
+        check_transfer:
+          $ref: '#/components/schemas/CheckTransfer'
+        real_time_payments_transfer:
+          $ref: '#/components/schemas/RealTimePaymentsTransfer'
+    TransactionDonors:
+      type: object
+      description: Information about the individuals associated with the gift. Includes a primary donor and an optional joint donor.
+      properties:
+        primary_donor:
+          $ref: '#/components/schemas/Donor'
+        joint_donor:
+          $ref: '#/components/schemas/Donor'
+    DisbursementStop:
+      type: object
+      description: If the disbursement was stopped by the grantmaker after it was submitted, this will contain the details of the stop.
+      properties:
+        stopped_by:
+          type: string
+          description: If the disbursement was stopped by a user in the dashboard, the email address of that user.
+          example: user@example.com
+        stopped_at:
+          type: string
+          format: date-time
+          description: The RFC 3339 date and time at which the Disbursement was stopped.
+          example: '2020-01-31T23:00:00Z'
+          readOnly: true
+    NaicsCode:
+      type: object
+      description: A code that is used to classify the nonprofit entity as defined by the NAICS.
+      properties:
+        naics2:
+          type: string
+          description: The code of the NAICS code
+          example: '31'
+        naics2_description:
+          type: string
+          description: The description of the NAICS code
+          example: Manufacturing
+        naics4:
+          type: string
+          description: The code of the NAICS code
+          example: '3112'
+        naics4_description:
+          type: string
+          description: The description of the NAICS code
+          example: Grain and Oilseed Milling
+        naics6:
+          type: string
+          description: The code of the NAICS code
+          example: '311221'
+        naics6_description:
+          type: string
+          description: The description of the NAICS code
+          example: Wet Corn Milling and Starch Manufacturing
+    DisbursementRejection:
+      type: object
+      description: If the disbursement was rejected by Chariot, this will contain details as to why the disbursement was rejected.
+      properties:
+        reason:
+          type: string
+          description: "Why the disbursement was rejected.\nPossible values include:\n  - `insufficient_funds`: The disbursement was rejected because the grantmaker does not have enough funds in their account.\n  - `incorrect_recipient`: The disbursement was rejected because the recipient or address was incorrect.\n  - `suspected_fraud`: The disbursement was suspected to be fraudulent.\n  - `requested_by_user`: The disbursement was rejected at the request of the grantmaker.\n  - `acceptance_criteria_failed`: The disbursement was rejected because the disbursement did not meet the acceptance criteria for the receiving organization.\n  - `duplicate`: The disbursement was rejected because the disbursement was a duplicate.\n  - `unknown`: The disbursement was rejected for an unknown reason."
+          example: insufficient_funds
+          enum:
+          - insufficient_funds
+          - incorrect_recipient
+          - suspected_fraud
+          - requested_by_user
+          - acceptance_criteria_failed
+          - duplicate
+          - unknown
+        rejected_at:
+          type: string
+          format: date-time
+          description: The RFC 3339 date and time at which the Disbursement was rejected.
+          example: '2020-01-31T23:00:00Z'
+          readOnly: true
+    Address:
+      type: object
+      required:
+      - city
+      - country
+      - line1
+      - postal_code
+      - state
+      properties:
+        city:
+          type: string
+          description: 'City, district, suburb, town, or village. Maximum length: 255 characters.'
+          example: New York
+        country:
+          type: string
+          description: Two-letter country code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+          example: US
+        line1:
+          type: string
+          description: 'Address line 1 (e.g. street, PO Box, or company name). Maximum length: 255 characters.'
+          example: 123 Main St.
+        line2:
+          type: string
+          description: 'Address line 2 (e.g. apartment, suite, unit, or building). Maximum length: 255 characters.'
+        postal_code:
+          type: string
+          description: 'ZIP or postal code. Maximum length: 40 characters.'
+          example: '12345'
+        state:
+          type: string
+          description: State, county, province, or region
+          example: NY
+    TaxExemptCode:
+      type: object
+      description: A tax exempt code is a code that is used to classify the tax-exempt status of a nonprofit entity.
+      required:
+      - name
+      - code
+      properties:
+        code:
+          type: integer
+          description: The code of the tax exempt code
+          example: 1
+        name:
+          type: string
+          description: The name of the tax exempt code
+          example: UNCONDITIONAL
+        description:
+          type: string
+          description: The description of the tax exempt code
+          example: Unconditional Exemption
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
+    Organization:
+      type: object
+      description: 'An `Organization` represents an operating nonprofit or an operating sub-organization of a parent or sponsoring nonprofit.
+
+        The generally accepted identifier for an organization is its domain. This domain provides proof of identity, ownership and relationship to an entity.
+
+        Organizations can receive payments from payers on the network.'
+      required:
+      - id
+      - ein
+      - name
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: The unique identifier for the object.
+          example: org_01jpjenf5q6cawy43yxfcrxhct
+        ein:
+          type: string
+          description: The EIN of the organization.
+          example: '123456789'
+        name:
+          type: string
+          description: 'The name of the organization.
+
+            For organizations that operate under a different name than the one tied to the legal entity,
+
+            this name will differ from the name of the linked entity.
+
+            This is also known as the "DBA" or "Doing Business As" name of the organization.'
+          example: American Red Cross
+        parent_organization_id:
+          type: string
+          description: 'The unique identifier of the parent organization, if this is a sponsored organization.
+
+            This value is `null` or empty if the organization is not sponsored or not a child of a parent organization.'
+          example: org_01j8rs605a4gctmbm58d87mvsk
+        physical_address:
+          $ref: '#/components/schemas/Address'
+        classification:
+          $ref: '#/components/schemas/NonprofitClassification'
+        compliance:
+          $ref: '#/components/schemas/NonprofitCompliance'
+        mission_statement:
+          type: string
+          description: The mission statement of the organization
+          example: To provide relief to those in need
+        web:
+          $ref: '#/components/schemas/WebDomain'
+        brand:
+          $ref: '#/components/schemas/Brand'
+        officers:
+          type: array
+          description: The list of officers of the organization
+          items:
+            $ref: '#/components/schemas/Person'
+        claimed:
+          type: boolean
+          readOnly: true
+          description: 'A flag to indicate if the nonprofit has been claimed by a user.
+
+            A nonprofit is claimed if a user signs up for a Chariot account with
+
+            this nonprofit and is verified by the Chariot team.'
+        incorporation:
+          $ref: '#/components/schemas/Incorporation'
+    DonationType:
+      type: string
+      description: The type of donation
+      enum:
+      - donor_advised_fund_grant
+      - corporate_match
+    RealTimePaymentsTransfer:
+      type: object
+      description: A real-time payments transfer represents an instant, electronic transfer of funds.
+      required:
+      - transfer_id
+      - amount
+      - status
+      - creditor_name
+      - remittance_information
+      - created_at
+      - updated_at
+      properties:
+        transfer_id:
+          type: string
+          description: The unique identifier for the real-time payments transfer
+          example: real_time_payments_transfer_01j8rs605a4gctmbm58d87mvsj
+          readOnly: true
+        amount:
+          type: integer
+          format: int64
+          description: The amount of the real-time payments transfer in minor currency units (cents)
+          example: 10000
+        status:
+          type: string
+          description: The status of the real-time payments transfer
+          example: complete
+          enum:
+          - pending_submission
+          - submitted
+          - complete
+          - rejected
+        creditor_name:
+          type: string
+          description: The name of the creditor for the real-time payments transfer
+          example: Acme Inc.
+        remittance_information:
+          type: string
+          description: The remittance information for the real-time payments transfer
+          example: 'Real-Time Payment: Acme Inc.'
+        transaction_identification:
+          type: string
+          description: The transaction identification for the real-time payments transfer
+          example: 20260101101050001T1BTEST01234557890
+        submitted_at:
+          type: string
+          format: date-time
+          description: The date and time the real-time payments transfer was submitted to the payment network.
+          example: '2020-01-31T23:00:00Z'
+        acknowledged_at:
+          type: string
+          format: date-time
+          description: 'The date and time at which the real-time payments transfer was acknowledged by the receiving bank.
+
+            If the transfer is not acknowledged, this will be null.'
+          example: '2020-01-31T23:00:05Z'
+        rejected_at:
+          type: string
+          format: date-time
+          description: 'The date and time at which the real-time payments transfer was rejected.
+
+            If the transfer is not rejected, this will be null.'
+          example: '2020-01-31T23:00:05Z'
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time the real-time payments transfer was created
+          example: '2020-01-31T23:00:00Z'
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time the real-time payments transfer was last updated
+          example: '2020-01-31T23:00:00Z'
+          readOnly: true
+    PostalAddress:
+      type: object
+      description: 'A postal address is a mailing address where physical mail can be received.
+
+        Postal addresses can be used to receive paper checks.'
+      required:
+      - city
+      - country
+      - line1
+      - postal_code
+      - state
+      properties:
+        city:
+          type: string
+          description: City, district, suburb, town, or village.
+          example: New York
+        country:
+          type: string
+          description: Two-letter country code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+          example: US
+        line1:
+          type: string
+          description: Address line 1 (e.g. street, PO Box, or company name)
+          example: 123 Main St.
+        line2:
+          type: string
+          description: Address line 2 (e.g. apartment, suite, unit, or building)
+          example: Suite 2504
+        postal_code:
+          type: string
+          description: ZIP or postal code
+          example: '12345'
+        state:
+          type: string
+          description: State, county, province, or region
+          example: NY
+    WebDomain:
+      type: object
+      description: 'A web domain is a unique identifier for a website or web application that is associated with an organization.
+
+        Domains are important identity constructs that underpin the web and online interactions.
+
+        The domain can be used as an identifier and its validity can be asserted via DNS.'
+      required:
+      - domain
+      properties:
+        domain:
+          type: string
+          description: The DNS domain name
+          example: redcross.org
+    AchTransfer:
+      type: object
+      description: An ACH transfer represents an electronic transfer of funds via the Automated Clearing House (ACH) payment network.
+      required:
+      - transfer_id
+      - amount
+      - status
+      - created_at
+      properties:
+        transfer_id:
+          type: string
+          description: The unique identifier for the ACH transfer
+          example: ach_transfer_01j8rs605a4gctmbm58d87mvsj
+          readOnly: true
+        amount:
+          type: integer
+          format: int64
+          description: 'The amount of the ACH transfer in minor currency units (cents).
+
+            For ACH debits, this is a negative number.'
+          example: 10000
+        status:
+          type: string
+          description: "The lifecycle status of the ACH transfer.\nPossible values include:\n  - `initiated`: The ACH transfer has been initiated and is pending submission to the Federal Reserve.\n  - `submitted`: The ACH transfer has been submitted to the Federal Reserve.\n  - `completed`: The ACH transfer has been completed. Funds should be settled.\n  - `rejected`: The ACH transfer was rejected.\n  - `returned`: The ACH transfer was returned by the receiving organization."
+          example: initiated
+          enum:
+          - initiated
+          - submitted
+          - completed
+          - rejected
+          - returned
+        direction:
+          type: string
+          description: The direction of the ACH transfer.
+          example: credit
+          enum:
+          - credit
+          - debit
+        standard_entry_class_code:
+          type: string
+          description: The Standard Entry Class (SEC) code for the ACH transfer.
+          example: corporate_credit_or_debit
+          enum:
+          - corporate_credit_or_debit
+          - prearranged_payments_and_deposit
+          - internet_initiated
+        company_entry_description:
+          type: string
+          description: 'The company entry description for the ACH transfer.
+
+            This is included in the transfer data sent to the receiving bank.'
+          example: Disbursement to nonprofit
+        trace_number:
+          type: string
+          description: 'A 15 digit number recorded in the Nacha file and transmitted to the receiving bank.
+
+            Along with the amount, date, and originating routing number, this can be used to identify the ACH transfer at the receiving bank.
+
+            ACH trace numbers are not unique, but are used to correlate returns.'
+          example: 012345678901234
+        effective_date:
+          type: string
+          format: date-time
+          description: 'The ACH transfer''s effective date as sent to the Federal Reserve.
+
+            This is the date the funds will be available to the receiving organization.'
+          example: '2020-01-31T23:00:00Z'
+        submitted_at:
+          type: string
+          format: date-time
+          description: The date and time the ACH transfer was submitted to the Federal Reserve.
+          example: '2020-01-31T23:00:00Z'
+        settled_at:
+          type: string
+          format: date-time
+          description: 'The date and time at which the ACH transfer was settled.
+
+            If the transfer is not settled, this will be null.'
+          example: '2020-07-12 15:00:00.000'
+        rejected_at:
+          type: string
+          format: date-time
+          description: 'The date and time at which the ACH transfer was rejected.
+
+            If the transfer is not rejected, this will be null.'
+          example: '2020-07-12 15:00:00.000'
+        returned_at:
+          type: string
+          format: date-time
+          description: 'The date and time at which the ACH transfer was returned.
+
+            If the transfer is not returned, this will be null.'
+          example: '2020-07-12 15:00:00.000'
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time the ACH transfer was created
+          example: '2020-01-31T23:00:00Z'
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time the ACH transfer was last updated
+          example: '2020-01-31T23:00:00Z'
+          readOnly: true
+  requestBodies:
+    BulkCreateDisbursementsRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - disbursements
+            properties:
+              disbursements:
+                type: array
+                description: Array of disbursements to create
+                minItems: 1
+                items:
+                  $ref: '#/components/schemas/CreateDisbursementInput'
+            example:
+              disbursements:
+              - organization_id: org_01jpjenf5q6cawy43yxfcrxhct
+                amount: 25000
+                transactions:
+                - amount: 15000
+                  internal_transaction_id: GRANT-001
+                  type: donor_advised_fund_grant
+                  purpose: General Operating Support
+                  note: Allocate to education programs
+                  donors:
+                    primary_donor:
+                      first_name: Jane
+                      last_name: Doe
+                      email: jane.doe@example.com
+                  daf_grant:
+                    fund_name: Doe Family Charitable Fund
+                - amount: 10000
+                  internal_transaction_id: MATCH-001
+                  type: corporate_match
+                  purpose: Corporate matching gift
+                  note: Matched employee donation
+                  donors:
+                    primary_donor:
+                      first_name: John
+                      last_name: Smith
+                      email: john.smith@example.com
+                  corporate_match:
+                    company_name: Acme Corporation
+              - organization_id: org_01jpjenf5q6cawy43yxfcrxhct
+                amount: 20000
+                transactions:
+                - amount: 12000
+                  internal_transaction_id: GRANT-002
+                  type: donor_advised_fund_grant
+                  purpose: Youth Programs
+                  note: Annual grant for youth services
+                  donors:
+                    primary_donor:
+                      first_name: Alice
+                      last_name: Williams
+                      email: alice.williams@example.com
+                  daf_grant:
+                    fund_name: Williams Family Foundation
+                - amount: 8000
+                  internal_transaction_id: MATCH-002
+                  type: corporate_match
+                  purpose: Corporate matching gift
+                  note: Matched employee donation
+                  donors:
+                    primary_donor:
+                      first_name: Bob
+                      last_name: Chen
+                      email: bob.chen@example.com
+                  corporate_match:
+                    company_name: TechCorp Inc.
+    StopDisbursementRequest:
+      description: The request body for stopping a disbursement payment
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - reason
+            properties:
+              reason:
+                $ref: '#/components/schemas/StopDisbursementPaymentReason'
+    CreateDisbursementRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateDisbursementInput'
+          examples:
+            MultipleTransactions:
+              summary: Disbursement with multiple DAF grant transactions
+              value:
+                organization_id: org_01jpjenf5q6cawy43yxfcrxhct
+                amount: 25000
+                transactions:
+                - amount: 15000
+                  internal_transaction_id: GRANT-001
+                  type: donor_advised_fund_grant
+                  purpose: General Operating Support
+                  note: Allocate to education programs
+                  donors:
+                    primary_donor:
+                      first_name: Jane
+                      last_name: Doe
+                      email: jane.doe@example.com
+                  daf_grant:
+                    fund_name: Doe Family Charitable Fund
+                - amount: 10000
+                  internal_transaction_id: MATCH-001
+                  type: corporate_match
+                  purpose: Corporate matching gift
+                  note: Matched employee donation
+                  donors:
+                    primary_donor:
+                      first_name: John
+                      last_name: Smith
+                      email: john.smith@example.com
+                  corporate_match:
+                    company_name: Acme Corporation
+            MultipleTransactionsWithFees:
+              summary: Disbursement with multiple transactions including fees
+              value:
+                organization_id: org_01jpjenf5q6cawy43yxfcrxhct
+                amount: 24000
+                transactions:
+                - amount: 15000
+                  fee_amount: 500
+                  internal_transaction_id: GRANT-001
+                  type: donor_advised_fund_grant
+                  purpose: General Operating Support
+                  note: Allocate to education programs
+                  donors:
+                    primary_donor:
+                      first_name: Jane
+                      last_name: Doe
+                      email: jane.doe@example.com
+                  daf_grant:
+                    fund_name: Doe Family Charitable Fund
+                - amount: 10000
+                  fee_amount: 500
+                  internal_transaction_id: GRANT-002
+                  type: donor_advised_fund_grant
+                  purpose: Program Support
+                  donors:
+                    primary_donor:
+                      first_name: John
+                      last_name: Smith
+                      email: john.smith@example.com
+                  daf_grant:
+                    fund_name: Smith Family Legacy Fund
+            CorporateMatchTransaction:
+              summary: Disbursement with a corporate match transaction
+              value:
+                organization_id: org_01jpjenf5q6cawy43yxfcrxhct
+                amount: 10000
+                transactions:
+                - amount: 10000
+                  internal_transaction_id: MATCH-001
+                  type: corporate_match
+                  purpose: Corporate matching gift
+                  note: Matched employee donation
+                  donors:
+                    primary_donor:
+                      first_name: Alice
+                      last_name: Williams
+                  corporate_match:
+                    company_name: Acme Corporation
+  examples:
+    ApprovedDafGrantDisbursement:
+      summary: Approved disbursement with DAF grant transactions
+      value:
+        id: disbursement_01jpjen1s23s29kkmnjsb6fzga
+        organization_id: org_01jpjenf5q6cawy43yxfcrxhct
+        organization:
+          id: org_01jpjenf5q6cawy43yxfcrxhct
+          name: Local Community Foundation
+          ein: '123456789'
+          parent_organization_id: org_01j8rs605a4gctmbm58d87mvsk
+          physical_address:
+            line1: 456 Oak Avenue
+            line2: Suite 200
+            city: San Francisco
+            state: CA
+            postal_code: '94105'
+            country: US
+          classification:
+            group_exemption_number: '0000'
+            subsection_code:
+              code: 3
+              name: 501(C)(3)
+              description: Organizations described in section 501(c)(3)
+            filing_requirement_code:
+              code: 1
+              name: 990_REQUIRED
+              description: 990 - Required to file Form 990
+            foundation_code:
+              code: 15
+              name: PUBLIC_CHARITY
+              description: Organization that normally receives a substantial part of its support from a governmental unit or from the general public
+            affiliation_code:
+              code: 3
+              name: INDEPENDENT
+              description: Independent - the organization is an independent organization
+            organization_code:
+              code: 1
+              name: CORPORATION
+              description: Corporation
+            exempt_status_code:
+              code: 1
+              name: UNCONDITIONAL
+              description: Unconditional Exemption
+            deductibility_code:
+              code: 1
+              name: DEDUCTIBLE
+              description: Contributions are deductible
+            ntee_code:
+              code: T31
+              description: Community Foundations
+              parent_code: T
+              parent_description: Philanthropy, Voluntarism & Grantmaking Foundations
+            naics_code:
+              naics2: '81'
+              naics2_description: Other Services
+              naics4: '8134'
+              naics4_description: Civic and Social Organizations
+              naics6: '813410'
+              naics6_description: Civic and Social Organizations
+          compliance:
+            daf_eligible: true
+            irs_pub_78:
+              compliant: true
+              reason: Organization found in IRS Publication 78
+              last_found_at: '2026-03-01T00:00:00Z'
+            ofac:
+              compliant: true
+              reason: No matches found on OFAC SDN list
+              last_found_at: '2026-03-01T00:00:00Z'
+            foundation_code:
+              compliant: true
+              reason: Foundation code is eligible
+              last_found_at: '2026-03-01T00:00:00Z'
+            california_attorney_general_registry:
+              compliant: true
+              reason: Registered with California Attorney General
+              last_found_at: '2026-03-01T00:00:00Z'
+            california_franchise_tax_board:
+              compliant: true
+              reason: Listed on California Franchise Tax Board
+              last_found_at: '2026-03-01T00:00:00Z'
+          mission_statement: Supporting local communities through education and outreach
+          web:
+            domain: localcommunityfoundation.org
+          brand:
+            icon_url: https://cdn.example.com/lcf-icon.png
+            logo_url: https://cdn.example.com/lcf-logo.png
+          officers:
+          - name: Sarah Johnson
+            title: Executive Director
+          claimed: true
+          incorporation:
+            formation_year: '2010'
+            state: CA
+            ruling_date: 2010-09
+        program_id: program_01jpjenf5q6cawy43yxfcrxhct
+        amount: 25000
+        auto_fund: false
+        bypass_chariot_organization_verification: false
+        status: awaiting_verification
+        created_at: '2026-04-01T12:00:00Z'
+        updated_at: '2026-04-01T12:30:00Z'
+        approval:
+          approved_at: '2026-04-01T12:30:00Z'
+        transactions:
+        - id: txn_01jpjen1s23s29kkmnjsb6fzga
+          amount: 15000
+          internal_transaction_id: GRANT-001
+          net_amount: 15000
+          type: donor_advised_fund_grant
+          purpose: General Operating Support
+          note: Allocate to education programs
+          donors:
+            primary_donor:
+              first_name: Jane
+              last_name: Doe
+              email: jane.doe@example.com
+          daf_grant:
+            fund_name: Doe Family Charitable Fund
+          created_at: '2026-04-01T12:00:00Z'
+          updated_at: '2026-04-01T12:00:00Z'
+    BulkCreateDisbursements:
+      summary: Multiple disbursements created
+      value:
+        disbursements:
+        - id: disbursement_01jpjen1s23s29kkmnjsb6fzga
+          organization_id: org_01jpjenf5q6cawy43yxfcrxhct
+          organization:
+            id: org_01jpjenf5q6cawy43yxfcrxhct
+            name: Local Community Foundation
+            ein: '123456789'
+            parent_organization_id: org_01j8rs605a4gctmbm58d87mvsk
+            physical_address:
+              line1: 456 Oak Avenue
+              line2: Suite 200
+              city: San Francisco
+              state: CA
+              postal_code: '94105'
+              country: US
+            classification:
+              group_exemption_number: '0000'
+              subsection_code:
+                code: 3
+                name: 501(C)(3)
+                description: Organizations described in section 501(c)(3)
+              filing_requirement_code:
+                code: 1
+                name: 990_REQUIRED
+                description: 990 - Required to file Form 990
+              foundation_code:
+                code: 15
+                name: PUBLIC_CHARITY
+                description: Organization that normally receives a substantial part of its support from a governmental unit or from the general public
+              affiliation_code:
+                code: 3
+                name: INDEPENDENT
+                description: Independent - the organization is an independent organization
+              organization_code:
+                code: 1
+                name: CORPORATION
+                description: Corporation
+              exempt_status_code:
+                code: 1
+                name: UNCONDITIONAL
+                description: Unconditional Exemption
+              deductibility_code:
+                code: 1
+                name: DEDUCTIBLE
+                description: Contributions are deductible
+              ntee_code:
+                code: T31
+                description: Community Foundations
+                parent_code: T
+                parent_description: Philanthropy, Voluntarism & Grantmaking Foundations
+              naics_code:
+                naics2: '81'
+                naics2_description: Other Services
+                naics4: '8134'
+                naics4_description: Civic and Social Organizations
+                naics6: '813410'
+                naics6_description: Civic and Social Organizations
+            compliance:
+              daf_eligible: true
+              irs_pub_78:
+                compliant: true
+                reason: Organization found in IRS Publication 78
+                last_found_at: '2026-03-01T00:00:00Z'
+              ofac:
+                compliant: true
+                reason: No matches found on OFAC SDN list
+                last_found_at: '2026-03-01T00:00:00Z'
+              foundation_code:
+                compliant: true
+                reason: Foundation code is eligible
+                last_found_at: '2026-03-01T00:00:00Z'
+              california_attorney_general_registry:
+                compliant: true
+                reason: Registered with California Attorney General
+                last_found_at: '2026-03-01T00:00:00Z'
+              california_franchise_tax_board:
+                compliant: true
+                reason: Listed on California Franchise Tax Board
+                last_found_at: '2026-03-01T00:00:00Z'
+            mission_statement: Supporting local communities through education and outreach
+            web:
+              domain: localcommunityfoundation.org
+            brand:
+              icon_url: https://cdn.example.com/lcf-icon.png
+              logo_url: https://cdn.example.com/lcf-logo.png
+            officers:
+            - name: Sarah Johnson
+              title: Executive Director
+            claimed: true
+            incorporation:
+              formation_year: '2010'
+              state: CA
+              ruling_date: 2010-09
+          program_id: program_01jpjenf5q6cawy43yxfcrxhct
+          amount: 25000
+          auto_fund: false
+          bypass_chariot_organization_verification: false
+          status: pending_approval
+          created_at: '2026-04-01T12:00:00Z'
+          updated_at: '2026-04-01T12:00:00Z'
+          transactions:
+          - id: txn_01jpjen1s23s29kkmnjsb6fzga
+            amount: 15000
+            internal_transaction_id: GRANT-001
+            net_amount: 15000
+            type: donor_advised_fund_grant
+            purpose: General Operating Support
+            note: Allocate to education programs
+            donors:
+              primary_donor:
+                first_name: Jane
+                last_name: Doe
+                email: jane.doe@example.com
+            daf_grant:
+              fund_name: Doe Family Charitable Fund
+            created_at: '2026-04-01T12:00:00Z'
+            updated_at: '2026-04-01T12:00:00Z'
+          - id: txn_02jpjen1s23s29kkmnjsb6fzga
+            amount: 10000
+            internal_transaction_id: MATCH-001
+            net_amount: 10000
+            type: corporate_match
+            purpose: Corporate matching gift
+            note: Matched employee donation
+            donors:
+              primary_donor:
+                first_name: John
+                last_name: Smith
+                email: john.smith@example.com
+            corporate_match:
+              company_name: Acme Corporation
+            created_at: '2026-04-01T12:00:00Z'
+            updated_at: '2026-04-01T12:00:00Z'
+        - id: disbursement_02jpjen1s23s29kkmnjsb6fzga
+          organization_id: org_01jpjenf5q6cawy43yxfcrxhct
+          organization:
+            id: org_01jpjenf5q6cawy43yxfcrxhct
+            name: Local Community Foundation
+            ein: '123456789'
+            parent_organization_id: org_01j8rs605a4gctmbm58d87mvsk
+            physical_address:
+              line1: 456 Oak Avenue
+              line2: Suite 200
+              city: San Francisco
+              state: CA
+              postal_code: '94105'
+              country: US
+            classification:
+              group_exemption_number: '0000'
+              subsection_code:
+                code: 3
+                name: 501(C)(3)
+                description: Organizations described in section 501(c)(3)
+              filing_requirement_code:
+                code: 1
+                name: 990_REQUIRED
+                description: 990 - Required to file Form 990
+              foundation_code:
+                code: 15
+                name: PUBLIC_CHARITY
+                description: Organization that normally receives a substantial part of its support from a governmental unit or from the general public
+              affiliation_code:
+                code: 3
+                name: INDEPENDENT
+                description: Independent - the organization is an independent organization
+              organization_code:
+                code: 1
+                name: CORPORATION
+                description: Corporation
+              exempt_status_code:
+                code: 1
+                name: UNCONDITIONAL
+                description: Unconditional Exemption
+              deductibility_code:
+                code: 1
+                name: DEDUCTIBLE
+                description: Contributions are deductible
+              ntee_code:
+                code: T31
+                description: Community Foundations
+                parent_code: T
+                parent_description: Philanthropy, Voluntarism & Grantmaking Foundations
+              naics_code:
+                naics2: '81'
+                naics2_description: Other Services
+                naics4: '8134'
+                naics4_description: Civic and Social Organizations
+                naics6: '813410'
+                naics6_description: Civic and Social Organizations
+            compliance:
+              daf_eligible: true
+              irs_pub_78:
+                compliant: true
+                reason: Organization found in IRS Publication 78
+                last_found_at: '2026-03-01T00:00:00Z'
+              ofac:
+                compliant: true
+                reason: No matches found on OFAC SDN list
+                last_found_at: '2026-03-01T00:00:00Z'
+              foundation_code:
+                compliant: true
+                reason: Foundation code is eligible
+                last_found_at: '2026-03-01T00:00:00Z'
+              california_attorney_general_registry:
+                compliant: true
+                reason: Registered with California Attorney General
+                last_found_at: '2026-03-01T00:00:00Z'
+              california_franchise_tax_board:
+                compliant: true
+                reason: Listed on California Franchise Tax Board
+                last_found_at: '2026-03-01T00:00:00Z'
+            mission_statement: Supporting local communities through education and outreach
+            web:
+              domain: localcommunityfoundation.org
+            brand:
+              icon_url: https://cdn.example.com/lcf-icon.png
+              logo_url: https://cdn.example.com/lcf-logo.png
+            officers:
+            - name: Sarah Johnson
+              title: Executive Director
+            claimed: true
+            incorporation:
+              formation_year: '2010'
+              state: CA
+              ruling_date: 2010-09
+          program_id: program_01jpjenf5q6cawy43yxfcrxhct
+          amount: 20000
+          auto_fund: false
+          bypass_chariot_organization_verification: false
+          status: pending_approval
+          created_at: '2026-04-01T12:00:00Z'
+          updated_at: '2026-04-01T12:00:00Z'
+          transactions:
+          - id: txn_03jpjen1s23s29kkmnjsb6fzga
+            amount: 12000
+            internal_transaction_id: GRANT-002
+            net_amount: 12000
+            type: donor_advised_fund_grant
+            purpose: Youth Programs
+            note: Annual grant for youth services
+            donors:
+              primary_donor:
+                first_name: Alice
+                last_name: Williams
+                email: alice.williams@example.com
+            daf_grant:
+              fund_name: Williams Family Foundation
+            created_at: '2026-04-01T12:00:00Z'
+            updated_at: '2026-04-01T12:00:00Z'
+          - id: txn_04jpjen1s23s29kkmnjsb6fzga
+            amount: 8000
+            internal_transaction_id: MATCH-002
+            net_amount: 8000
+            type: corporate_match
+            purpose: Corporate matching gift
+            note: Matched employee donation
+            donors:
+              primary_donor:
+                first_name: Bob
+                last_name: Chen
+                email: bob.chen@example.com
+            corporate_match:
+              company_name: TechCorp Inc.
+            created_at: '2026-04-01T12:00:00Z'
+            updated_at: '2026-04-01T12:00:00Z'
+        count: 2
+    ListDisbursements:
+      summary: List of disbursements
+      value:
+        results:
+        - id: disbursement_01jpjen1s23s29kkmnjsb6fzga
+          organization_id: org_01jpjenf5q6cawy43yxfcrxhct
+          organization:
+            id: org_01jpjenf5q6cawy43yxfcrxhct
+            name: Local Community Foundation
+            ein: '123456789'
+            parent_organization_id: org_01j8rs605a4gctmbm58d87mvsk
+            physical_address:
+              line1: 456 Oak Avenue
+              line2: Suite 200
+              city: San Francisco
+              state: CA
+              postal_code: '94105'
+              country: US
+            classification:
+              group_exemption_number: '0000'
+              subsection_code:
+                code: 3
+                name: 501(C)(3)
+                description: Organizations described in section 501(c)(3)
+              filing_requirement_code:
+                code: 1
+                name: 990_REQUIRED
+                description: 990 - Required to file Form 990
+              foundation_code:
+                code: 15
+                name: PUBLIC_CHARITY
+                description: Organization that normally receives a substantial part of its support from a governmental unit or from the general public
+              affiliation_code:
+                code: 3
+                name: INDEPENDENT
+                description: Independent - the organization is an independent organization
+              organization_code:
+                code: 1
+                name: CORPORATION
+                description: Corporation
+              exempt_status_code:
+                code: 1
+                name: UNCONDITIONAL
+                description: Unconditional Exemption
+              deductibility_code:
+                code: 1
+                name: DEDUCTIBLE
+                description: Contributions are deductible
+              ntee_code:
+                code: T31
+                description: Community Foundations
+                parent_code: T
+                parent_description: Philanthropy, Voluntarism & Grantmaking Foundations
+              naics_code:
+                naics2: '81'
+                naics2_description: Other Services
+                naics4: '8134'
+                naics4_description: Civic and Social Organizations
+                naics6: '813410'
+                naics6_description: Civic and Social Organizations
+            compliance:
+              daf_eligible: true
+              irs_pub_78:
+                compliant: true
+                reason: Organization found in IRS Publication 78
+                last_found_at: '2026-03-01T00:00:00Z'
+              ofac:
+                compliant: true
+                reason: No matches found on OFAC SDN list
+                last_found_at: '2026-03-01T00:00:00Z'
+              foundation_code:
+                compliant: true
+                reason: Foundation code is eligible
+                last_found_at: '2026-03-01T00:00:00Z'
+              california_attorney_general_registry:
+                compliant: true
+                reason: Registered with California Attorney General
+                last_found_at: '2026-03-01T00:00:00Z'
+              california_franchise_tax_board:
+                compliant: true
+                reason: Listed on California Franchise Tax Board
+                last_found_at: '2026-03-01T00:00:00Z'
+            mission_statement: Supporting local communities through education and outreach
+            web:
+              domain: localcommunityfoundation.org
+            brand:
+              icon_url: https://cdn.example.com/lcf-icon.png
+              logo_url: https://cdn.example.com/lcf-logo.png
+            officers:
+            - name: Sarah Johnson
+              title: Executive Director
+            claimed: true
+            incorporation:
+              formation_year: '2010'
+              state: CA
+              ruling_date: 2010-09
+          program_id: program_01jpjenf5q6cawy43yxfcrxhct
+          amount: 25000
+          auto_fund: false
+          bypass_chariot_organization_verification: false
+          status: pending_approval
+          created_at: '2026-04-01T12:00:00Z'
+          updated_at: '2026-04-01T12:00:00Z'
+          transactions:
+          - id: txn_01jpjen1s23s29kkmnjsb6fzga
+            amount: 15000
+            internal_transaction_id: GRANT-001
+            net_amount: 15000
+            type: donor_advised_fund_grant
+            purpose: General Operating Support
+            note: Allocate to education programs
+            donors:
+              primary_donor:
+                first_name: Jane
+                last_name: Doe
+                email: jane.doe@example.com
+            daf_grant:
+              fund_name: Doe Family Charitable Fund
+            created_at: '2026-04-01T12:00:00Z'
+            updated_at: '2026-04-01T12:00:00Z'
+          - id: txn_02jpjen1s23s29kkmnjsb6fzga
+            amount: 10000
+            internal_transaction_id: MATCH-001
+            net_amount: 10000
+            type: corporate_match
+            purpose: Corporate matching gift
+            note: Matched employee donation
+            donors:
+              primary_donor:
+                first_name: John
+                last_name: Smith
+                email: john.smith@example.com
+            corporate_match:
+              company_name: Acme Corporation
+            created_at: '2026-04-01T12:00:00Z'
+            updated_at: '2026-04-01T12:00:00Z'
+        - id: disbursement_02jpjen1s23s29kkmnjsb6fzga
+          organization_id: org_01jpjenf5q6cawy43yxfcrxhct
+          organization:
+            id: org_01jpjenf5q6cawy43yxfcrxhct
+            name: Local Community Foundation
+            ein: '123456789'
+            parent_organization_id: org_01j8rs605a4gctmbm58d87mvsk
+            physical_address:
+              line1: 456 Oak Avenue
+              line2: Suite 200
+              city: San Francisco
+              state: CA
+              postal_code: '94105'
+              country: US
+            classification:
+              group_exemption_number: '0000'
+              subsection_code:
+                code: 3
+                name: 501(C)(3)
+                description: Organizations described in section 501(c)(3)
+              filing_requirement_code:
+                code: 1
+                name: 990_REQUIRED
+                description: 990 - Required to file Form 990
+              foundation_code:
+                code: 15
+                name: PUBLIC_CHARITY
+                description: Organization that normally receives a substantial part of its support from a governmental unit or from the general public
+              affiliation_code:
+                code: 3
+                name: INDEPENDENT
+                description: Independent - the organization is an independent organization
+              organization_code:
+                code: 1
+                name: CORPORATION
+                description: Corporation
+              exempt_status_code:
+                code: 1
+                name: UNCONDITIONAL
+                description: Unconditional Exemption
+              deductibility_code:
+                code: 1
+                name: DEDUCTIBLE
+                description: Contributions are deductible
+              ntee_code:
+                code: T31
+                description: Community Foundations
+                parent_code: T
+                parent_description: Philanthropy, Voluntarism & Grantmaking Foundations
+              naics_code:
+                naics2: '81'
+                naics2_description: Other Services
+                naics4: '8134'
+                naics4_description: Civic and Social Organizations
+                naics6: '813410'
+                naics6_description: Civic and Social Organizations
+            compliance:
+              daf_eligible: true
+              irs_pub_78:
+                compliant: true
+                reason: Organization found in IRS Publication 78
+                last_found_at: '2026-03-01T00:00:00Z'
+              ofac:
+                compliant: true
+                reason: No matches found on OFAC SDN list
+                last_found_at: '2026-03-01T00:00:00Z'
+              foundation_code:
+                compliant: true
+                reason: Foundation code is eligible
+                last_found_at: '2026-03-01T00:00:00Z'
+              california_attorney_general_registry:
+                compliant: true
+                reason: Registered with California Attorney General
+                last_found_at: '2026-03-01T00:00:00Z'
+              california_franchise_tax_board:
+                compliant: true
+                reason: Listed on California Franchise Tax Board
+                last_found_at: '2026-03-01T00:00:00Z'
+            mission_statement: Supporting local communities through education and outreach
+            web:
+              domain: localcommunityfoundation.org
+            brand:
+              icon_url: https://cdn.example.com/lcf-icon.png
+              logo_url: https://cdn.example.com/lcf-logo.png
+            officers:
+            - name: Sarah Johnson
+              title: Executive Director
+            claimed: true
+            incorporation:
+              formation_year: '2010'
+              state: CA
+              ruling_date: 2010-09
+          program_id: program_01jpjenf5q6cawy43yxfcrxhct
+          amount: 20000
+          auto_fund: false
+          bypass_chariot_organization_verification: false
+          status: completed
+          created_at: '2026-03-15T12:00:00Z'
+          updated_at: '2026-03-20T12:00:00Z'
+          transactions:
+          - id: txn_03jpjen1s23s29kkmnjsb6fzga
+            amount: 12000
+            internal_transaction_id: GRANT-002
+            net_amount: 12000
+            type: donor_advised_fund_grant
+            purpose: Youth Programs
+            note: Annual grant for youth services
+            donors:
+              primary_donor:
+                first_name: Alice
+                last_name: Williams
+                email: alice.williams@example.com
+            daf_grant:
+              fund_name: Williams Family Foundation
+            created_at: '2026-03-15T12:00:00Z'
+            updated_at: '2026-03-20T12:00:00Z'
+          - id: txn_04jpjen1s23s29kkmnjsb6fzga
+            amount: 8000
+            internal_transaction_id: MATCH-002
+            net_amount: 8000
+            type: corporate_match
+            purpose: Corporate matching gift
+            note: Matched employee donation
+            donors:
+              primary_donor:
+                first_name: Bob
+                last_name: Chen
+                email: bob.chen@example.com
+            corporate_match:
+              company_name: TechCorp Inc.
+            created_at: '2026-03-15T12:00:00Z'
+            updated_at: '2026-03-20T12:00:00Z'
+        next_page_token: eyJsYXN0X2lkIjoiZGlzYnVyc2VtZW50XzAyanBqZW4xcz
+    DafGrantDisbursement:
+      summary: Disbursement with DAF grant transactions
+      value:
+        id: disbursement_01jpjen1s23s29kkmnjsb6fzga
+        organization_id: org_01jpjenf5q6cawy43yxfcrxhct
+        organization:
+          id: org_01jpjenf5q6cawy43yxfcrxhct
+          name: Local Community Foundation
+          ein: '123456789'
+          parent_organization_id: org_01j8rs605a4gctmbm58d87mvsk
+          physical_address:
+            line1: 456 Oak Avenue
+            line2: Suite 200
+            city: San Francisco
+            state: CA
+            postal_code: '94105'
+            country: US
+          classification:
+            group_exemption_number: '0000'
+            subsection_code:
+              code: 3
+              name: 501(C)(3)
+              description: Organizations described in section 501(c)(3)
+            filing_requirement_code:
+              code: 1
+              name: 990_REQUIRED
+              description: 990 - Required to file Form 990
+            foundation_code:
+              code: 15
+              name: PUBLIC_CHARITY
+              description: Organization that normally receives a substantial part of its support from a governmental unit or from the general public
+            affiliation_code:
+              code: 3
+              name: INDEPENDENT
+              description: Independent - the organization is an independent organization
+            organization_code:
+              code: 1
+              name: CORPORATION
+              description: Corporation
+            exempt_status_code:
+              code: 1
+              name: UNCONDITIONAL
+              description: Unconditional Exemption
+            deductibility_code:
+              code: 1
+              name: DEDUCTIBLE
+              description: Contributions are deductible
+            ntee_code:
+              code: T31
+              description: Community Foundations
+              parent_code: T
+              parent_description: Philanthropy, Voluntarism & Grantmaking Foundations
+            naics_code:
+              naics2: '81'
+              naics2_description: Other Services
+              naics4: '8134'
+              naics4_description: Civic and Social Organizations
+              naics6: '813410'
+              naics6_description: Civic and Social Organizations
+          compliance:
+            daf_eligible: true
+            irs_pub_78:
+              compliant: true
+              reason: Organization found in IRS Publication 78
+              last_found_at: '2026-03-01T00:00:00Z'
+            ofac:
+              compliant: true
+              reason: No matches found on OFAC SDN list
+              last_found_at: '2026-03-01T00:00:00Z'
+            foundation_code:
+              compliant: true
+              reason: Foundation code is eligible
+              last_found_at: '2026-03-01T00:00:00Z'
+            california_attorney_general_registry:
+              compliant: true
+              reason: Registered with California Attorney General
+              last_found_at: '2026-03-01T00:00:00Z'
+            california_franchise_tax_board:
+              compliant: true
+              reason: Listed on California Franchise Tax Board
+              last_found_at: '2026-03-01T00:00:00Z'
+          mission_statement: Supporting local communities through education and outreach
+          web:
+            domain: localcommunityfoundation.org
+          brand:
+            icon_url: https://cdn.example.com/lcf-icon.png
+            logo_url: https://cdn.example.com/lcf-logo.png
+          officers:
+          - name: Sarah Johnson
+            title: Executive Director
+          claimed: true
+          incorporation:
+            formation_year: '2010'
+            state: CA
+            ruling_date: 2010-09
+        program_id: program_01jpjenf5q6cawy43yxfcrxhct
+        amount: 25000
+        auto_fund: false
+        bypass_chariot_organization_verification: false
+        status: pending_approval
+        created_at: '2026-04-01T12:00:00Z'
+        updated_at: '2026-04-01T12:00:00Z'
+        transactions:
+        - id: txn_01jpjen1s23s29kkmnjsb6fzga
+          amount: 15000
+          internal_transaction_id: GRANT-001
+          net_amount: 15000
+          type: donor_advised_fund_grant
+          purpose: General Operating Support
+          note: Allocate to education programs
+          donors:
+            primary_donor:
+              first_name: Jane
+              last_name: Doe
+              email: jane.doe@example.com
+          daf_grant:
+            fund_name: Doe Family Charitable Fund
+          created_at: '2026-04-01T12:00:00Z'
+          updated_at: '2026-04-01T12:00:00Z'
+        - id: txn_02jpjen1s23s29kkmnjsb6fzga
+          amount: 10000
+          internal_transaction_id: MATCH-001
+          net_amount: 10000
+          type: corporate_match
+          purpose: Corporate matching gift
+          note: Matched employee donation
+          donors:
+            primary_donor:
+              first_name: John
+              last_name: Smith
+              email: john.smith@example.com
+          corporate_match:
+            company_name: Acme Corporation
+          created_at: '2026-04-01T12:00:00Z'
+          updated_at: '2026-04-01T12:00:00Z'
+  responses:
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+    ConflictError:
+      description: Resource Conflicts
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Conflict:
+              value:
+                type: about:blank
+                title: API Error
+                status: 409
+                detail: The request conflicts with the current state of the resource.
+    PreconditionFailedError:
+      description: Precondition Failed
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            PreconditionFailed:
+              value:
+                type: about:blank
+                title: API Error
+                status: 412
+                detail: A precondition for the request was not met.
+    ListDisbursementsResponse:
+      description: The response for Disbursements.list
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Disbursement'
+              next_page_token:
+                type: string
+                description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
+          examples:
+            ListDisbursements:
+              $ref: '#/components/examples/ListDisbursements'
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+  headers:
+    Location:
+      description: The URI of the created object
+      schema:
+        type: string
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 Bearer token. A client may hold both scopes, but each FDX authorization must contain exactly one — they are mutually exclusive per authorization. An authorization containing both will be rejected. See the Authentication page for token exchange details.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://dashboard.givechariot.com/oauth/authorize
+          tokenUrl: https://api.givechariot.com/auth/oauth/token
+          scopes:
+            read:bank_accounts: Read access to bank account data
+            sync:connected_accounts: Sync access to connected account data

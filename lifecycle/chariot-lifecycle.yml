@@ -1,0 +1,29 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.givechariot.com + https://github.com/chariot-giving/chariot-openapi
+versioning:
+  scheme: date-based
+  current: v2026-04-01
+  previous: v2026-01-15
+  history:
+    - '2026-04-01'
+    - '2026-01-15'
+    - '2025-02-24'
+    - '2023-01-01'
+  spec_repo: https://github.com/chariot-giving/chariot-openapi
+  docs: https://docs.givechariot.com/changelog
+  note: >-
+    Chariot pins the API by dated version. Published OpenAPI specs live in the chariot-openapi repo
+    under specs/<version>.yaml; the docs default to the latest (v2026-04-01).
+changelog:
+  url: https://docs.givechariot.com/changelog
+  cross_link: changelog/chariot-changelog.yml
+status_page:
+  url: https://status.givechariot.com
+  provider: Atlassian Statuspage
+deprecation:
+  policy_documented: false
+  note: No standalone deprecation/sunset policy page was found; older dated versions remain published in the spec repo.
+sla:
+  documented: false
+deprecated_operations: []

@@ -1,0 +1,816 @@
+{
+  "info": {
+    "_postman_id": "9222664b-df07-4c16-8e70-93521012b55b",
+    "name": "Chariot FDX Accounts paymentSources API",
+    "description": "Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.\n\nContact Support:\n Name: Chariot Development Team\n Email: developers@givechariot.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:20:04.000Z",
+    "updatedAt": "2026-07-28T01:20:04.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-9222664b-df07-4c16-8e70-93521012b55b"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "payment_sources",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "Get a Payment Source",
+                  "id": "c3f3dd64-0fb4-44e9-b72a-970e534fda07",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/payment_sources/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "payment_sources",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "id": "136a1dfb-2432-4cc7-a4e2-efbab09b59e8",
+                          "key": "id",
+                          "value": "<string>",
+                          "description": "(Required) The unique identifier for the payment source"
+                        }
+                      ]
+                    },
+                    "description": "Get a payment source by its unique identifier.\n\nA Payment Source represents a segregated address for incoming deposits.\nIn practice, this can be separate electronic bank addresses (account + routing numbers) or physical mailing addresses (lockboxes).\nPayment Sources make it easy to independently manage and consolidate incoming payments and donations from different sources\nwhich in turn makes reconciliation of money and data seamless.\nEvery Payment Source belongs to a specific Financial Account and can be thought of as a gateway/door for money to flow into the Financial Account.\nPayment Sources are not separately ledgered which means you can't get the balance of a Payment Source separately from the Financial Account.\n\nPayment Sources should be setup and managed through the Chariot Dashboard."
+                  },
+                  "response": [
+                    {
+                      "id": "96b1ff0f-f33c-431f-8e4a-c9e5be2f1026",
+                      "name": "Successfully retrieved the payment source.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/payment_sources/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "payment_sources",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"financial_account_id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"source_type\": \"manual\",\n  \"financial_address\": {\n    \"ach\": {\n      \"account_number\": \"<string>\",\n      \"routing_number\": \"<string>\",\n      \"institution_name\": true\n    }\n  },\n  \"lockbox\": {\n    \"address\": {\n      \"city\": \"<string>\",\n      \"country\": \"<string>\",\n      \"line1\": \"<string>\",\n      \"postal_code\": \"<string>\",\n      \"state\": \"<string>\",\n      \"line2\": \"<string>\"\n    }\n  },\n  \"created_at\": \"<dateTime>\",\n  \"updated_at\": \"<dateTime>\"\n}",
+                      "createdAt": "2026-07-28T01:20:04.000Z",
+                      "updatedAt": "2026-07-28T01:20:04.000Z",
+                      "uid": "35240-96b1ff0f-f33c-431f-8e4a-c9e5be2f1026"
+                    },
+                    {
+                      "id": "71269016-993c-43de-a903-45da8f159d8e",
+                      "name": "The request is invalid or contains invalid parameters",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/payment_sources/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "payment_sources",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:04.000Z",
+                      "updatedAt": "2026-07-28T01:20:04.000Z",
+                      "uid": "35240-71269016-993c-43de-a903-45da8f159d8e"
+                    },
+                    {
+                      "id": "336d720f-fd3e-42c0-b508-885b18940f50",
+                      "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/payment_sources/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "payment_sources",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:04.000Z",
+                      "updatedAt": "2026-07-28T01:20:04.000Z",
+                      "uid": "35240-336d720f-fd3e-42c0-b508-885b18940f50"
+                    },
+                    {
+                      "id": "fe8290df-801c-42c9-a39d-a9945e26fecb",
+                      "name": "Access denied",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/payment_sources/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "payment_sources",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:04.000Z",
+                      "updatedAt": "2026-07-28T01:20:04.000Z",
+                      "uid": "35240-fe8290df-801c-42c9-a39d-a9945e26fecb"
+                    },
+                    {
+                      "id": "a17a591f-b73d-4ec1-9dfa-5759d3ab54f2",
+                      "name": "Resource Not Found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/payment_sources/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "payment_sources",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:04.000Z",
+                      "updatedAt": "2026-07-28T01:20:04.000Z",
+                      "uid": "35240-a17a591f-b73d-4ec1-9dfa-5759d3ab54f2"
+                    },
+                    {
+                      "id": "a825e3a1-ab2e-4ac1-a3b2-c170b23ba58d",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/payment_sources/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "payment_sources",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:04.000Z",
+                      "updatedAt": "2026-07-28T01:20:04.000Z",
+                      "uid": "35240-a825e3a1-ab2e-4ac1-a3b2-c170b23ba58d"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:20:04.000Z",
+                  "updatedAt": "2026-07-28T01:20:04.000Z",
+                  "uid": "35240-c3f3dd64-0fb4-44e9-b72a-970e534fda07"
+                }
+              ],
+              "id": "c0cb99b0-e6b7-4f22-917e-a85f5d0988a7",
+              "createdAt": "2026-07-28T01:20:04.000Z",
+              "updatedAt": "2026-07-28T01:20:04.000Z",
+              "uid": "35240-c0cb99b0-e6b7-4f22-917e-a85f5d0988a7"
+            },
+            {
+              "name": "List Payment Sources",
+              "id": "27bda349-3509-43bb-ac3b-2ae729bdbf4e",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/payment_sources?limit=<integer>&page_token=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "payment_sources"
+                  ],
+                  "query": [
+                    {
+                      "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                      "key": "page_token",
+                      "value": "<string>"
+                    }
+                  ]
+                },
+                "description": "List payment sources for your Chariot account.\n\nPayment Sources represent segregated addresses for incoming deposits.\nIn practice, this can be separate electronic bank addresses (account + routing numbers) or physical mailing addresses (lockboxes).\nPayment Sources make it easy to independently manage and consolidate incoming payments and donations from different sources\nwhich in turn makes reconciliation of money and data seamless.\nEvery Payment Source belongs to a specific Financial Account and can be thought of as a gateway/door for money to flow into the Financial Account.\nPayment Sources are not separately ledgered which means you can't get the balance of a Payment Source separately from the Financial Account.\n\nPayment Sources should be setup and managed through the Chariot Dashboard."
+              },
+              "response": [
+                {
+                  "id": "6c5eae51-3ef3-41cc-8e29-5c413ee5d290",
+                  "name": "The response for PaymentSources.list",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/payment_sources?limit=<integer>&page_token=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "payment_sources"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"results\": [\n    {\n      \"id\": \"<string>\",\n      \"financial_account_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"source_type\": \"manual\",\n      \"financial_address\": {\n        \"ach\": {\n          \"account_number\": \"<string>\",\n          \"routing_number\": \"<string>\",\n          \"institution_name\": -45120763\n        }\n      },\n      \"lockbox\": {\n        \"address\": {\n          \"city\": \"<string>\",\n          \"country\": \"<string>\",\n          \"line1\": \"<string>\",\n          \"postal_code\": \"<string>\",\n          \"state\": \"<string>\",\n          \"line2\": \"<string>\"\n        }\n      },\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"financial_account_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"source_type\": \"lockbox\",\n      \"financial_address\": {\n        \"ach\": {\n          \"account_number\": \"<string>\",\n          \"routing_number\": \"<string>\",\n          \"institution_name\": -30437452\n        }\n      },\n      \"lockbox\": {\n        \"address\": {\n          \"city\": \"<string>\",\n          \"country\": \"<string>\",\n          \"line1\": \"<string>\",\n          \"postal_code\": \"<string>\",\n          \"state\": \"<string>\",\n          \"line2\": \"<string>\"\n        }\n      },\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\"\n    }\n  ],\n  \"next_page_token\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:04.000Z",
+                  "updatedAt": "2026-07-28T01:20:04.000Z",
+                  "uid": "35240-6c5eae51-3ef3-41cc-8e29-5c413ee5d290"
+                },
+                {
+                  "id": "d33ab952-e569-420f-bf36-fa8140af6b0d",
+                  "name": "The request is invalid or contains invalid parameters",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/payment_sources?limit=<integer>&page_token=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "payment_sources"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:04.000Z",
+                  "updatedAt": "2026-07-28T01:20:04.000Z",
+                  "uid": "35240-d33ab952-e569-420f-bf36-fa8140af6b0d"
+                },
+                {
+                  "id": "1995a4a8-2893-4874-b2e4-11f1fc154b84",
+                  "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/payment_sources?limit=<integer>&page_token=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "payment_sources"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:04.000Z",
+                  "updatedAt": "2026-07-28T01:20:04.000Z",
+                  "uid": "35240-1995a4a8-2893-4874-b2e4-11f1fc154b84"
+                },
+                {
+                  "id": "758a6729-8873-47e6-a4d1-a5e78e4afd68",
+                  "name": "Access denied",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/payment_sources?limit=<integer>&page_token=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "payment_sources"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:04.000Z",
+                  "updatedAt": "2026-07-28T01:20:04.000Z",
+                  "uid": "35240-758a6729-8873-47e6-a4d1-a5e78e4afd68"
+                },
+                {
+                  "id": "53693a26-8f0a-429b-85f3-3a636be94aea",
+                  "name": "Internal Server Error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/payment_sources?limit=<integer>&page_token=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "payment_sources"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:04.000Z",
+                  "updatedAt": "2026-07-28T01:20:04.000Z",
+                  "uid": "35240-53693a26-8f0a-429b-85f3-3a636be94aea"
+                }
+              ],
+              "createdAt": "2026-07-28T01:20:04.000Z",
+              "updatedAt": "2026-07-28T01:20:04.000Z",
+              "uid": "35240-27bda349-3509-43bb-ac3b-2ae729bdbf4e"
+            }
+          ],
+          "id": "a1a7d500-d133-46a0-ad47-9b173d3e90a3",
+          "createdAt": "2026-07-28T01:20:04.000Z",
+          "updatedAt": "2026-07-28T01:20:04.000Z",
+          "uid": "35240-a1a7d500-d133-46a0-ad47-9b173d3e90a3"
+        }
+      ],
+      "id": "2fd71fb4-24c4-4d3d-9d53-b5cb9440ca5e",
+      "createdAt": "2026-07-28T01:20:04.000Z",
+      "updatedAt": "2026-07-28T01:20:04.000Z",
+      "uid": "35240-2fd71fb4-24c4-4d3d-9d53-b5cb9440ca5e"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read:bank_accounts sync:connected_accounts",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.givechariot.com/auth/oauth/token",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://dashboard.givechariot.com/oauth/authorize",
+        "type": "string"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.givechariot.com/fdx/v6"
+    }
+  ]
+}

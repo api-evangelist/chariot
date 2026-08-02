@@ -1,0 +1,410 @@
+openapi: 3.0.0
+info:
+  title: Chariot FDX Accounts Event Subscriptions API
+  version: '6.0'
+  description: Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.
+  contact:
+    name: Chariot Development Team
+    url: https://givechariot.com/contact
+    email: developers@givechariot.com
+servers:
+- url: https://api.givechariot.com/fdx/v6
+  description: Production
+- url: https://devapi.givechariot.com/fdx/v6
+  description: Staging
+security:
+- oauth2: []
+tags:
+- name: Event Subscriptions
+paths:
+  /v1/event_subscriptions:
+    post:
+      summary: Create an Event Subscription
+      description: Create an event subscription corresponding to your Chariot account.
+      operationId: createEventSubscription
+      tags:
+      - Event Subscriptions
+      security:
+      - bearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/CreateEventSubscriptionRequest'
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventSubscription'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      summary: List Event Subscriptions
+      description: List all event subscriptions corresponding to your Chariot account.
+      operationId: listEventSubscriptions
+      tags:
+      - Event Subscriptions
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: limit
+        in: query
+        description: Limit the size of the list that is returned. The default (and maximum) is 100 objects.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: cursor
+        in: query
+        description: The cursor to use for pagination. If not set, the first page of results will be returned.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/ListEventSubscriptionsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/event_subscriptions/{id}:
+    get:
+      summary: Get an Event Subscription
+      description: Retrieve an event subscription with the given ID.
+      operationId: getEventSubscription
+      tags:
+      - Event Subscriptions
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier for the event subscription
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventSubscription'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      summary: Update an Event Subscription
+      description: Update an event subscription with the given ID.
+      operationId: updateEventSubscription
+      tags:
+      - Event Subscriptions
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier for the event subscription
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateEventSubscriptionRequest'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventSubscription'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  requestBodies:
+    UpdateEventSubscriptionRequest:
+      description: The request body for creating an event subscription
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                description: "The status of the event subscription:\n  * active: The event subscription is active and events will be delivered\n  * disabled: The event subscription is temporarily disabled and events will not be delivered\n  * deleted: The event subscription is permanently deleted and events will not be delivered"
+                enum:
+                - active
+                - disabled
+                - deleted
+    CreateEventSubscriptionRequest:
+      description: The request body for creating an event subscription
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - url
+            - category
+            properties:
+              url:
+                type: string
+                description: The webhook url where we'll send notifications.
+                example: https://example.com/webhook
+              category:
+                $ref: '#/components/schemas/EventCategory'
+              signing_secret:
+                type: string
+                description: 'The key that will be used to sign webhooks.
+
+                  If no value is passed, a random string will be used as default.
+
+                  This is necessary to verify that the webhook is coming from Chariot.
+
+                  While this parameter is optional, it is highly recommended to pass a value
+
+                  for the secret and implement webhook signature verification.'
+  schemas:
+    EventCategory:
+      type: string
+      description: 'The category of the event. This is useful for filtering events.
+
+
+        Event names follow the pattern `{resource}.{event_type}` where `event_type` is either `created` or `updated`. Status transitions (for example, a Donor Account moving to `approved` or `rejected`) are emitted as `{resource}.updated` events — fetch the object to read its current status.
+
+        '
+      enum:
+      - grant.created
+      - grant.updated
+      - unintegrated_grant.created
+      - unintegrated_grant.updated
+      - donor_account.created
+      - donor_account.updated
+      - authorization_token.created
+      - authorization_token.updated
+      - grant_request.created
+      - grant_request.updated
+      - disbursement.created
+      - disbursement.updated
+      - inbound_transfer.created
+      - inbound_transfer.updated
+      - donation.created
+      - donation.updated
+      - deposit.created
+      - deposit.updated
+      - verification_request.created
+      - verification_request.updated
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
+    EventSubscription:
+      type: object
+      description: 'Webhooks are event notifications we send to you by HTTPS POST requests.
+
+        Event Subscriptions are how you configure your application to listen for them.
+
+        '
+      required:
+      - url
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the event subscription
+          example: 4d06d393-1f14-46cf-b02d-8db17d7ed06a
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time the event subscription was created
+          example: '2024-01-14T12:48:56.37Z'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/EventSubscriptionStatus'
+        url:
+          type: string
+          description: The webhook url where we'll send notifications.
+          example: https://example.com/webhook
+        category:
+          $ref: '#/components/schemas/EventCategory'
+    EventSubscriptionStatus:
+      type: string
+      description: "The status of the event subscription.\nThis indicates if we'll send notifications to this subscription\n  * active: subscription is active and events will be delivered normally\n  * disabled: subscription is temporarily disabled and events will not be delivered\n  * deleted: subscription has been deleted and events will not be delivered\n  * requires_attention: subscription has been disabled due to delivery failures and events will not be delivered"
+      enum:
+      - active
+      - disabled
+      - deleted
+      - requires_attention
+  responses:
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
+    ListEventSubscriptionsResponse:
+      description: The response for Events.list
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EventSubscription'
+              nextPageToken:
+                type: string
+                description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
+    Location:
+      description: The URI of the created object
+      schema:
+        type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 Bearer token. A client may hold both scopes, but each FDX authorization must contain exactly one — they are mutually exclusive per authorization. An authorization containing both will be rejected. See the Authentication page for token exchange details.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://dashboard.givechariot.com/oauth/authorize
+          tokenUrl: https://api.givechariot.com/auth/oauth/token
+          scopes:
+            read:bank_accounts: Read access to bank account data
+            sync:connected_accounts: Sync access to connected account data

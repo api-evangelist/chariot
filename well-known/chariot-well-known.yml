@@ -1,0 +1,34 @@
+generated: '2026-07-18'
+method: searched
+source: probed live hosts
+hosts:
+  - host: https://api.givechariot.com
+    documents:
+      - path: /.well-known/openid-configuration
+        status: 200
+        file: chariot-openid-configuration.json
+        note: OIDC discovery — issuer, authorization/token/userinfo/jwks endpoints, scopes_supported, PKCE S256, token-exchange + private_key_jwt.
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        file: chariot-oauth-authorization-server.json
+        note: RFC 8414 OAuth 2.0 Authorization Server Metadata.
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+  - host: https://docs.givechariot.com
+    documents:
+      - path: /.well-known/api-catalog
+        status: 200
+        file: chariot-api-catalog.json
+        note: RFC 9727 API catalog linkset — points at api-reference.yaml and fdx-api-reference.yaml across versions.
+      - path: /.well-known/security.txt
+        status: 404
+  - host: https://www.givechariot.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404

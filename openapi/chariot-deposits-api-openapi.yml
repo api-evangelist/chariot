@@ -1,0 +1,483 @@
+openapi: 3.0.0
+info:
+  title: Chariot FDX Accounts deposits API
+  version: '6.0'
+  description: Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.
+  contact:
+    name: Chariot Development Team
+    url: https://givechariot.com/contact
+    email: developers@givechariot.com
+servers:
+- url: https://api.givechariot.com/fdx/v6
+  description: Production
+- url: https://devapi.givechariot.com/fdx/v6
+  description: Staging
+security:
+- oauth2: []
+tags:
+- name: deposits
+paths:
+  /v1/deposits:
+    get:
+      summary: List Deposits
+      description: List deposits for your account.
+      operationId: listDeposits
+      tags:
+      - deposits
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: limit
+        in: query
+        description: Limit the size of the list that is returned. The default (and maximum) is 100 objects.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        in: query
+        description: The cursor to use for pagination. If not set, the first page of results will be returned.
+        required: false
+        schema:
+          type: string
+      - name: payment_source_id
+        in: query
+        description: The unique identifier for the payment sources to filter deposits by. Comma separated list of payment source IDs.
+        required: false
+        schema:
+          type: string
+        example: payment_source_01j8rs605a4gctmbm58d87mvsj
+      - name: settled_at.after
+        in: query
+        description: Return deposits with a settled date and time after the given date and time.
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: settled_at.before
+        in: query
+        description: Return deposits with a settled date and time before the given date and time.
+        required: false
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          $ref: '#/components/responses/ListDepositsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/deposits/{id}:
+    get:
+      summary: Get a Deposit
+      description: Get a deposit by its unique identifier.
+      operationId: getDeposit
+      tags:
+      - deposits
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier for the deposit
+        required: true
+        schema:
+          type: string
+        example: deposit_01j8rs605a4gctmbm58d87mvsj
+      responses:
+        '200':
+          description: The deposit was retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Deposit'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    ListDepositsResponse:
+      description: The response for Deposits.list
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Deposit'
+              next_page_token:
+                type: string
+                description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+  schemas:
+    InboundAchTransfer:
+      type: object
+      description: An ACH transfer initiated outside of Chariot to your financial account.
+      properties:
+        standard_entry_class_code:
+          type: string
+          description: The Standard Entry Class (SEC) code for the ACH transfer.
+          example: WEB
+        company_entry_description:
+          type: string
+          description: The company entry description for the ACH transfer.
+          example: GRANTPMT
+        originator_routing_number:
+          type: string
+          description: The routing number of the originator of the ACH transfer.
+          example: '1234567890'
+        originator_company_name:
+          type: string
+          description: The name of the originator of the ACH transfer.
+          example: Charity Good
+        trace_number:
+          type: string
+          description: The trace number for the ACH transfer.
+          example: '1234567890'
+        effective_date:
+          type: string
+          format: date-time
+          description: The effective date for the ACH transfer.
+          example: '2020-01-31T23:00:00Z'
+        status:
+          type: string
+          description: The status of the ACH transfer.
+          example: accepted
+          enum:
+          - pending
+          - declined
+          - accepted
+          - returned
+    CheckDeposit:
+      type: object
+      description: A check deposit represents a physical check that is deposited into a financial account.
+      properties:
+        auxiliary_on_us:
+          type: string
+          description: 'An additional line of metadata printed on the check.
+
+            This typically includes the check number for business checks.'
+          example: '102'
+        routing_number:
+          type: string
+          description: 'The routing number printed on the check.
+
+            This is a routing number for the bank that issued the check.'
+          example: '101050001'
+        submitted_at:
+          type: string
+          format: date-time
+          description: The date and time the check deposit was submitted.
+          example: '2020-01-31T23:00:00Z'
+        status:
+          type: string
+          description: The status of the check deposit.
+          example: deposited
+          enum:
+          - pending
+          - deposited
+          - rejected
+          - returned
+    PropertyAssignment:
+      type: object
+      description: A property assignment is a key-value pair that is associated with a donation.
+      properties:
+        property_id:
+          type: string
+          description: The unique identifier for the property.
+          example: prop_01j8rs605a4gctmbm58d87mvsj
+        value:
+          $ref: '#/components/schemas/PropertyValue'
+    InboundAccountTransfer:
+      type: object
+      description: 'An instant transfer of funds between two financial accounts.
+
+        This is the preferred method of transferring funds for Grantmakers within Chariot''s Network.'
+      required:
+      - created_at
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time the account transfer was created
+          example: '2020-01-31T23:00:00Z'
+          readOnly: true
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
+    PropertyType:
+      type: string
+      description: The data type of a property.
+      enum:
+      - text
+      - enum
+      - user
+      - boolean
+      - date
+      example: text
+    Deposit:
+      type: object
+      description: A Deposit is a transfer of money for a charitable donation or a batch of donations.
+      required:
+      - id
+      - payment_source_id
+      - status
+      - transfer
+      - created_at
+      - updated_at
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: The unique identifier for this object.
+          example: deposit_01j8rs605a4gctmbm58d87mvsj
+        payment_source_id:
+          type: string
+          description: The unique identifier for the payment source that contains the money for the deposit.
+          example: payment_source_01j8rs605a4gctmbm58d87mvsj
+        settled_at:
+          type: string
+          format: date-time
+          description: The date and time when the deposit was settled.
+          example: '2020-01-31T23:59:59Z'
+        returned_at:
+          type: string
+          format: date-time
+          description: The date and time when the deposit was returned.
+          example: '2020-01-31T23:59:59Z'
+        status:
+          type: string
+          description: The status of the deposit.
+          example: complete
+          enum:
+          - pending
+          - complete
+          - failed
+        transfer:
+          description: A subhash containing information about the transfer associated with the deposit.
+          allOf:
+          - $ref: '#/components/schemas/Transfer'
+        properties:
+          type: array
+          description: A list of properties assigned to the deposit.
+          items:
+            $ref: '#/components/schemas/PropertyAssignment'
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the deposit was created.
+          example: '2020-01-31T23:59:59Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time when the deposit was last updated.
+          example: '2020-01-31T23:59:59Z'
+        bank_created_at:
+          type: string
+          format: date-time
+          description: The date and time when the bank created the deposit.
+          example: '2020-01-31T23:59:59Z'
+    PropertyValue:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          $ref: '#/components/schemas/PropertyType'
+        text_value:
+          type: string
+          description: The text value of the property.
+        enum_value_id:
+          type: string
+          description: The unique identifier for the enum value.
+        user_value_id:
+          type: string
+          description: The unique identifier for the user.
+        boolean_value:
+          type: boolean
+          description: The boolean value of the property.
+        date_value:
+          type: string
+          format: date-time
+          description: The date value of the property.
+        empty:
+          type: boolean
+          description: 'Whether the property value is empty.
+
+            Can use this to unset property values when assigning a property.'
+    Transfer:
+      type: object
+      description: A subhash containing information about the transfer associated with the deposit.
+      required:
+      - amount
+      - currency
+      - financial_account_id
+      properties:
+        amount:
+          type: integer
+          format: int64
+          description: The amount of the transfer in minor currency units. For example, for dollars, this is cents.
+          example: 10000
+        currency:
+          type: string
+          description: The [ISO 4217 code](https://en.wikipedia.org/wiki/ISO_4217) for the transfer's currency.
+          example: USD
+        financial_account_id:
+          type: string
+          description: The unique identifier for the financial account that the transfer was made to.
+          example: fa_01j8rs605a4gctmbm58d87mvsj
+        description:
+          type: string
+          description: A description of the transfer.
+          example: Disbursement to nonprofit
+        inbound_account_transfer:
+          description: A subhash containing information about the inbound account transfer associated with the deposit.
+          allOf:
+          - $ref: '#/components/schemas/InboundAccountTransfer'
+        inbound_ach_transfer:
+          description: A subhash containing information about the inbound ACH transfer associated with the deposit.
+          allOf:
+          - $ref: '#/components/schemas/InboundAchTransfer'
+        check_deposit:
+          description: A subhash containing information about the check deposit associated with the deposit.
+          allOf:
+          - $ref: '#/components/schemas/CheckDeposit'
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 Bearer token. A client may hold both scopes, but each FDX authorization must contain exactly one — they are mutually exclusive per authorization. An authorization containing both will be rejected. See the Authentication page for token exchange details.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://dashboard.givechariot.com/oauth/authorize
+          tokenUrl: https://api.givechariot.com/auth/oauth/token
+          scopes:
+            read:bank_accounts: Read access to bank account data
+            sync:connected_accounts: Sync access to connected account data

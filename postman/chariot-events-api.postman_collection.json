@@ -1,0 +1,846 @@
+{
+  "info": {
+    "_postman_id": "f9fc81f7-25be-445a-a75d-2d7999b01a7c",
+    "name": "Chariot FDX Accounts Events API",
+    "description": "Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.\n\nContact Support:\n Name: Chariot Development Team\n Email: developers@givechariot.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:19:35.000Z",
+    "updatedAt": "2026-07-28T01:19:35.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-f9fc81f7-25be-445a-a75d-2d7999b01a7c"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "events",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "Get Event",
+                  "id": "8702039f-0162-419b-8402-c6763ce57cd8",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/events/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "events",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "id": "eee1f27d-1fe4-4673-a765-4507fe34464e",
+                          "key": "id",
+                          "value": "<string>",
+                          "description": "(Required) The unique id for the event"
+                        }
+                      ]
+                    },
+                    "description": "Retrieve an event with the given ID."
+                  },
+                  "response": [
+                    {
+                      "id": "7058c340-06d8-4adc-8cd8-7e060c926b70",
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/events/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "events",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"category\": \"donor_account.created\",\n  \"created_at\": \"<dateTime>\",\n  \"associated_object_id\": \"<string>\",\n  \"associated_object_type\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:35.000Z",
+                      "updatedAt": "2026-07-28T01:19:35.000Z",
+                      "uid": "35240-7058c340-06d8-4adc-8cd8-7e060c926b70"
+                    },
+                    {
+                      "id": "d004d07d-36d5-4553-b0e1-77771f36e204",
+                      "name": "The request is invalid or contains invalid parameters",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/events/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "events",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:35.000Z",
+                      "updatedAt": "2026-07-28T01:19:35.000Z",
+                      "uid": "35240-d004d07d-36d5-4553-b0e1-77771f36e204"
+                    },
+                    {
+                      "id": "33b039d0-b7f7-4872-a8e4-eb8c86d89bcd",
+                      "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/events/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "events",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:35.000Z",
+                      "updatedAt": "2026-07-28T01:19:35.000Z",
+                      "uid": "35240-33b039d0-b7f7-4872-a8e4-eb8c86d89bcd"
+                    },
+                    {
+                      "id": "ea9ca54f-38c4-48ce-a389-628f6b27863c",
+                      "name": "Access denied",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/events/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "events",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:35.000Z",
+                      "updatedAt": "2026-07-28T01:19:35.000Z",
+                      "uid": "35240-ea9ca54f-38c4-48ce-a389-628f6b27863c"
+                    },
+                    {
+                      "id": "868e3aea-2a04-469b-95e9-e59c8fdb857b",
+                      "name": "Resource Not Found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/events/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "events",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:35.000Z",
+                      "updatedAt": "2026-07-28T01:19:35.000Z",
+                      "uid": "35240-868e3aea-2a04-469b-95e9-e59c8fdb857b"
+                    },
+                    {
+                      "id": "7f96d1b7-a846-40b3-86bb-3d2a9f295d37",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/events/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "events",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:35.000Z",
+                      "updatedAt": "2026-07-28T01:19:35.000Z",
+                      "uid": "35240-7f96d1b7-a846-40b3-86bb-3d2a9f295d37"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:19:35.000Z",
+                  "updatedAt": "2026-07-28T01:19:35.000Z",
+                  "uid": "35240-8702039f-0162-419b-8402-c6763ce57cd8"
+                }
+              ],
+              "id": "2bfdf000-c831-42f2-a928-3f05b417bae9",
+              "createdAt": "2026-07-28T01:19:35.000Z",
+              "updatedAt": "2026-07-28T01:19:35.000Z",
+              "uid": "35240-2bfdf000-c831-42f2-a928-3f05b417bae9"
+            },
+            {
+              "name": "List Events",
+              "id": "4fa06dd3-4211-4bae-9a47-8b128b8cc75e",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/events?limit=<integer>&cursor=<string>&category=deposit.created",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "events"
+                  ],
+                  "query": [
+                    {
+                      "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Filter Events for those with the specified category.\n",
+                      "key": "category",
+                      "value": "deposit.created"
+                    }
+                  ]
+                },
+                "description": "List all events corresponding to your Chariot account."
+              },
+              "response": [
+                {
+                  "id": "d3f2da3b-2f7c-4352-8c13-778fae21a37d",
+                  "name": "The response for Events.list",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/events?limit=<integer>&cursor=<string>&category=deposit.created",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "events"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "cursor",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter Events for those with the specified category.\n",
+                          "key": "category",
+                          "value": "deposit.created"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"results\": [\n    {\n      \"id\": \"<string>\",\n      \"category\": \"disbursement.updated\",\n      \"created_at\": \"<dateTime>\",\n      \"associated_object_id\": \"<string>\",\n      \"associated_object_type\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"category\": \"disbursement.updated\",\n      \"created_at\": \"<dateTime>\",\n      \"associated_object_id\": \"<string>\",\n      \"associated_object_type\": \"<string>\"\n    }\n  ],\n  \"nextPageToken\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:35.000Z",
+                  "updatedAt": "2026-07-28T01:19:35.000Z",
+                  "uid": "35240-d3f2da3b-2f7c-4352-8c13-778fae21a37d"
+                },
+                {
+                  "id": "b5717963-89b2-45a6-8f1f-431634afe7f7",
+                  "name": "The request is invalid or contains invalid parameters",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/events?limit=<integer>&cursor=<string>&category=deposit.created",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "events"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "cursor",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter Events for those with the specified category.\n",
+                          "key": "category",
+                          "value": "deposit.created"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:35.000Z",
+                  "updatedAt": "2026-07-28T01:19:35.000Z",
+                  "uid": "35240-b5717963-89b2-45a6-8f1f-431634afe7f7"
+                },
+                {
+                  "id": "94bcbd67-b431-42d7-8c5f-2bc59519231a",
+                  "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/events?limit=<integer>&cursor=<string>&category=deposit.created",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "events"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "cursor",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter Events for those with the specified category.\n",
+                          "key": "category",
+                          "value": "deposit.created"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:35.000Z",
+                  "updatedAt": "2026-07-28T01:19:35.000Z",
+                  "uid": "35240-94bcbd67-b431-42d7-8c5f-2bc59519231a"
+                },
+                {
+                  "id": "4097e760-b7f4-4916-9f44-13953cb476d3",
+                  "name": "Access denied",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/events?limit=<integer>&cursor=<string>&category=deposit.created",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "events"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "cursor",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter Events for those with the specified category.\n",
+                          "key": "category",
+                          "value": "deposit.created"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:35.000Z",
+                  "updatedAt": "2026-07-28T01:19:35.000Z",
+                  "uid": "35240-4097e760-b7f4-4916-9f44-13953cb476d3"
+                },
+                {
+                  "id": "bc3e4b14-1cd7-48ad-8fb6-14ff41dbf593",
+                  "name": "Internal Server Error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/events?limit=<integer>&cursor=<string>&category=deposit.created",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "events"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "cursor",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter Events for those with the specified category.\n",
+                          "key": "category",
+                          "value": "deposit.created"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:35.000Z",
+                  "updatedAt": "2026-07-28T01:19:35.000Z",
+                  "uid": "35240-bc3e4b14-1cd7-48ad-8fb6-14ff41dbf593"
+                }
+              ],
+              "createdAt": "2026-07-28T01:19:35.000Z",
+              "updatedAt": "2026-07-28T01:19:35.000Z",
+              "uid": "35240-4fa06dd3-4211-4bae-9a47-8b128b8cc75e"
+            }
+          ],
+          "id": "e53e44a0-5192-4ad7-81bc-82b6a4e283d9",
+          "createdAt": "2026-07-28T01:19:35.000Z",
+          "updatedAt": "2026-07-28T01:19:35.000Z",
+          "uid": "35240-e53e44a0-5192-4ad7-81bc-82b6a4e283d9"
+        }
+      ],
+      "id": "4660e791-b200-4f96-a731-8dcbe1f31446",
+      "createdAt": "2026-07-28T01:19:35.000Z",
+      "updatedAt": "2026-07-28T01:19:35.000Z",
+      "uid": "35240-4660e791-b200-4f96-a731-8dcbe1f31446"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read:bank_accounts sync:connected_accounts",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.givechariot.com/auth/oauth/token",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://dashboard.givechariot.com/oauth/authorize",
+        "type": "string"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.givechariot.com/fdx/v6"
+    }
+  ]
+}

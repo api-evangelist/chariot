@@ -1,0 +1,753 @@
+{
+  "info": {
+    "_postman_id": "5e0829cb-aee5-47d0-b6b2-34561696e752",
+    "name": "Chariot FDX Accounts Donor Advised Funds API",
+    "description": "Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.\n\nContact Support:\n Name: Chariot Development Team\n Email: developers@givechariot.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:19:29.000Z",
+    "updatedAt": "2026-07-28T01:19:30.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-5e0829cb-aee5-47d0-b6b2-34561696e752"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "dafs",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "Get Donor Advised Fund",
+                  "id": "3c2fe838-8956-4094-b257-78efd503c490",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/dafs/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "dafs",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "id": "bf208511-a60b-4237-9ee4-35412412ab9d",
+                          "key": "id",
+                          "value": "<uuid>",
+                          "description": "(Required) The unique id of the DAF.\nThe format should be a v4 UUID according to RFC 4122."
+                        }
+                      ]
+                    },
+                    "description": "Retrieve a DAF with a given ID."
+                  },
+                  "response": [
+                    {
+                      "id": "4a0f5e4a-b984-4014-a26b-333525d52535",
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/dafs/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "dafs",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"orgName\": \"<string>\",\n  \"address\": \"<string>\",\n  \"address2\": \"<string>\",\n  \"city\": \"<string>\",\n  \"state\": \"<string>\",\n  \"zip\": \"<string>\",\n  \"supported\": \"<boolean>\",\n  \"minimumGrantAmount\": \"<number>\",\n  \"institutionDown\": \"<boolean>\"\n}",
+                      "createdAt": "2026-07-28T01:19:30.000Z",
+                      "updatedAt": "2026-07-28T01:19:30.000Z",
+                      "uid": "35240-4a0f5e4a-b984-4014-a26b-333525d52535"
+                    },
+                    {
+                      "id": "d77a7572-e43d-44d4-85c0-b6c051fb3b2d",
+                      "name": "The request is invalid or contains invalid parameters",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/dafs/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "dafs",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:30.000Z",
+                      "updatedAt": "2026-07-28T01:19:30.000Z",
+                      "uid": "35240-d77a7572-e43d-44d4-85c0-b6c051fb3b2d"
+                    },
+                    {
+                      "id": "5c2ca937-b7ba-454d-a629-7a3659985120",
+                      "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/dafs/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "dafs",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:30.000Z",
+                      "updatedAt": "2026-07-28T01:19:30.000Z",
+                      "uid": "35240-5c2ca937-b7ba-454d-a629-7a3659985120"
+                    },
+                    {
+                      "id": "4aed199b-b187-48b3-8237-045287f4ddc5",
+                      "name": "Resource Not Found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/dafs/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "dafs",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:30.000Z",
+                      "updatedAt": "2026-07-28T01:19:30.000Z",
+                      "uid": "35240-4aed199b-b187-48b3-8237-045287f4ddc5"
+                    },
+                    {
+                      "id": "dd8783cf-3e1d-4bed-a513-b10720dfafbd",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/dafs/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "dafs",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:30.000Z",
+                      "updatedAt": "2026-07-28T01:19:30.000Z",
+                      "uid": "35240-dd8783cf-3e1d-4bed-a513-b10720dfafbd"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:19:30.000Z",
+                  "updatedAt": "2026-07-28T01:19:30.000Z",
+                  "uid": "35240-3c2fe838-8956-4094-b257-78efd503c490"
+                }
+              ],
+              "id": "39332e1a-c6d9-4d82-a198-bdad88abd5c4",
+              "createdAt": "2026-07-28T01:19:30.000Z",
+              "updatedAt": "2026-07-28T01:19:30.000Z",
+              "uid": "35240-39332e1a-c6d9-4d82-a198-bdad88abd5c4"
+            },
+            {
+              "name": "List Donor Advised Funds",
+              "id": "95d95597-d94a-4311-b0d2-7525f0c84922",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/dafs?supportedOnly=false&query=<string>&pageLimit=10&pageToken=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "dafs"
+                  ],
+                  "query": [
+                    {
+                      "description": "If set to true, filters DAFs to only those that have a direct integration with Chariot.",
+                      "key": "supportedOnly",
+                      "value": "false"
+                    },
+                    {
+                      "description": "If included, filters DAFs to only those that contain the query. This parameter is case insensitive.",
+                      "key": "query",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "the number of results to return; defaults to 10, max is 100",
+                      "key": "pageLimit",
+                      "value": "10"
+                    },
+                    {
+                      "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls.",
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ]
+                },
+                "description": "Returns a list of all Donor Advised Funds within Chariot's system. This API allows for paginating over many results.\n\n<Note>\nIf there are DAFs missing from the list, please contact support at support@givechariot.com.\n</Note>"
+              },
+              "response": [
+                {
+                  "id": "5a67c99c-0669-449b-9808-7fc4a5eb7faf",
+                  "name": "The response for Dafs.list",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/dafs?supportedOnly=false&query=<string>&pageLimit=10&pageToken=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "dafs"
+                      ],
+                      "query": [
+                        {
+                          "description": "If set to true, filters DAFs to only those that have a direct integration with Chariot.",
+                          "key": "supportedOnly",
+                          "value": "false"
+                        },
+                        {
+                          "description": "If included, filters DAFs to only those that contain the query. This parameter is case insensitive.",
+                          "key": "query",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "the number of results to return; defaults to 10, max is 100",
+                          "key": "pageLimit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls.",
+                          "key": "pageToken",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"results\": [\n    {\n      \"id\": \"<string>\",\n      \"orgName\": \"<string>\",\n      \"address\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\",\n      \"zip\": \"<string>\",\n      \"supported\": \"<boolean>\",\n      \"minimumGrantAmount\": \"<number>\",\n      \"institutionDown\": \"<boolean>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"orgName\": \"<string>\",\n      \"address\": \"<string>\",\n      \"address2\": \"<string>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\",\n      \"zip\": \"<string>\",\n      \"supported\": \"<boolean>\",\n      \"minimumGrantAmount\": \"<number>\",\n      \"institutionDown\": \"<boolean>\"\n    }\n  ],\n  \"nextPageToken\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:30.000Z",
+                  "updatedAt": "2026-07-28T01:19:30.000Z",
+                  "uid": "35240-5a67c99c-0669-449b-9808-7fc4a5eb7faf"
+                },
+                {
+                  "id": "0e43754f-afec-4f4a-a1f5-205e0580b8f0",
+                  "name": "The request is invalid or contains invalid parameters",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/dafs?supportedOnly=false&query=<string>&pageLimit=10&pageToken=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "dafs"
+                      ],
+                      "query": [
+                        {
+                          "description": "If set to true, filters DAFs to only those that have a direct integration with Chariot.",
+                          "key": "supportedOnly",
+                          "value": "false"
+                        },
+                        {
+                          "description": "If included, filters DAFs to only those that contain the query. This parameter is case insensitive.",
+                          "key": "query",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "the number of results to return; defaults to 10, max is 100",
+                          "key": "pageLimit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls.",
+                          "key": "pageToken",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:30.000Z",
+                  "updatedAt": "2026-07-28T01:19:30.000Z",
+                  "uid": "35240-0e43754f-afec-4f4a-a1f5-205e0580b8f0"
+                },
+                {
+                  "id": "acd82bf8-ec50-4af3-a992-7f66b82d65a5",
+                  "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/dafs?supportedOnly=false&query=<string>&pageLimit=10&pageToken=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "dafs"
+                      ],
+                      "query": [
+                        {
+                          "description": "If set to true, filters DAFs to only those that have a direct integration with Chariot.",
+                          "key": "supportedOnly",
+                          "value": "false"
+                        },
+                        {
+                          "description": "If included, filters DAFs to only those that contain the query. This parameter is case insensitive.",
+                          "key": "query",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "the number of results to return; defaults to 10, max is 100",
+                          "key": "pageLimit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls.",
+                          "key": "pageToken",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:30.000Z",
+                  "updatedAt": "2026-07-28T01:19:30.000Z",
+                  "uid": "35240-acd82bf8-ec50-4af3-a992-7f66b82d65a5"
+                },
+                {
+                  "id": "20c5b61e-d284-4505-bd7d-f8529e0fb36a",
+                  "name": "Internal Server Error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/dafs?supportedOnly=false&query=<string>&pageLimit=10&pageToken=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "dafs"
+                      ],
+                      "query": [
+                        {
+                          "description": "If set to true, filters DAFs to only those that have a direct integration with Chariot.",
+                          "key": "supportedOnly",
+                          "value": "false"
+                        },
+                        {
+                          "description": "If included, filters DAFs to only those that contain the query. This parameter is case insensitive.",
+                          "key": "query",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "the number of results to return; defaults to 10, max is 100",
+                          "key": "pageLimit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls.",
+                          "key": "pageToken",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:30.000Z",
+                  "updatedAt": "2026-07-28T01:19:30.000Z",
+                  "uid": "35240-20c5b61e-d284-4505-bd7d-f8529e0fb36a"
+                }
+              ],
+              "createdAt": "2026-07-28T01:19:30.000Z",
+              "updatedAt": "2026-07-28T01:19:30.000Z",
+              "uid": "35240-95d95597-d94a-4311-b0d2-7525f0c84922"
+            }
+          ],
+          "id": "4638f772-3eb7-4896-930f-db15681d2ae8",
+          "createdAt": "2026-07-28T01:19:30.000Z",
+          "updatedAt": "2026-07-28T01:19:30.000Z",
+          "uid": "35240-4638f772-3eb7-4896-930f-db15681d2ae8"
+        }
+      ],
+      "id": "4a3b906a-be63-4a2c-8d80-4d2ff2a3d355",
+      "createdAt": "2026-07-28T01:19:30.000Z",
+      "updatedAt": "2026-07-28T01:19:30.000Z",
+      "uid": "35240-4a3b906a-be63-4a2c-8d80-4d2ff2a3d355"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read:bank_accounts sync:connected_accounts",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.givechariot.com/auth/oauth/token",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://dashboard.givechariot.com/oauth/authorize",
+        "type": "string"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.givechariot.com/fdx/v6"
+    }
+  ]
+}

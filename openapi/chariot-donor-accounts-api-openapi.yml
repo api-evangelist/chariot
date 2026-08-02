@@ -1,0 +1,772 @@
+openapi: 3.0.0
+info:
+  title: Chariot FDX Accounts Donor Accounts API
+  version: '6.0'
+  description: Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.
+  contact:
+    name: Chariot Development Team
+    url: https://givechariot.com/contact
+    email: developers@givechariot.com
+servers:
+- url: https://api.givechariot.com/fdx/v6
+  description: Production
+- url: https://devapi.givechariot.com/fdx/v6
+  description: Staging
+security:
+- oauth2: []
+tags:
+- name: Donor Accounts
+paths:
+  /v1/donor_accounts:
+    post:
+      summary: Create Donor Account
+      description: 'Create a new Donor Account.
+
+
+        This endpoint is intended for DAF providers who want to set up a Donor Account on behalf of a donor before that donor uses DAFpay for the first time.
+
+        See the [DAF-Initiated Setup guide](/guides/dafpay/donor-accounts/daf-initiated-setup) for the most common use of this endpoint.
+
+
+        On creation, the Donor Account is placed in `pending` status. To make the account immediately usable for grant submissions, follow up with [Create Authorization Token](/api/donor-accounts/create-authorization-token) and provide the resulting code to the donor — when the donor enters the code in DAFpay, the Donor Account is automatically approved.'
+      operationId: create-donor-account
+      tags:
+      - Donor Accounts
+      security:
+      - bearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/CreateDonorAccountRequest'
+      responses:
+        '201':
+          description: Created
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+            Location:
+              description: The URI reference of the created donor account.
+              schema:
+                type: string
+                format: uri
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonorAccount'
+              examples:
+                Simple:
+                  $ref: '#/components/examples/DonorAccountOutput'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      summary: List Donor Accounts
+      description: 'Returns a list of Donor Accounts for the authenticated DAF.
+
+        This endpoint supports cursor-based pagination as well as filtering by fund, status, and email.'
+      operationId: list-donor-accounts
+      tags:
+      - Donor Accounts
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: giving_pool_id
+        in: query
+        description: The `id` of a [Giving Pool](/api/giving-pools). When set, filters Donor Accounts to those that have this Giving Pool associated with them.
+        schema:
+          type: string
+        required: false
+        example: 0bf40881-8ee2-47fb-98ca-f58c7999aa34
+      - name: status
+        in: query
+        description: Filter Donor Accounts to only those with the specified status.
+        schema:
+          $ref: '#/components/schemas/DonorAccountStatus'
+        required: false
+      - name: email
+        in: query
+        description: Filter Donor Accounts by donor email. The match is case insensitive and exact.
+        schema:
+          type: string
+        required: false
+        example: warrenBuffet@example.com
+      - name: external_id
+        in: query
+        description: Filter Donor Accounts by `external_id` — the DAF's internal identifier for the Donor Account.
+        schema:
+          type: string
+        required: false
+      - name: page_limit
+        in: query
+        description: the number of results to return; defaults to 10, max is 100
+        schema:
+          type: integer
+          default: 10
+      - name: page_token
+        in: query
+        description: A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls and the value of this field should be from the next_page_token in the previous response.
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/ListDonorAccountsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/donor_accounts/{id}:
+    get:
+      summary: Get Donor Account
+      description: Retrieve a Donor Account with the given ID.
+      operationId: get-donor-account
+      tags:
+      - Donor Accounts
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: The unique id of the Donor Account.
+        schema:
+          type: string
+        required: true
+        example: donor_account_01jpjenf5q6cawy43yxfcrxhct
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonorAccount'
+              examples:
+                Simple:
+                  $ref: '#/components/examples/DonorAccountOutput'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    patch:
+      summary: Update Donor Account
+      description: 'Update mutable properties on a Donor Account such as `external_id`, the nested `donor` fields, and `metadata`.
+
+
+        The Donor Account''s status is managed automatically through the Authorization Token verification flow and cannot be changed directly via this endpoint.'
+      operationId: update-donor-account
+      tags:
+      - Donor Accounts
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: The unique id of the Donor Account
+        schema:
+          type: string
+        required: true
+        example: donor_account_01jpjenf5q6cawy43yxfcrxhct
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateDonorAccountRequest'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonorAccount'
+              examples:
+                Simple:
+                  $ref: '#/components/examples/DonorAccountOutput'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/donor_accounts/{id}/disable:
+    post:
+      summary: Disable Donor Account
+      description: 'Disable an approved Donor Account.
+
+
+        A disabled Donor Account remains `approved` but cannot submit new Grant Requests. Existing Grant Requests already in flight are unaffected — disabling does not retroactively cancel or reject prior activity. Use this when a DAF needs to temporarily prevent a donor from initiating new grants (e.g. account under review, donor offboarding) without rejecting the underlying identity verification.
+
+
+        This endpoint is idempotent — calling it on an already-disabled account returns the Donor Account unchanged.
+
+
+        <Warning>
+
+        - The Donor Account must be in `approved` status. Calls on a `pending` or `rejected` account return status `409 Conflict`.
+
+        </Warning>'
+      operationId: disable-donor-account
+      tags:
+      - Donor Accounts
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: The unique id of the Donor Account.
+        schema:
+          type: string
+        required: true
+        example: donor_account_01jpjenf5q6cawy43yxfcrxhct
+      responses:
+        '200':
+          description: The Donor Account was disabled (or was already disabled).
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonorAccount'
+              examples:
+                Disabled:
+                  $ref: '#/components/examples/DonorAccountDisabledOutput'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/donor_accounts/{id}/enable:
+    post:
+      summary: Enable Donor Account
+      description: 'Re-enable a previously disabled Donor Account. After this call, the Donor Account can submit new Grant Requests again.
+
+
+        This endpoint is idempotent — calling it on an account that is already enabled returns the Donor Account unchanged.
+
+
+        <Warning>
+
+        - The Donor Account must be in `approved` status. Calls on a `pending` or `rejected` account return status `409 Conflict`.
+
+        </Warning>'
+      operationId: enable-donor-account
+      tags:
+      - Donor Accounts
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: The unique id of the Donor Account.
+        schema:
+          type: string
+        required: true
+        example: donor_account_01jpjenf5q6cawy43yxfcrxhct
+      responses:
+        '200':
+          description: The Donor Account was enabled (or was already enabled).
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonorAccount'
+              examples:
+                Enabled:
+                  $ref: '#/components/examples/DonorAccountEnabledOutput'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  examples:
+    DonorAccountOutput:
+      summary: Pending donor account
+      value:
+        id: donor_account_01jpjenf5q6cawy43yxfcrxhct
+        status: pending
+        donor:
+          email: warrenBuffet@example.com
+          first_name: null
+          last_name: null
+          phone: null
+        external_id: ACME-DAF-DONOR-1042
+        approval: null
+        rejection: null
+        disabled: false
+        created_at: '2026-04-01T12:00:00Z'
+        updated_at: '2026-04-01T12:00:00Z'
+    DonorAccountEnabledOutput:
+      summary: Previously-disabled donor account that has been re-enabled
+      value:
+        id: donor_account_01jpjenf5q6cawy43yxfcrxhct
+        status: approved
+        donor:
+          email: warrenBuffet@example.com
+          first_name: Warren
+          last_name: Buffet
+          phone: '+12125550100'
+        external_id: ACME-DAF-DONOR-1042
+        approval:
+          approved_at: '2026-04-02T18:30:00Z'
+          approved_by: daf:fid_01jpjenf5q6cawy43yxfcrxhct
+        rejection: null
+        disabled: false
+        created_at: '2026-04-01T12:00:00Z'
+        updated_at: '2026-04-06T11:00:00Z'
+    DonorAccountDisabledOutput:
+      summary: Approved donor account that has been disabled
+      value:
+        id: donor_account_01jpjenf5q6cawy43yxfcrxhct
+        status: approved
+        donor:
+          email: warrenBuffet@example.com
+          first_name: Warren
+          last_name: Buffet
+          phone: '+12125550100'
+        external_id: ACME-DAF-DONOR-1042
+        approval:
+          approved_at: '2026-04-02T18:30:00Z'
+          approved_by: daf:fid_01jpjenf5q6cawy43yxfcrxhct
+        rejection: null
+        disabled: true
+        created_at: '2026-04-01T12:00:00Z'
+        updated_at: '2026-04-05T09:00:00Z'
+  responses:
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    ListDonorAccountsResponse:
+      description: The response for DonorAccounts.list
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DonorAccount'
+              next_page_token:
+                type: string
+                nullable: true
+                description: A cursor token to use to retrieve the next page of results by making another API call to the same endpoint with the same parameters (only changing the page_token). If specified, then more results exist on the server that were not returned, otherwise no more results exist on the server.
+          example:
+            results:
+            - id: donor_account_01jpjenf5q6cawy43yxfcrxhct
+              status: approved
+              donor:
+                email: warrenBuffet@example.com
+                first_name: Warren
+                last_name: Buffet
+                phone: '+12125550100'
+              external_id: ACME-DAF-DONOR-1042
+              approval:
+                approved_at: '2026-04-02T18:30:00Z'
+                approved_by: daf:fid_01jpjenf5q6cawy43yxfcrxhct
+              rejection: null
+              disabled: false
+              created_at: '2026-04-01T12:00:00Z'
+              updated_at: '2026-04-02T18:30:00Z'
+            next_page_token: c3f685f2-2dda-4956-815b-39867a5e5638
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
+    ConflictError:
+      description: Resource Conflicts
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Conflict:
+              value:
+                type: about:blank
+                title: API Error
+                status: 409
+                detail: The request conflicts with the current state of the resource.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+  requestBodies:
+    UpdateDonorAccountRequest:
+      description: 'The request to update mutable properties on a Donor Account.
+
+        Note that the Donor Account''s status is managed automatically through the Authorization Token verification flow and cannot be changed directly via this endpoint.'
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              donor:
+                type: object
+                description: Mutable donor identity fields. Only the fields you pass are updated; omitted fields are left unchanged.
+                properties:
+                  first_name:
+                    type: string
+                    description: The donor's first name.
+                    example: Warren
+                  last_name:
+                    type: string
+                    description: The donor's last name.
+                    example: Buffet
+                  phone:
+                    type: string
+                    description: The donor's phone number.
+                    example: '+12125550100'
+              external_id:
+                type: string
+                description: 'The DAF''s internal identifier for this Donor Account. Maximum length: 255 characters.'
+                example: ACME-DAF-DONOR-1042
+              metadata:
+                type: object
+                description: A map of arbitrary string keys and values to store information about the object.
+                additionalProperties:
+                  type: string
+    CreateDonorAccountRequest:
+      description: 'The request to create a new Donor Account.
+
+        Used by DAFs to pre-establish access for a donor before that donor authenticates through DAFpay.'
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - donor
+            properties:
+              donor:
+                type: object
+                description: The donor's identity and profile information. `email` is required and **must** match the email the donor will use when authenticating with DAFpay — DAFpay matches incoming verified emails to existing Accounts. Other fields are optional and may be filled in later by the donor during DAFpay profile setup.
+                required:
+                - email
+                properties:
+                  email:
+                    type: string
+                    description: The donor's email. Must match the email the donor will use when authenticating with DAFpay.
+                    example: warrenBuffet@example.com
+                  first_name:
+                    type: string
+                    description: The donor's first name.
+                    example: Warren
+                  last_name:
+                    type: string
+                    description: The donor's last name.
+                    example: Buffet
+                  phone:
+                    type: string
+                    description: The donor's phone number.
+                    example: '+12125550100'
+              external_id:
+                type: string
+                description: 'The DAF''s internal identifier for this Donor Account. Optional but strongly recommended — it allows you to reconcile DAFpay grants with the donor''s record in your own system without an additional update later. Maximum length: 255 characters.'
+                example: ACME-DAF-DONOR-1042
+              metadata:
+                type: object
+                description: A map of arbitrary string keys and values to store information about the object.
+                additionalProperties:
+                  type: string
+  schemas:
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
+    DonorAccountStatus:
+      type: string
+      description: "The status of a [Donor Account](/api/donor-accounts).\n  * `pending`: The Donor Account has been created but the DAF has not yet approved or rejected it.\n  * `approved`: The DAF has verified the donor's identity and Grants from this account can be processed.\n  * `rejected`: The DAF has rejected the Donor Account. Grants from this account will not be processed."
+      enum:
+      - pending
+      - approved
+      - rejected
+      example: pending
+    DonorAccount:
+      type: object
+      description: 'A Donor Account represents a DAFpay donor identity at a DAF.
+
+
+        Donor Accounts are the bridge between a donor''s verified DAFpay identity (email, profile) and the donor''s record at the DAF.
+
+        An Account must reach `approved` status — via an [Authorization Token](/api/authorization-tokens) — before its Grant Requests can be processed.
+
+
+        A Donor Account may optionally have one or more [Giving Pools](/api/giving-pools) associated with it (see [Giving Pool](/api/giving-pools)). The relationship is many-to-one from `GivingPool` to `DonorAccount` — each Giving Pool belongs to exactly one Donor Account.
+
+
+        There are two flows for how an Account reaches `approved`:
+
+
+        - **Donor-Initiated Verification**: After a donor submits a Grant Request, DAFpay issues a one-time [Authorization Token](/api/authorization-tokens) and emails the `code` to the donor. The donor provides the code to the DAF, who calls [Verify Authorization Token](/api/authorization-tokens/verify) to approve the account.
+
+        - **DAF-Initiated Setup**: The DAF creates the Donor Account and an Authorization Token in advance (e.g. when a donor opts in via the DAF portal). The donor enters the token''s `code` into DAFpay during profile setup, automatically approving the account.
+
+
+        See the [Donor Accounts overview](/guides/dafpay/donor-accounts/overview) for a full discussion of these flows.'
+      required:
+      - id
+      - status
+      - donor
+      - created_at
+      - updated_at
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: The unique identifier for this object.
+          example: donor_account_01jpjenf5q6cawy43yxfcrxhct
+        status:
+          $ref: '#/components/schemas/DonorAccountStatus'
+        donor:
+          type: object
+          description: The donor's identity and profile information.
+          required:
+          - email
+          properties:
+            email:
+              type: string
+              readOnly: true
+              description: The donor's email. This is the donor's verified identifier — DAFpay verifies ownership via an email verification flow before a Donor Account is created.
+              example: warrenBuffet@example.com
+            first_name:
+              type: string
+              nullable: true
+              description: The donor's first name as captured during DAFpay profile setup. May be null for Donor Accounts created via [Create Donor Account](/api/donor-accounts/create) before the donor has authenticated.
+              example: Warren
+            last_name:
+              type: string
+              nullable: true
+              description: The donor's last name as captured during DAFpay profile setup. May be null for Donor Accounts created via [Create Donor Account](/api/donor-accounts/create) before the donor has authenticated.
+              example: Buffet
+            phone:
+              type: string
+              nullable: true
+              description: 'The donor''s phone number as captured during DAFpay profile setup.
+
+                <Note>
+
+                DAFpay does not currently verify ownership of the phone number. Treat this field as donor-asserted information.
+
+                </Note>'
+              example: '+12125550100'
+        external_id:
+          type: string
+          nullable: true
+          description: The DAF's internal identifier for this Donor Account. Can be set on creation or via [Update Donor Account](/api/donor-accounts/update) to link the DAFpay Donor Account to the donor's record in the DAF's own systems.
+          example: ACME-DAF-DONOR-1042
+        approval:
+          type: object
+          nullable: true
+          readOnly: true
+          description: Details about the approval decision. Present when `status` is `approved`; otherwise `null`.
+          properties:
+            approved_at:
+              type: string
+              readOnly: true
+              format: date-time
+              description: Time when the Donor Account was approved. Expressed in RFC 3339 format.
+              example: '2026-04-02T18:30:00Z'
+            approved_by:
+              type: string
+              readOnly: true
+              description: Identifier of the actor that approved this Donor Account. For DAF-initiated approvals, this is the DAF's API key principal. For automatic approvals via token verification, this is `system:authorization_token`.
+              example: daf:fid_01jpjenf5q6cawy43yxfcrxhct
+        rejection:
+          type: object
+          nullable: true
+          readOnly: true
+          description: Details about the rejection decision. Present when `status` is `rejected`; otherwise `null`.
+          properties:
+            rejected_at:
+              type: string
+              readOnly: true
+              format: date-time
+              description: Time when the Donor Account was rejected. Expressed in RFC 3339 format.
+              example: '2026-04-02T18:30:00Z'
+            rejected_by:
+              type: string
+              readOnly: true
+              description: Identifier of the actor that rejected this Donor Account. For DAF-initiated rejections, this is the DAF's API key principal.
+              example: daf:fid_01jpjenf5q6cawy43yxfcrxhct
+            rejection_reason:
+              type: string
+              readOnly: true
+              description: A human-readable reason provided by the DAF when rejecting the Donor Account.
+              example: Donor could not be located in our records.
+        disabled:
+          type: boolean
+          readOnly: true
+          description: Whether this Donor Account is currently disabled. A disabled Donor Account remains `approved` but cannot submit new Grant Requests — call [Enable Donor Account](/api/donor-accounts/enable) to re-enable it. Disabling is only available for accounts in `approved` status.
+          default: false
+          example: false
+        created_at:
+          type: string
+          readOnly: true
+          format: date-time
+          description: Time when this object was created. Expressed in RFC 3339 format.
+          example: '2026-04-01T12:00:00Z'
+        updated_at:
+          type: string
+          readOnly: true
+          format: date-time
+          description: Time when this object was last updated. Expressed in RFC 3339 format.
+          example: '2026-04-02T18:30:00Z'
+        metadata:
+          type: object
+          description: A map of arbitrary string keys and values to store information about the object.
+          additionalProperties:
+            type: string
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 Bearer token. A client may hold both scopes, but each FDX authorization must contain exactly one — they are mutually exclusive per authorization. An authorization containing both will be rejected. See the Authentication page for token exchange details.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://dashboard.givechariot.com/oauth/authorize
+          tokenUrl: https://api.givechariot.com/auth/oauth/token
+          scopes:
+            read:bank_accounts: Read access to bank account data
+            sync:connected_accounts: Sync access to connected account data

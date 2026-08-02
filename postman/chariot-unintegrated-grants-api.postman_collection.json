@@ -1,0 +1,855 @@
+{
+  "info": {
+    "_postman_id": "0687448d-adf7-4b47-aa8a-5cf966b174b6",
+    "name": "Chariot FDX Accounts unintegrated_grants API",
+    "description": "Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.\n\nContact Support:\n Name: Chariot Development Team\n Email: developers@givechariot.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:20:10.000Z",
+    "updatedAt": "2026-07-28T01:20:10.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-0687448d-adf7-4b47-aa8a-5cf966b174b6"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "unintegrated_grants",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "Get Unintegrated Grant",
+                  "id": "9dbfe9c1-cb3c-4252-82ce-b5d0dc34cb0c",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/unintegrated_grants/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "unintegrated_grants",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "id": "113da51a-412f-44f2-88fb-de1deae039c6",
+                          "key": "id",
+                          "value": "<uuid>",
+                          "description": "(Required) The unique id of the unintegrated grant.\nThe format should be a v4 UUID according to RFC 4122."
+                        }
+                      ]
+                    },
+                    "description": "Retrieve an unintegrated grant with a given ID."
+                  },
+                  "response": [
+                    {
+                      "id": "bc5a2c73-a2c3-4afc-98ed-f79e010d88e9",
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/unintegrated_grants/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "unintegrated_grants",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<uuid>\",\n  \"workflowSessionId\": \"<uuid>\",\n  \"fundId\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"userFriendlyId\": \"<string>\",\n  \"trackingId\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"updatedAt\": \"<dateTime>\",\n  \"status\": \"Unknown\",\n  \"metadata\": {\n    \"dolore_3\": \"<string>\",\n    \"esse_0c\": \"<string>\"\n  },\n  \"firstName\": \"<string>\",\n  \"lastName\": \"<string>\",\n  \"phone\": \"<string>\",\n  \"email\": \"<string>\",\n  \"address\": {\n    \"line1\": \"<string>\",\n    \"line2\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"postalCode\": \"<string>\"\n  },\n  \"note\": \"<string>\",\n  \"paymentChannel\": \"offline\"\n}",
+                      "createdAt": "2026-07-28T01:20:10.000Z",
+                      "updatedAt": "2026-07-28T01:20:10.000Z",
+                      "uid": "35240-bc5a2c73-a2c3-4afc-98ed-f79e010d88e9"
+                    },
+                    {
+                      "id": "6c51f1d6-7e40-496a-920d-9493a1035612",
+                      "name": "The request is invalid or contains invalid parameters",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/unintegrated_grants/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "unintegrated_grants",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:10.000Z",
+                      "updatedAt": "2026-07-28T01:20:10.000Z",
+                      "uid": "35240-6c51f1d6-7e40-496a-920d-9493a1035612"
+                    },
+                    {
+                      "id": "0314de2b-46cf-4cdc-a80c-a23d3e265a49",
+                      "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/unintegrated_grants/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "unintegrated_grants",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:10.000Z",
+                      "updatedAt": "2026-07-28T01:20:10.000Z",
+                      "uid": "35240-0314de2b-46cf-4cdc-a80c-a23d3e265a49"
+                    },
+                    {
+                      "id": "9ce325fb-2ff6-4972-821a-2803475f1324",
+                      "name": "Access denied",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/unintegrated_grants/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "unintegrated_grants",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:10.000Z",
+                      "updatedAt": "2026-07-28T01:20:10.000Z",
+                      "uid": "35240-9ce325fb-2ff6-4972-821a-2803475f1324"
+                    },
+                    {
+                      "id": "e2c6f078-ffbe-44eb-b45e-65c391108c96",
+                      "name": "Resource Not Found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/unintegrated_grants/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "unintegrated_grants",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:10.000Z",
+                      "updatedAt": "2026-07-28T01:20:10.000Z",
+                      "uid": "35240-e2c6f078-ffbe-44eb-b45e-65c391108c96"
+                    },
+                    {
+                      "id": "42853a91-740c-4e63-96de-abbb14fe8e59",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/unintegrated_grants/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "unintegrated_grants",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:10.000Z",
+                      "updatedAt": "2026-07-28T01:20:10.000Z",
+                      "uid": "35240-42853a91-740c-4e63-96de-abbb14fe8e59"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:20:10.000Z",
+                  "updatedAt": "2026-07-28T01:20:10.000Z",
+                  "uid": "35240-9dbfe9c1-cb3c-4252-82ce-b5d0dc34cb0c"
+                }
+              ],
+              "id": "b8147f82-cc48-4162-8347-b1ad6ed98de4",
+              "createdAt": "2026-07-28T01:20:10.000Z",
+              "updatedAt": "2026-07-28T01:20:10.000Z",
+              "uid": "35240-b8147f82-cc48-4162-8347-b1ad6ed98de4"
+            },
+            {
+              "name": "List Unintegrated Grants",
+              "id": "d4a978f7-a616-4d95-9d8a-e04bf782a282",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/unintegrated_grants?connect_id=<string>&pageLimit=10&pageToken=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "unintegrated_grants"
+                  ],
+                  "query": [
+                    {
+                      "description": "the `id` of the Connect object. This can be used to filter the unintegrated grants by a specific Connect if you have more than one.",
+                      "key": "connect_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "the number of results to return; defaults to 10, max is 100",
+                      "key": "pageLimit",
+                      "value": "10"
+                    },
+                    {
+                      "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls and the value of this field should be from the nextPageToken in the previous response.",
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ]
+                },
+                "description": "Returns a list of all unintegrated grants for a given Connect. This API allows for paginating over many results."
+              },
+              "response": [
+                {
+                  "id": "00816d55-a92b-42a5-8d4c-063cfc1ae3e1",
+                  "name": "The response for UnintegratedGrants.list",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/unintegrated_grants?connect_id=<string>&pageLimit=10&pageToken=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "unintegrated_grants"
+                      ],
+                      "query": [
+                        {
+                          "description": "the `id` of the Connect object. This can be used to filter the unintegrated grants by a specific Connect if you have more than one.",
+                          "key": "connect_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "the number of results to return; defaults to 10, max is 100",
+                          "key": "pageLimit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls and the value of this field should be from the nextPageToken in the previous response.",
+                          "key": "pageToken",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"results\": [\n    {\n      \"id\": \"<uuid>\",\n      \"workflowSessionId\": \"<uuid>\",\n      \"fundId\": \"<string>\",\n      \"amount\": \"<number>\",\n      \"userFriendlyId\": \"<string>\",\n      \"trackingId\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"updatedAt\": \"<dateTime>\",\n      \"status\": \"Completed\",\n      \"metadata\": {\n        \"et_9\": \"<string>\",\n        \"nisi__\": \"<string>\"\n      },\n      \"firstName\": \"<string>\",\n      \"lastName\": \"<string>\",\n      \"phone\": \"<string>\",\n      \"email\": \"<string>\",\n      \"address\": {\n        \"line1\": \"<string>\",\n        \"line2\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"postalCode\": \"<string>\"\n      },\n      \"note\": \"<string>\",\n      \"paymentChannel\": \"offline\"\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"workflowSessionId\": \"<uuid>\",\n      \"fundId\": \"<string>\",\n      \"amount\": \"<number>\",\n      \"userFriendlyId\": \"<string>\",\n      \"trackingId\": \"<string>\",\n      \"createdAt\": \"<dateTime>\",\n      \"updatedAt\": \"<dateTime>\",\n      \"status\": \"Unknown\",\n      \"metadata\": {\n        \"ut132\": \"<string>\",\n        \"in0\": \"<string>\",\n        \"autec\": \"<string>\"\n      },\n      \"firstName\": \"<string>\",\n      \"lastName\": \"<string>\",\n      \"phone\": \"<string>\",\n      \"email\": \"<string>\",\n      \"address\": {\n        \"line1\": \"<string>\",\n        \"line2\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"postalCode\": \"<string>\"\n      },\n      \"note\": \"<string>\",\n      \"paymentChannel\": \"offline\"\n    }\n  ],\n  \"nextPageToken\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:10.000Z",
+                  "updatedAt": "2026-07-28T01:20:10.000Z",
+                  "uid": "35240-00816d55-a92b-42a5-8d4c-063cfc1ae3e1"
+                },
+                {
+                  "id": "b197b03d-037c-4acf-99e9-eb5aa20f22ba",
+                  "name": "The request is invalid or contains invalid parameters",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/unintegrated_grants?connect_id=<string>&pageLimit=10&pageToken=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "unintegrated_grants"
+                      ],
+                      "query": [
+                        {
+                          "description": "the `id` of the Connect object. This can be used to filter the unintegrated grants by a specific Connect if you have more than one.",
+                          "key": "connect_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "the number of results to return; defaults to 10, max is 100",
+                          "key": "pageLimit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls and the value of this field should be from the nextPageToken in the previous response.",
+                          "key": "pageToken",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:10.000Z",
+                  "updatedAt": "2026-07-28T01:20:10.000Z",
+                  "uid": "35240-b197b03d-037c-4acf-99e9-eb5aa20f22ba"
+                },
+                {
+                  "id": "a67dcc19-7791-4ecd-b3fa-257e81b9a21a",
+                  "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/unintegrated_grants?connect_id=<string>&pageLimit=10&pageToken=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "unintegrated_grants"
+                      ],
+                      "query": [
+                        {
+                          "description": "the `id` of the Connect object. This can be used to filter the unintegrated grants by a specific Connect if you have more than one.",
+                          "key": "connect_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "the number of results to return; defaults to 10, max is 100",
+                          "key": "pageLimit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls and the value of this field should be from the nextPageToken in the previous response.",
+                          "key": "pageToken",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:10.000Z",
+                  "updatedAt": "2026-07-28T01:20:10.000Z",
+                  "uid": "35240-a67dcc19-7791-4ecd-b3fa-257e81b9a21a"
+                },
+                {
+                  "id": "6b422c57-6556-4007-a6c4-e49733af0f59",
+                  "name": "Access denied",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/unintegrated_grants?connect_id=<string>&pageLimit=10&pageToken=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "unintegrated_grants"
+                      ],
+                      "query": [
+                        {
+                          "description": "the `id` of the Connect object. This can be used to filter the unintegrated grants by a specific Connect if you have more than one.",
+                          "key": "connect_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "the number of results to return; defaults to 10, max is 100",
+                          "key": "pageLimit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls and the value of this field should be from the nextPageToken in the previous response.",
+                          "key": "pageToken",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:10.000Z",
+                  "updatedAt": "2026-07-28T01:20:10.000Z",
+                  "uid": "35240-6b422c57-6556-4007-a6c4-e49733af0f59"
+                },
+                {
+                  "id": "3d6aa0dc-7d1d-4f64-ab0e-b55e2f39f7c5",
+                  "name": "Internal Server Error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/unintegrated_grants?connect_id=<string>&pageLimit=10&pageToken=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "unintegrated_grants"
+                      ],
+                      "query": [
+                        {
+                          "description": "the `id` of the Connect object. This can be used to filter the unintegrated grants by a specific Connect if you have more than one.",
+                          "key": "connect_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "the number of results to return; defaults to 10, max is 100",
+                          "key": "pageLimit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls and the value of this field should be from the nextPageToken in the previous response.",
+                          "key": "pageToken",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:10.000Z",
+                  "updatedAt": "2026-07-28T01:20:10.000Z",
+                  "uid": "35240-3d6aa0dc-7d1d-4f64-ab0e-b55e2f39f7c5"
+                }
+              ],
+              "createdAt": "2026-07-28T01:20:10.000Z",
+              "updatedAt": "2026-07-28T01:20:10.000Z",
+              "uid": "35240-d4a978f7-a616-4d95-9d8a-e04bf782a282"
+            }
+          ],
+          "id": "72093bdb-0346-4c8c-beea-a262be9db609",
+          "createdAt": "2026-07-28T01:20:10.000Z",
+          "updatedAt": "2026-07-28T01:20:10.000Z",
+          "uid": "35240-72093bdb-0346-4c8c-beea-a262be9db609"
+        }
+      ],
+      "id": "5fb84260-3b3e-436b-ba0b-b035a572dd93",
+      "createdAt": "2026-07-28T01:20:10.000Z",
+      "updatedAt": "2026-07-28T01:20:10.000Z",
+      "uid": "35240-5fb84260-3b3e-436b-ba0b-b035a572dd93"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read:bank_accounts sync:connected_accounts",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.givechariot.com/auth/oauth/token",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://dashboard.givechariot.com/oauth/authorize",
+        "type": "string"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.givechariot.com/fdx/v6"
+    }
+  ]
+}

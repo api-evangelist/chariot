@@ -1,0 +1,25 @@
+generated: '2026-07-18'
+method: searched
+source: https://www.npmjs.com/package/react-chariot-connect + https://docs.givechariot.com
+components:
+  - family: Chariot Connect
+    kind: embedded-widget
+    description: >-
+      Client-side DAFpay integration surface. Chariot Connect is the embeddable donor-advised-fund
+      payment flow a fundraising site drops in so donors can give directly from their DAF; it opens
+      the Connect experience and returns a grant intent to the host application.
+    loaders:
+      - language: react
+        library: react-chariot-connect
+        registry: npm
+        url: https://www.npmjs.com/package/react-chariot-connect
+        repository: https://github.com/chariot-giving/react-chariot-connect
+        exports: [ChariotConnect component, useChariotConnect hook]
+        official: true
+    backing_operations:
+      - create-connect
+      - get-connect
+    docs: https://help.givechariot.com/dafpay/editor/fundraising-platforms
+notes: >-
+  Distinct from the server SDK (@chariot-giving/typescript-sdk in packages/). This is the client/UI
+  embed for the donation flow, wired to the Connects API.

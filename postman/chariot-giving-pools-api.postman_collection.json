@@ -1,0 +1,855 @@
+{
+  "info": {
+    "_postman_id": "2d5454fc-bfcd-451f-89a5-0a1ad4317525",
+    "name": "Chariot FDX Accounts Giving Pools API",
+    "description": "Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.\n\nContact Support:\n Name: Chariot Development Team\n Email: developers@givechariot.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:19:36.000Z",
+    "updatedAt": "2026-07-28T01:19:37.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-2d5454fc-bfcd-451f-89a5-0a1ad4317525"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "giving_pools",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "Get Giving Pool",
+                  "id": "7180a07c-6f53-47d5-bfba-bf333d49e4e4",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/giving_pools/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "giving_pools",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "id": "05a4f66d-57a5-4f21-89ec-85a056f4e9a9",
+                          "key": "id",
+                          "value": "<uuid>",
+                          "description": "(Required) The unique ID of the Giving Pool."
+                        }
+                      ]
+                    },
+                    "description": "Retrieve a Giving Pool with the given ID."
+                  },
+                  "response": [
+                    {
+                      "id": "b521d8c4-b9be-4b64-bef4-be65a7193ea0",
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/giving_pools/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "giving_pools",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"donor_account_id\": \"<string>\",\n  \"created_at\": \"<dateTime>\",\n  \"updated_at\": \"<dateTime>\",\n  \"metadata\": {\n    \"minim_8b1\": \"<string>\",\n    \"labore_61a\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-07-28T01:19:37.000Z",
+                      "updatedAt": "2026-07-28T01:19:37.000Z",
+                      "uid": "35240-b521d8c4-b9be-4b64-bef4-be65a7193ea0"
+                    },
+                    {
+                      "id": "7f51e443-554c-4224-ac67-4f7f5622d171",
+                      "name": "The request is invalid or contains invalid parameters",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/giving_pools/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "giving_pools",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:37.000Z",
+                      "updatedAt": "2026-07-28T01:19:37.000Z",
+                      "uid": "35240-7f51e443-554c-4224-ac67-4f7f5622d171"
+                    },
+                    {
+                      "id": "51e06b44-a0db-4d50-bb99-77ed296c6679",
+                      "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/giving_pools/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "giving_pools",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:37.000Z",
+                      "updatedAt": "2026-07-28T01:19:37.000Z",
+                      "uid": "35240-51e06b44-a0db-4d50-bb99-77ed296c6679"
+                    },
+                    {
+                      "id": "522fb181-9057-4bb5-a875-763380742c9e",
+                      "name": "Access denied",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/giving_pools/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "giving_pools",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:37.000Z",
+                      "updatedAt": "2026-07-28T01:19:37.000Z",
+                      "uid": "35240-522fb181-9057-4bb5-a875-763380742c9e"
+                    },
+                    {
+                      "id": "8b1d71c9-e2a7-4996-8bb7-9b740b5e1121",
+                      "name": "Resource Not Found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/giving_pools/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "giving_pools",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:37.000Z",
+                      "updatedAt": "2026-07-28T01:19:37.000Z",
+                      "uid": "35240-8b1d71c9-e2a7-4996-8bb7-9b740b5e1121"
+                    },
+                    {
+                      "id": "b2958e59-9d23-4b04-9be5-99cac75511e4",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/giving_pools/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "giving_pools",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:37.000Z",
+                      "updatedAt": "2026-07-28T01:19:37.000Z",
+                      "uid": "35240-b2958e59-9d23-4b04-9be5-99cac75511e4"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:19:37.000Z",
+                  "updatedAt": "2026-07-28T01:19:37.000Z",
+                  "uid": "35240-7180a07c-6f53-47d5-bfba-bf333d49e4e4"
+                }
+              ],
+              "id": "bed529d9-866c-4644-bae2-2b38214edfc1",
+              "createdAt": "2026-07-28T01:19:37.000Z",
+              "updatedAt": "2026-07-28T01:19:37.000Z",
+              "uid": "35240-bed529d9-866c-4644-bae2-2b38214edfc1"
+            },
+            {
+              "name": "List Giving Pools",
+              "id": "0ecad4ab-bfde-47a4-b0b5-3f44e36e4d4e",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/giving_pools?donor_account_id=<string>&page_limit=10&page_token=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "giving_pools"
+                  ],
+                  "query": [
+                    {
+                      "description": "Filter Giving Pools by the ID of the associated [Donor Account](/api/donor-accounts).",
+                      "key": "donor_account_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "The number of results to return. Defaults to 10, max is 100.",
+                      "key": "page_limit",
+                      "value": "10"
+                    },
+                    {
+                      "description": "A token to retrieve the next page of results.",
+                      "key": "page_token",
+                      "value": "<string>"
+                    }
+                  ]
+                },
+                "description": "Returns a list of Giving Pools accessible to the authenticated DAF account.\n\nGiving Pools represent individual named giving pools within a donor's DAF account (e.g. \"Smith Family Fund\").\nA [Donor Account](/api/donor-accounts) may be associated with multiple Giving Pools."
+              },
+              "response": [
+                {
+                  "id": "ed4a796e-1537-4ade-911b-17d33cccc7f4",
+                  "name": "OK",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/giving_pools?donor_account_id=<string>&page_limit=10&page_token=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "giving_pools"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter Giving Pools by the ID of the associated [Donor Account](/api/donor-accounts).",
+                          "key": "donor_account_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The number of results to return. Defaults to 10, max is 100.",
+                          "key": "page_limit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "A token to retrieve the next page of results.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"results\": [\n    {\n      \"id\": \"<uuid>\",\n      \"name\": \"<string>\",\n      \"donor_account_id\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"metadata\": {\n        \"proident50f\": \"<string>\"\n      }\n    },\n    {\n      \"id\": \"<uuid>\",\n      \"name\": \"<string>\",\n      \"donor_account_id\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"metadata\": {\n        \"ipsum971\": \"<string>\",\n        \"ad46e\": \"<string>\"\n      }\n    }\n  ],\n  \"next_page_token\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:37.000Z",
+                  "updatedAt": "2026-07-28T01:19:37.000Z",
+                  "uid": "35240-ed4a796e-1537-4ade-911b-17d33cccc7f4"
+                },
+                {
+                  "id": "11ae2e4c-86f6-4c2b-aeea-8db4b001ba7d",
+                  "name": "The request is invalid or contains invalid parameters",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/giving_pools?donor_account_id=<string>&page_limit=10&page_token=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "giving_pools"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter Giving Pools by the ID of the associated [Donor Account](/api/donor-accounts).",
+                          "key": "donor_account_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The number of results to return. Defaults to 10, max is 100.",
+                          "key": "page_limit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "A token to retrieve the next page of results.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:37.000Z",
+                  "updatedAt": "2026-07-28T01:19:37.000Z",
+                  "uid": "35240-11ae2e4c-86f6-4c2b-aeea-8db4b001ba7d"
+                },
+                {
+                  "id": "33d93be3-bd80-41c6-a6e4-f836a105d9c1",
+                  "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/giving_pools?donor_account_id=<string>&page_limit=10&page_token=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "giving_pools"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter Giving Pools by the ID of the associated [Donor Account](/api/donor-accounts).",
+                          "key": "donor_account_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The number of results to return. Defaults to 10, max is 100.",
+                          "key": "page_limit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "A token to retrieve the next page of results.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:37.000Z",
+                  "updatedAt": "2026-07-28T01:19:37.000Z",
+                  "uid": "35240-33d93be3-bd80-41c6-a6e4-f836a105d9c1"
+                },
+                {
+                  "id": "9a323739-05c2-4a49-aa11-8a0bf8aa315e",
+                  "name": "Access denied",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/giving_pools?donor_account_id=<string>&page_limit=10&page_token=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "giving_pools"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter Giving Pools by the ID of the associated [Donor Account](/api/donor-accounts).",
+                          "key": "donor_account_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The number of results to return. Defaults to 10, max is 100.",
+                          "key": "page_limit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "A token to retrieve the next page of results.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:37.000Z",
+                  "updatedAt": "2026-07-28T01:19:37.000Z",
+                  "uid": "35240-9a323739-05c2-4a49-aa11-8a0bf8aa315e"
+                },
+                {
+                  "id": "510791d9-39b3-44ba-b5cd-d5cc5b9a07c9",
+                  "name": "Internal Server Error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/giving_pools?donor_account_id=<string>&page_limit=10&page_token=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "giving_pools"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter Giving Pools by the ID of the associated [Donor Account](/api/donor-accounts).",
+                          "key": "donor_account_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The number of results to return. Defaults to 10, max is 100.",
+                          "key": "page_limit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "A token to retrieve the next page of results.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:37.000Z",
+                  "updatedAt": "2026-07-28T01:19:37.000Z",
+                  "uid": "35240-510791d9-39b3-44ba-b5cd-d5cc5b9a07c9"
+                }
+              ],
+              "createdAt": "2026-07-28T01:19:37.000Z",
+              "updatedAt": "2026-07-28T01:19:37.000Z",
+              "uid": "35240-0ecad4ab-bfde-47a4-b0b5-3f44e36e4d4e"
+            }
+          ],
+          "id": "96f8c543-dade-43fd-9f21-d3dc2c7a7752",
+          "createdAt": "2026-07-28T01:19:37.000Z",
+          "updatedAt": "2026-07-28T01:19:37.000Z",
+          "uid": "35240-96f8c543-dade-43fd-9f21-d3dc2c7a7752"
+        }
+      ],
+      "id": "6057d0d2-09f8-49dd-8f82-91becd886b19",
+      "createdAt": "2026-07-28T01:19:37.000Z",
+      "updatedAt": "2026-07-28T01:19:37.000Z",
+      "uid": "35240-6057d0d2-09f8-49dd-8f82-91becd886b19"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read:bank_accounts sync:connected_accounts",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.givechariot.com/auth/oauth/token",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://dashboard.givechariot.com/oauth/authorize",
+        "type": "string"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.givechariot.com/fdx/v6"
+    }
+  ]
+}

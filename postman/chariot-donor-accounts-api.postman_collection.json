@@ -1,0 +1,2811 @@
+{
+  "info": {
+    "_postman_id": "69aff737-3c5c-4cff-8505-fb72c9705832",
+    "name": "Chariot FDX Accounts Donor Accounts API",
+    "description": "Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.\n\nContact Support:\n Name: Chariot Development Team\n Email: developers@givechariot.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:19:28.000Z",
+    "updatedAt": "2026-07-28T01:19:29.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-69aff737-3c5c-4cff-8505-fb72c9705832"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "donor_accounts",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "disable",
+                  "item": [
+                    {
+                      "name": "Disable Donor Account",
+                      "id": "0d3ac7be-a1fc-4fdc-919a-7f6d087cfb3f",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donor_accounts/:id/disable",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donor_accounts",
+                            ":id",
+                            "disable"
+                          ],
+                          "variable": [
+                            {
+                              "id": "13fb3fd0-a0f7-442c-a759-6ba2460cec59",
+                              "key": "id",
+                              "value": "<string>",
+                              "description": "(Required) The unique id of the Donor Account."
+                            }
+                          ]
+                        },
+                        "description": "Disable an approved Donor Account.\n\nA disabled Donor Account remains `approved` but cannot submit new Grant Requests. Existing Grant Requests already in flight are unaffected \u2014 disabling does not retroactively cancel or reject prior activity. Use this when a DAF needs to temporarily prevent a donor from initiating new grants (e.g. account under review, donor offboarding) without rejecting the underlying identity verification.\n\nThis endpoint is idempotent \u2014 calling it on an already-disabled account returns the Donor Account unchanged.\n\n<Warning>\n- The Donor Account must be in `approved` status. Calls on a `pending` or `rejected` account return status `409 Conflict`.\n</Warning>"
+                      },
+                      "response": [
+                        {
+                          "id": "05a95de8-4ed5-4248-b6c2-8c65c08065ab",
+                          "name": "The Donor Account was disabled (or was already disabled).",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/disable",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "disable"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"status\": \"pending\",\n  \"donor\": {\n    \"email\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phone\": \"<string>\"\n  },\n  \"created_at\": \"<dateTime>\",\n  \"updated_at\": \"<dateTime>\",\n  \"external_id\": \"<string>\",\n  \"approval\": {\n    \"approved_at\": \"<dateTime>\",\n    \"approved_by\": \"<string>\"\n  },\n  \"rejection\": {\n    \"rejected_at\": \"<dateTime>\",\n    \"rejected_by\": \"<string>\",\n    \"rejection_reason\": \"<string>\"\n  },\n  \"disabled\": false,\n  \"metadata\": {\n    \"velit_1e\": \"<string>\",\n    \"est_8\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-07-28T01:19:29.000Z",
+                          "updatedAt": "2026-07-28T01:19:29.000Z",
+                          "uid": "35240-05a95de8-4ed5-4248-b6c2-8c65c08065ab"
+                        },
+                        {
+                          "id": "781523d6-5927-4cdf-8281-970fce9debfe",
+                          "name": "The request is invalid or contains invalid parameters",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/disable",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "disable"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:29.000Z",
+                          "updatedAt": "2026-07-28T01:19:29.000Z",
+                          "uid": "35240-781523d6-5927-4cdf-8281-970fce9debfe"
+                        },
+                        {
+                          "id": "7d63f4fc-5154-4e56-9823-617635dfc786",
+                          "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/disable",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "disable"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:29.000Z",
+                          "updatedAt": "2026-07-28T01:19:29.000Z",
+                          "uid": "35240-7d63f4fc-5154-4e56-9823-617635dfc786"
+                        },
+                        {
+                          "id": "9b46a35b-dbb2-47a6-b11a-80f9490bc347",
+                          "name": "Access denied",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/disable",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "disable"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:29.000Z",
+                          "updatedAt": "2026-07-28T01:19:29.000Z",
+                          "uid": "35240-9b46a35b-dbb2-47a6-b11a-80f9490bc347"
+                        },
+                        {
+                          "id": "b13d6240-5a92-4247-a076-cb9356e9d0ff",
+                          "name": "Resource Not Found",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/disable",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "disable"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:29.000Z",
+                          "updatedAt": "2026-07-28T01:19:29.000Z",
+                          "uid": "35240-b13d6240-5a92-4247-a076-cb9356e9d0ff"
+                        },
+                        {
+                          "id": "617029ab-26fa-4b08-8413-1c4622054efb",
+                          "name": "Resource Conflicts",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/disable",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "disable"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Conflict",
+                          "code": 409,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:29.000Z",
+                          "updatedAt": "2026-07-28T01:19:29.000Z",
+                          "uid": "35240-617029ab-26fa-4b08-8413-1c4622054efb"
+                        },
+                        {
+                          "id": "5cc7f130-db7c-4925-836a-47cc5386ae1e",
+                          "name": "Internal Server Error",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/disable",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "disable"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:29.000Z",
+                          "updatedAt": "2026-07-28T01:19:29.000Z",
+                          "uid": "35240-5cc7f130-db7c-4925-836a-47cc5386ae1e"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:19:29.000Z",
+                      "updatedAt": "2026-07-28T01:19:29.000Z",
+                      "uid": "35240-0d3ac7be-a1fc-4fdc-919a-7f6d087cfb3f"
+                    }
+                  ],
+                  "id": "0c4c7254-6d94-4849-84ff-275ad893611d",
+                  "createdAt": "2026-07-28T01:19:29.000Z",
+                  "updatedAt": "2026-07-28T01:19:29.000Z",
+                  "uid": "35240-0c4c7254-6d94-4849-84ff-275ad893611d"
+                },
+                {
+                  "name": "enable",
+                  "item": [
+                    {
+                      "name": "Enable Donor Account",
+                      "id": "47421bcd-7b16-491b-b9ab-e7616ff82e65",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donor_accounts/:id/enable",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donor_accounts",
+                            ":id",
+                            "enable"
+                          ],
+                          "variable": [
+                            {
+                              "id": "e9e2936e-fd67-459c-961e-c51f84730ea8",
+                              "key": "id",
+                              "value": "<string>",
+                              "description": "(Required) The unique id of the Donor Account."
+                            }
+                          ]
+                        },
+                        "description": "Re-enable a previously disabled Donor Account. After this call, the Donor Account can submit new Grant Requests again.\n\nThis endpoint is idempotent \u2014 calling it on an account that is already enabled returns the Donor Account unchanged.\n\n<Warning>\n- The Donor Account must be in `approved` status. Calls on a `pending` or `rejected` account return status `409 Conflict`.\n</Warning>"
+                      },
+                      "response": [
+                        {
+                          "id": "5e054df9-491c-4241-b882-75126f3ac482",
+                          "name": "The Donor Account was enabled (or was already enabled).",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/enable",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "enable"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"status\": \"pending\",\n  \"donor\": {\n    \"email\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phone\": \"<string>\"\n  },\n  \"created_at\": \"<dateTime>\",\n  \"updated_at\": \"<dateTime>\",\n  \"external_id\": \"<string>\",\n  \"approval\": {\n    \"approved_at\": \"<dateTime>\",\n    \"approved_by\": \"<string>\"\n  },\n  \"rejection\": {\n    \"rejected_at\": \"<dateTime>\",\n    \"rejected_by\": \"<string>\",\n    \"rejection_reason\": \"<string>\"\n  },\n  \"disabled\": false,\n  \"metadata\": {\n    \"velit_1e\": \"<string>\",\n    \"est_8\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-07-28T01:19:29.000Z",
+                          "updatedAt": "2026-07-28T01:19:29.000Z",
+                          "uid": "35240-5e054df9-491c-4241-b882-75126f3ac482"
+                        },
+                        {
+                          "id": "48618cbf-8dcb-4d0d-bcf1-12c58e8ab391",
+                          "name": "The request is invalid or contains invalid parameters",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/enable",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "enable"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:29.000Z",
+                          "updatedAt": "2026-07-28T01:19:29.000Z",
+                          "uid": "35240-48618cbf-8dcb-4d0d-bcf1-12c58e8ab391"
+                        },
+                        {
+                          "id": "e2e3ed57-fe8a-4a78-a480-4964dad0b7cd",
+                          "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/enable",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "enable"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:29.000Z",
+                          "updatedAt": "2026-07-28T01:19:29.000Z",
+                          "uid": "35240-e2e3ed57-fe8a-4a78-a480-4964dad0b7cd"
+                        },
+                        {
+                          "id": "cfd5bd95-39cc-484f-be59-89a1f0fe98ac",
+                          "name": "Access denied",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/enable",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "enable"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:29.000Z",
+                          "updatedAt": "2026-07-28T01:19:29.000Z",
+                          "uid": "35240-cfd5bd95-39cc-484f-be59-89a1f0fe98ac"
+                        },
+                        {
+                          "id": "c7005f14-bde3-457d-9644-5f4b132bfbd6",
+                          "name": "Resource Not Found",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/enable",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "enable"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:29.000Z",
+                          "updatedAt": "2026-07-28T01:19:29.000Z",
+                          "uid": "35240-c7005f14-bde3-457d-9644-5f4b132bfbd6"
+                        },
+                        {
+                          "id": "2dff16e8-aa1e-4160-9091-1314a69aa142",
+                          "name": "Resource Conflicts",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/enable",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "enable"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Conflict",
+                          "code": 409,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:29.000Z",
+                          "updatedAt": "2026-07-28T01:19:29.000Z",
+                          "uid": "35240-2dff16e8-aa1e-4160-9091-1314a69aa142"
+                        },
+                        {
+                          "id": "ea29674d-3a05-4e73-9ca5-4f6f62709244",
+                          "name": "Internal Server Error",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/enable",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "enable"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:29.000Z",
+                          "updatedAt": "2026-07-28T01:19:29.000Z",
+                          "uid": "35240-ea29674d-3a05-4e73-9ca5-4f6f62709244"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:19:29.000Z",
+                      "updatedAt": "2026-07-28T01:19:29.000Z",
+                      "uid": "35240-47421bcd-7b16-491b-b9ab-e7616ff82e65"
+                    }
+                  ],
+                  "id": "441a15ff-a5fd-4fcd-84a8-4a04e98482a2",
+                  "createdAt": "2026-07-28T01:19:29.000Z",
+                  "updatedAt": "2026-07-28T01:19:29.000Z",
+                  "uid": "35240-441a15ff-a5fd-4fcd-84a8-4a04e98482a2"
+                },
+                {
+                  "name": "Get Donor Account",
+                  "id": "122dde9e-6011-48a4-8db4-426e18d506fb",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/donor_accounts/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "donor_accounts",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "id": "f78ec41e-ee95-4aa4-8786-c05ef738a2ec",
+                          "key": "id",
+                          "value": "<string>",
+                          "description": "(Required) The unique id of the Donor Account."
+                        }
+                      ]
+                    },
+                    "description": "Retrieve a Donor Account with the given ID."
+                  },
+                  "response": [
+                    {
+                      "id": "d8b335cf-0c62-4c11-a2e4-e68c00484924",
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donor_accounts/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donor_accounts",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"status\": \"pending\",\n  \"donor\": {\n    \"email\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phone\": \"<string>\"\n  },\n  \"created_at\": \"<dateTime>\",\n  \"updated_at\": \"<dateTime>\",\n  \"external_id\": \"<string>\",\n  \"approval\": {\n    \"approved_at\": \"<dateTime>\",\n    \"approved_by\": \"<string>\"\n  },\n  \"rejection\": {\n    \"rejected_at\": \"<dateTime>\",\n    \"rejected_by\": \"<string>\",\n    \"rejection_reason\": \"<string>\"\n  },\n  \"disabled\": false,\n  \"metadata\": {\n    \"velit_1e\": \"<string>\",\n    \"est_8\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-07-28T01:19:29.000Z",
+                      "updatedAt": "2026-07-28T01:19:29.000Z",
+                      "uid": "35240-d8b335cf-0c62-4c11-a2e4-e68c00484924"
+                    },
+                    {
+                      "id": "82bff712-ed70-4f76-8d3a-d30846138d44",
+                      "name": "The request is invalid or contains invalid parameters",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donor_accounts/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donor_accounts",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:29.000Z",
+                      "updatedAt": "2026-07-28T01:19:29.000Z",
+                      "uid": "35240-82bff712-ed70-4f76-8d3a-d30846138d44"
+                    },
+                    {
+                      "id": "e39331ae-bb05-4ede-b9b4-8c5a651f6d20",
+                      "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donor_accounts/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donor_accounts",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:29.000Z",
+                      "updatedAt": "2026-07-28T01:19:29.000Z",
+                      "uid": "35240-e39331ae-bb05-4ede-b9b4-8c5a651f6d20"
+                    },
+                    {
+                      "id": "04febf15-4733-40ec-a7ec-38d6a75224da",
+                      "name": "Access denied",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donor_accounts/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donor_accounts",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:29.000Z",
+                      "updatedAt": "2026-07-28T01:19:29.000Z",
+                      "uid": "35240-04febf15-4733-40ec-a7ec-38d6a75224da"
+                    },
+                    {
+                      "id": "7830c5f6-364b-427e-942a-6639209ccdd6",
+                      "name": "Resource Not Found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donor_accounts/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donor_accounts",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:29.000Z",
+                      "updatedAt": "2026-07-28T01:19:29.000Z",
+                      "uid": "35240-7830c5f6-364b-427e-942a-6639209ccdd6"
+                    },
+                    {
+                      "id": "338a8b71-1624-4c30-8bd6-7d02e90c30cc",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donor_accounts/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donor_accounts",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:29.000Z",
+                      "updatedAt": "2026-07-28T01:19:29.000Z",
+                      "uid": "35240-338a8b71-1624-4c30-8bd6-7d02e90c30cc"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:19:29.000Z",
+                  "updatedAt": "2026-07-28T01:19:29.000Z",
+                  "uid": "35240-122dde9e-6011-48a4-8db4-426e18d506fb"
+                },
+                {
+                  "name": "Update Donor Account",
+                  "id": "fda33500-5454-4a75-a652-bcfc0efa7e6b",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "PATCH",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"donor\": {\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phone\": \"<string>\"\n  },\n  \"external_id\": \"<string>\",\n  \"metadata\": {\n    \"Excepteurfe8\": \"<string>\",\n    \"exercitation5\": \"<string>\",\n    \"proident_6\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/donor_accounts/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "donor_accounts",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "id": "baf870b4-ff69-496a-b87d-a018809ec84c",
+                          "key": "id",
+                          "value": "<string>",
+                          "description": "(Required) The unique id of the Donor Account"
+                        }
+                      ]
+                    },
+                    "description": "Update mutable properties on a Donor Account such as `external_id`, the nested `donor` fields, and `metadata`.\n\nThe Donor Account's status is managed automatically through the Authorization Token verification flow and cannot be changed directly via this endpoint."
+                  },
+                  "response": [
+                    {
+                      "id": "74219738-a469-46c3-a6fa-65cc576f0355",
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"donor\": {\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phone\": \"<string>\"\n  },\n  \"external_id\": \"<string>\",\n  \"metadata\": {\n    \"Excepteurfe8\": \"<string>\",\n    \"exercitation5\": \"<string>\",\n    \"proident_6\": \"<string>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donor_accounts/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donor_accounts",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"status\": \"pending\",\n  \"donor\": {\n    \"email\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phone\": \"<string>\"\n  },\n  \"created_at\": \"<dateTime>\",\n  \"updated_at\": \"<dateTime>\",\n  \"external_id\": \"<string>\",\n  \"approval\": {\n    \"approved_at\": \"<dateTime>\",\n    \"approved_by\": \"<string>\"\n  },\n  \"rejection\": {\n    \"rejected_at\": \"<dateTime>\",\n    \"rejected_by\": \"<string>\",\n    \"rejection_reason\": \"<string>\"\n  },\n  \"disabled\": false,\n  \"metadata\": {\n    \"velit_1e\": \"<string>\",\n    \"est_8\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-07-28T01:19:29.000Z",
+                      "updatedAt": "2026-07-28T01:19:29.000Z",
+                      "uid": "35240-74219738-a469-46c3-a6fa-65cc576f0355"
+                    },
+                    {
+                      "id": "b545c455-c7ff-4731-915c-acf6699b0cc8",
+                      "name": "The request is invalid or contains invalid parameters",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"donor\": {\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phone\": \"<string>\"\n  },\n  \"external_id\": \"<string>\",\n  \"metadata\": {\n    \"Excepteurfe8\": \"<string>\",\n    \"exercitation5\": \"<string>\",\n    \"proident_6\": \"<string>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donor_accounts/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donor_accounts",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:29.000Z",
+                      "updatedAt": "2026-07-28T01:19:29.000Z",
+                      "uid": "35240-b545c455-c7ff-4731-915c-acf6699b0cc8"
+                    },
+                    {
+                      "id": "5b2f71e5-a3e2-4c2b-bbf9-b792a5803907",
+                      "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"donor\": {\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phone\": \"<string>\"\n  },\n  \"external_id\": \"<string>\",\n  \"metadata\": {\n    \"Excepteurfe8\": \"<string>\",\n    \"exercitation5\": \"<string>\",\n    \"proident_6\": \"<string>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donor_accounts/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donor_accounts",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:29.000Z",
+                      "updatedAt": "2026-07-28T01:19:29.000Z",
+                      "uid": "35240-5b2f71e5-a3e2-4c2b-bbf9-b792a5803907"
+                    },
+                    {
+                      "id": "8f92c6d7-0b24-4c50-ba4c-c0ecf6b02b47",
+                      "name": "Access denied",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"donor\": {\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phone\": \"<string>\"\n  },\n  \"external_id\": \"<string>\",\n  \"metadata\": {\n    \"Excepteurfe8\": \"<string>\",\n    \"exercitation5\": \"<string>\",\n    \"proident_6\": \"<string>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donor_accounts/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donor_accounts",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:29.000Z",
+                      "updatedAt": "2026-07-28T01:19:29.000Z",
+                      "uid": "35240-8f92c6d7-0b24-4c50-ba4c-c0ecf6b02b47"
+                    },
+                    {
+                      "id": "ce9f5ec4-f904-4319-a8dd-68e6171828c5",
+                      "name": "Resource Not Found",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"donor\": {\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phone\": \"<string>\"\n  },\n  \"external_id\": \"<string>\",\n  \"metadata\": {\n    \"Excepteurfe8\": \"<string>\",\n    \"exercitation5\": \"<string>\",\n    \"proident_6\": \"<string>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donor_accounts/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donor_accounts",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:29.000Z",
+                      "updatedAt": "2026-07-28T01:19:29.000Z",
+                      "uid": "35240-ce9f5ec4-f904-4319-a8dd-68e6171828c5"
+                    },
+                    {
+                      "id": "e1199646-809a-4778-b8c4-da7abad923fa",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "PATCH",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"donor\": {\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phone\": \"<string>\"\n  },\n  \"external_id\": \"<string>\",\n  \"metadata\": {\n    \"Excepteurfe8\": \"<string>\",\n    \"exercitation5\": \"<string>\",\n    \"proident_6\": \"<string>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donor_accounts/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donor_accounts",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:29.000Z",
+                      "updatedAt": "2026-07-28T01:19:29.000Z",
+                      "uid": "35240-e1199646-809a-4778-b8c4-da7abad923fa"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:19:29.000Z",
+                  "updatedAt": "2026-07-28T01:19:29.000Z",
+                  "uid": "35240-fda33500-5454-4a75-a652-bcfc0efa7e6b"
+                }
+              ],
+              "id": "658e2d25-7d85-45f9-a167-b47aa59f0ba9",
+              "createdAt": "2026-07-28T01:19:29.000Z",
+              "updatedAt": "2026-07-28T01:19:29.000Z",
+              "uid": "35240-658e2d25-7d85-45f9-a167-b47aa59f0ba9"
+            },
+            {
+              "name": "Create Donor Account",
+              "id": "4eb80b87-e7ab-4b59-b0b1-247486aeb127",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"donor\": {\n    \"email\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phone\": \"<string>\"\n  },\n  \"external_id\": \"<string>\",\n  \"metadata\": {\n    \"commodo18\": \"<string>\",\n    \"incididunt6\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/donor_accounts",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "donor_accounts"
+                  ]
+                },
+                "description": "Create a new Donor Account.\n\nThis endpoint is intended for DAF providers who want to set up a Donor Account on behalf of a donor before that donor uses DAFpay for the first time.\nSee the [DAF-Initiated Setup guide](/guides/dafpay/donor-accounts/daf-initiated-setup) for the most common use of this endpoint.\n\nOn creation, the Donor Account is placed in `pending` status. To make the account immediately usable for grant submissions, follow up with [Create Authorization Token](/api/donor-accounts/create-authorization-token) and provide the resulting code to the donor \u2014 when the donor enters the code in DAFpay, the Donor Account is automatically approved."
+              },
+              "response": [
+                {
+                  "id": "a846dfa0-70cc-4366-8eaf-f0ca20183b01",
+                  "name": "Created",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"donor\": {\n    \"email\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phone\": \"<string>\"\n  },\n  \"external_id\": \"<string>\",\n  \"metadata\": {\n    \"commodo18\": \"<string>\",\n    \"incididunt6\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/donor_accounts",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "donor_accounts"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The URI reference of the created donor account.",
+                        "type": "text/plain"
+                      },
+                      "key": "Location",
+                      "value": "<uri>"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"status\": \"pending\",\n  \"donor\": {\n    \"email\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phone\": \"<string>\"\n  },\n  \"created_at\": \"<dateTime>\",\n  \"updated_at\": \"<dateTime>\",\n  \"external_id\": \"<string>\",\n  \"approval\": {\n    \"approved_at\": \"<dateTime>\",\n    \"approved_by\": \"<string>\"\n  },\n  \"rejection\": {\n    \"rejected_at\": \"<dateTime>\",\n    \"rejected_by\": \"<string>\",\n    \"rejection_reason\": \"<string>\"\n  },\n  \"disabled\": false,\n  \"metadata\": {\n    \"velit_1e\": \"<string>\",\n    \"est_8\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-07-28T01:19:29.000Z",
+                  "updatedAt": "2026-07-28T01:19:29.000Z",
+                  "uid": "35240-a846dfa0-70cc-4366-8eaf-f0ca20183b01"
+                },
+                {
+                  "id": "d1595827-6a3d-4ca4-87bb-7cd5a10a55f1",
+                  "name": "The request is invalid or contains invalid parameters",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"donor\": {\n    \"email\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phone\": \"<string>\"\n  },\n  \"external_id\": \"<string>\",\n  \"metadata\": {\n    \"commodo18\": \"<string>\",\n    \"incididunt6\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/donor_accounts",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "donor_accounts"
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:29.000Z",
+                  "updatedAt": "2026-07-28T01:19:29.000Z",
+                  "uid": "35240-d1595827-6a3d-4ca4-87bb-7cd5a10a55f1"
+                },
+                {
+                  "id": "9b4a1b8d-78bc-474b-bf24-6f2ace142dad",
+                  "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"donor\": {\n    \"email\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phone\": \"<string>\"\n  },\n  \"external_id\": \"<string>\",\n  \"metadata\": {\n    \"commodo18\": \"<string>\",\n    \"incididunt6\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/donor_accounts",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "donor_accounts"
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:29.000Z",
+                  "updatedAt": "2026-07-28T01:19:29.000Z",
+                  "uid": "35240-9b4a1b8d-78bc-474b-bf24-6f2ace142dad"
+                },
+                {
+                  "id": "9e7d36da-1470-40b2-ba9f-277db24ec6b5",
+                  "name": "Access denied",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"donor\": {\n    \"email\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phone\": \"<string>\"\n  },\n  \"external_id\": \"<string>\",\n  \"metadata\": {\n    \"commodo18\": \"<string>\",\n    \"incididunt6\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/donor_accounts",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "donor_accounts"
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:29.000Z",
+                  "updatedAt": "2026-07-28T01:19:29.000Z",
+                  "uid": "35240-9e7d36da-1470-40b2-ba9f-277db24ec6b5"
+                },
+                {
+                  "id": "c6f198e0-4bb9-4b37-842e-4b970ee29d21",
+                  "name": "Resource Conflicts",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"donor\": {\n    \"email\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phone\": \"<string>\"\n  },\n  \"external_id\": \"<string>\",\n  \"metadata\": {\n    \"commodo18\": \"<string>\",\n    \"incididunt6\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/donor_accounts",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "donor_accounts"
+                      ]
+                    }
+                  },
+                  "status": "Conflict",
+                  "code": 409,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:29.000Z",
+                  "updatedAt": "2026-07-28T01:19:29.000Z",
+                  "uid": "35240-c6f198e0-4bb9-4b37-842e-4b970ee29d21"
+                },
+                {
+                  "id": "f0d178ce-0d88-4ac1-b6e4-8b15cc698166",
+                  "name": "Internal Server Error",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"donor\": {\n    \"email\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phone\": \"<string>\"\n  },\n  \"external_id\": \"<string>\",\n  \"metadata\": {\n    \"commodo18\": \"<string>\",\n    \"incididunt6\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/donor_accounts",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "donor_accounts"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:29.000Z",
+                  "updatedAt": "2026-07-28T01:19:29.000Z",
+                  "uid": "35240-f0d178ce-0d88-4ac1-b6e4-8b15cc698166"
+                }
+              ],
+              "createdAt": "2026-07-28T01:19:29.000Z",
+              "updatedAt": "2026-07-28T01:19:29.000Z",
+              "uid": "35240-4eb80b87-e7ab-4b59-b0b1-247486aeb127"
+            },
+            {
+              "name": "List Donor Accounts",
+              "id": "c5db0c51-6dd8-4ddf-9bfd-42c171eb9f8d",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/donor_accounts?giving_pool_id=<string>&status=approved&email=<string>&external_id=<string>&page_limit=10&page_token=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "donor_accounts"
+                  ],
+                  "query": [
+                    {
+                      "description": "The `id` of a [Giving Pool](/api/giving-pools). When set, filters Donor Accounts to those that have this Giving Pool associated with them.",
+                      "key": "giving_pool_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Filter Donor Accounts to only those with the specified status.",
+                      "key": "status",
+                      "value": "approved"
+                    },
+                    {
+                      "description": "Filter Donor Accounts by donor email. The match is case insensitive and exact.",
+                      "key": "email",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Filter Donor Accounts by `external_id` \u2014 the DAF's internal identifier for the Donor Account.",
+                      "key": "external_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "the number of results to return; defaults to 10, max is 100",
+                      "key": "page_limit",
+                      "value": "10"
+                    },
+                    {
+                      "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls and the value of this field should be from the next_page_token in the previous response.",
+                      "key": "page_token",
+                      "value": "<string>"
+                    }
+                  ]
+                },
+                "description": "Returns a list of Donor Accounts for the authenticated DAF.\nThis endpoint supports cursor-based pagination as well as filtering by fund, status, and email."
+              },
+              "response": [
+                {
+                  "id": "47c2d2cd-80d5-4685-8cf8-ec60cb20dd38",
+                  "name": "The response for DonorAccounts.list",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/donor_accounts?giving_pool_id=<string>&status=approved&email=<string>&external_id=<string>&page_limit=10&page_token=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "donor_accounts"
+                      ],
+                      "query": [
+                        {
+                          "description": "The `id` of a [Giving Pool](/api/giving-pools). When set, filters Donor Accounts to those that have this Giving Pool associated with them.",
+                          "key": "giving_pool_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter Donor Accounts to only those with the specified status.",
+                          "key": "status",
+                          "value": "approved"
+                        },
+                        {
+                          "description": "Filter Donor Accounts by donor email. The match is case insensitive and exact.",
+                          "key": "email",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter Donor Accounts by `external_id` \u2014 the DAF's internal identifier for the Donor Account.",
+                          "key": "external_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "the number of results to return; defaults to 10, max is 100",
+                          "key": "page_limit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls and the value of this field should be from the next_page_token in the previous response.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"results\": [\n    {\n      \"id\": \"<string>\",\n      \"status\": \"approved\",\n      \"donor\": {\n        \"email\": \"<string>\",\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\",\n        \"phone\": \"<string>\"\n      },\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"external_id\": \"<string>\",\n      \"approval\": {\n        \"approved_at\": \"<dateTime>\",\n        \"approved_by\": \"<string>\"\n      },\n      \"rejection\": {\n        \"rejected_at\": \"<dateTime>\",\n        \"rejected_by\": \"<string>\",\n        \"rejection_reason\": \"<string>\"\n      },\n      \"disabled\": false,\n      \"metadata\": {\n        \"do_8\": \"<string>\"\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"status\": \"approved\",\n      \"donor\": {\n        \"email\": \"<string>\",\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\",\n        \"phone\": \"<string>\"\n      },\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"external_id\": \"<string>\",\n      \"approval\": {\n        \"approved_at\": \"<dateTime>\",\n        \"approved_by\": \"<string>\"\n      },\n      \"rejection\": {\n        \"rejected_at\": \"<dateTime>\",\n        \"rejected_by\": \"<string>\",\n        \"rejection_reason\": \"<string>\"\n      },\n      \"disabled\": false,\n      \"metadata\": {\n        \"officiaf\": \"<string>\",\n        \"nonb7\": \"<string>\",\n        \"laboris_eb0\": \"<string>\",\n        \"minim9\": \"<string>\"\n      }\n    }\n  ],\n  \"next_page_token\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:29.000Z",
+                  "updatedAt": "2026-07-28T01:19:29.000Z",
+                  "uid": "35240-47c2d2cd-80d5-4685-8cf8-ec60cb20dd38"
+                },
+                {
+                  "id": "308c87da-afd9-4b98-bc65-d167e79db7ea",
+                  "name": "The request is invalid or contains invalid parameters",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/donor_accounts?giving_pool_id=<string>&status=approved&email=<string>&external_id=<string>&page_limit=10&page_token=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "donor_accounts"
+                      ],
+                      "query": [
+                        {
+                          "description": "The `id` of a [Giving Pool](/api/giving-pools). When set, filters Donor Accounts to those that have this Giving Pool associated with them.",
+                          "key": "giving_pool_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter Donor Accounts to only those with the specified status.",
+                          "key": "status",
+                          "value": "approved"
+                        },
+                        {
+                          "description": "Filter Donor Accounts by donor email. The match is case insensitive and exact.",
+                          "key": "email",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter Donor Accounts by `external_id` \u2014 the DAF's internal identifier for the Donor Account.",
+                          "key": "external_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "the number of results to return; defaults to 10, max is 100",
+                          "key": "page_limit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls and the value of this field should be from the next_page_token in the previous response.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:29.000Z",
+                  "updatedAt": "2026-07-28T01:19:29.000Z",
+                  "uid": "35240-308c87da-afd9-4b98-bc65-d167e79db7ea"
+                },
+                {
+                  "id": "dcbe40b9-c3b2-44f2-a429-8e8e3a3f8e7b",
+                  "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/donor_accounts?giving_pool_id=<string>&status=approved&email=<string>&external_id=<string>&page_limit=10&page_token=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "donor_accounts"
+                      ],
+                      "query": [
+                        {
+                          "description": "The `id` of a [Giving Pool](/api/giving-pools). When set, filters Donor Accounts to those that have this Giving Pool associated with them.",
+                          "key": "giving_pool_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter Donor Accounts to only those with the specified status.",
+                          "key": "status",
+                          "value": "approved"
+                        },
+                        {
+                          "description": "Filter Donor Accounts by donor email. The match is case insensitive and exact.",
+                          "key": "email",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter Donor Accounts by `external_id` \u2014 the DAF's internal identifier for the Donor Account.",
+                          "key": "external_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "the number of results to return; defaults to 10, max is 100",
+                          "key": "page_limit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls and the value of this field should be from the next_page_token in the previous response.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:29.000Z",
+                  "updatedAt": "2026-07-28T01:19:29.000Z",
+                  "uid": "35240-dcbe40b9-c3b2-44f2-a429-8e8e3a3f8e7b"
+                },
+                {
+                  "id": "0a7af0a7-050f-467c-b5f0-cbc715555441",
+                  "name": "Access denied",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/donor_accounts?giving_pool_id=<string>&status=approved&email=<string>&external_id=<string>&page_limit=10&page_token=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "donor_accounts"
+                      ],
+                      "query": [
+                        {
+                          "description": "The `id` of a [Giving Pool](/api/giving-pools). When set, filters Donor Accounts to those that have this Giving Pool associated with them.",
+                          "key": "giving_pool_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter Donor Accounts to only those with the specified status.",
+                          "key": "status",
+                          "value": "approved"
+                        },
+                        {
+                          "description": "Filter Donor Accounts by donor email. The match is case insensitive and exact.",
+                          "key": "email",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter Donor Accounts by `external_id` \u2014 the DAF's internal identifier for the Donor Account.",
+                          "key": "external_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "the number of results to return; defaults to 10, max is 100",
+                          "key": "page_limit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls and the value of this field should be from the next_page_token in the previous response.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:29.000Z",
+                  "updatedAt": "2026-07-28T01:19:29.000Z",
+                  "uid": "35240-0a7af0a7-050f-467c-b5f0-cbc715555441"
+                },
+                {
+                  "id": "64d1e689-613f-4217-9790-253f76087314",
+                  "name": "Internal Server Error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/donor_accounts?giving_pool_id=<string>&status=approved&email=<string>&external_id=<string>&page_limit=10&page_token=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "donor_accounts"
+                      ],
+                      "query": [
+                        {
+                          "description": "The `id` of a [Giving Pool](/api/giving-pools). When set, filters Donor Accounts to those that have this Giving Pool associated with them.",
+                          "key": "giving_pool_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter Donor Accounts to only those with the specified status.",
+                          "key": "status",
+                          "value": "approved"
+                        },
+                        {
+                          "description": "Filter Donor Accounts by donor email. The match is case insensitive and exact.",
+                          "key": "email",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter Donor Accounts by `external_id` \u2014 the DAF's internal identifier for the Donor Account.",
+                          "key": "external_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "the number of results to return; defaults to 10, max is 100",
+                          "key": "page_limit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls and the value of this field should be from the next_page_token in the previous response.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:29.000Z",
+                  "updatedAt": "2026-07-28T01:19:29.000Z",
+                  "uid": "35240-64d1e689-613f-4217-9790-253f76087314"
+                }
+              ],
+              "createdAt": "2026-07-28T01:19:29.000Z",
+              "updatedAt": "2026-07-28T01:19:29.000Z",
+              "uid": "35240-c5db0c51-6dd8-4ddf-9bfd-42c171eb9f8d"
+            }
+          ],
+          "id": "04b7744d-a184-4d67-88e0-1dd8f5dd86d3",
+          "createdAt": "2026-07-28T01:19:29.000Z",
+          "updatedAt": "2026-07-28T01:19:29.000Z",
+          "uid": "35240-04b7744d-a184-4d67-88e0-1dd8f5dd86d3"
+        }
+      ],
+      "id": "880fd6c5-3fc3-435d-a563-25be34b38b85",
+      "createdAt": "2026-07-28T01:19:29.000Z",
+      "updatedAt": "2026-07-28T01:19:29.000Z",
+      "uid": "35240-880fd6c5-3fc3-435d-a563-25be34b38b85"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read:bank_accounts sync:connected_accounts",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.givechariot.com/auth/oauth/token",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://dashboard.givechariot.com/oauth/authorize",
+        "type": "string"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.givechariot.com/fdx/v6"
+    }
+  ]
+}

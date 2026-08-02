@@ -1,0 +1,16 @@
+generated: '2026-07-18'
+method: generated
+source: openapi/chariot-openapi-original.yml
+skills:
+  - file: chariot-accept-daf-donation.md
+    name: Accept a DAF donation with Chariot Connect
+    api: openapi/chariot-openapi-original.yml
+    operations: [create-connect, get-connect, listDonations, getDonation]
+  - file: chariot-create-disbursement.md
+    name: Create and approve a disbursement
+    api: openapi/chariot-openapi-original.yml
+    operations: [createDisbursement, getDisbursement, approveDisbursement, listDisbursements, cancelDisbursement, simulateDisbursementCompletion]
+  - file: chariot-subscribe-events.md
+    name: Subscribe to Chariot webhooks
+    api: openapi/chariot-openapi-original.yml
+    operations: [createEventSubscription, listEventSubscriptions, getEventSubscription, updateEventSubscription, listEvents, getEvent]

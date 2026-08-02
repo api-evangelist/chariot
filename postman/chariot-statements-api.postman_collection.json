@@ -1,0 +1,989 @@
+{
+  "info": {
+    "_postman_id": "6ceaf70e-d475-4b33-bc8f-7eb2a7dc0567",
+    "name": "Chariot FDX Accounts Statements API",
+    "description": "Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.\n\nContact Support:\n Name: Chariot Development Team\n Email: developers@givechariot.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:20:08.000Z",
+    "updatedAt": "2026-07-28T01:20:08.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-6ceaf70e-d475-4b33-bc8f-7eb2a7dc0567"
+  },
+  "item": [
+    {
+      "name": "accounts",
+      "item": [
+        {
+          "name": "{id}",
+          "item": [
+            {
+              "name": "statements",
+              "item": [
+                {
+                  "name": "{statementId}",
+                  "item": [
+                    {
+                      "name": "Get account statement",
+                      "id": "82c9c240-92e2-4b94-afe5-c5c54d541245",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/pdf"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/accounts/:id/statements/:statementId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "accounts",
+                            ":id",
+                            "statements",
+                            ":statementId"
+                          ],
+                          "variable": [
+                            {
+                              "id": "6cfcc3a8-9d75-41d6-b5c1-2cc6b8a20055",
+                              "key": "id",
+                              "value": "<uuid>",
+                              "description": "(Required) Unique identifier for the account"
+                            },
+                            {
+                              "id": "6429176e-77cd-4d6b-8046-8b763d20a266",
+                              "key": "statementId",
+                              "value": "<uuid>",
+                              "description": "(Required) Unique identifier for the statement"
+                            }
+                          ]
+                        },
+                        "description": "Retrieve a statement document. Use the Accept header to specify the desired format. Supported formats are PDF (default), CSV, and BAI2."
+                      },
+                      "response": [
+                        {
+                          "id": "483b65dd-5b60-4ddf-bd9b-4896ddaaffb7",
+                          "name": "The statement document in the requested format",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/pdf"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/accounts/:id/statements/:statementId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "accounts",
+                                ":id",
+                                "statements",
+                                ":statementId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                },
+                                {
+                                  "key": "statementId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/pdf"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "<binary>",
+                          "createdAt": "2026-07-28T01:20:09.000Z",
+                          "updatedAt": "2026-07-28T01:20:09.000Z",
+                          "uid": "35240-483b65dd-5b60-4ddf-bd9b-4896ddaaffb7"
+                        },
+                        {
+                          "id": "4d59c525-116b-415f-ab36-899628ae157e",
+                          "name": "Invalid request parameters",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/accounts/:id/statements/:statementId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "accounts",
+                                ":id",
+                                "statements",
+                                ":statementId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                },
+                                {
+                                  "key": "statementId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:20:09.000Z",
+                          "updatedAt": "2026-07-28T01:20:09.000Z",
+                          "uid": "35240-4d59c525-116b-415f-ab36-899628ae157e"
+                        },
+                        {
+                          "id": "96f8a424-6831-48dd-be63-00f9e0e89761",
+                          "name": "Missing or invalid OAuth 2.0 Bearer token",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/accounts/:id/statements/:statementId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "accounts",
+                                ":id",
+                                "statements",
+                                ":statementId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                },
+                                {
+                                  "key": "statementId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:20:09.000Z",
+                          "updatedAt": "2026-07-28T01:20:09.000Z",
+                          "uid": "35240-96f8a424-6831-48dd-be63-00f9e0e89761"
+                        },
+                        {
+                          "id": "3b2f4180-2954-4ead-a872-30863f3c3b28",
+                          "name": "Insufficient permissions or IP not whitelisted",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/accounts/:id/statements/:statementId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "accounts",
+                                ":id",
+                                "statements",
+                                ":statementId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                },
+                                {
+                                  "key": "statementId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:20:09.000Z",
+                          "updatedAt": "2026-07-28T01:20:09.000Z",
+                          "uid": "35240-3b2f4180-2954-4ead-a872-30863f3c3b28"
+                        },
+                        {
+                          "id": "ee3a074f-cd1f-421f-ae54-620411e06664",
+                          "name": "Resource not found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/accounts/:id/statements/:statementId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "accounts",
+                                ":id",
+                                "statements",
+                                ":statementId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                },
+                                {
+                                  "key": "statementId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:20:09.000Z",
+                          "updatedAt": "2026-07-28T01:20:09.000Z",
+                          "uid": "35240-ee3a074f-cd1f-421f-ae54-620411e06664"
+                        },
+                        {
+                          "id": "e0b4e9b7-b379-4770-b216-a6d0b2dded99",
+                          "name": "The requested media type in the Accept header is not supported",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/accounts/:id/statements/:statementId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "accounts",
+                                ":id",
+                                "statements",
+                                ":statementId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                },
+                                {
+                                  "key": "statementId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Acceptable",
+                          "code": 406,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:20:09.000Z",
+                          "updatedAt": "2026-07-28T01:20:09.000Z",
+                          "uid": "35240-e0b4e9b7-b379-4770-b216-a6d0b2dded99"
+                        },
+                        {
+                          "id": "2e336b39-cb67-4e4c-aae4-371bf5a6c2c3",
+                          "name": "Unexpected server error",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/accounts/:id/statements/:statementId",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "accounts",
+                                ":id",
+                                "statements",
+                                ":statementId"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                },
+                                {
+                                  "key": "statementId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:20:09.000Z",
+                          "updatedAt": "2026-07-28T01:20:09.000Z",
+                          "uid": "35240-2e336b39-cb67-4e4c-aae4-371bf5a6c2c3"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:20:09.000Z",
+                      "updatedAt": "2026-07-28T01:20:09.000Z",
+                      "uid": "35240-82c9c240-92e2-4b94-afe5-c5c54d541245"
+                    }
+                  ],
+                  "id": "8286b605-0e8a-4a8f-b086-e962e3690dc1",
+                  "createdAt": "2026-07-28T01:20:09.000Z",
+                  "updatedAt": "2026-07-28T01:20:09.000Z",
+                  "uid": "35240-8286b605-0e8a-4a8f-b086-e962e3690dc1"
+                },
+                {
+                  "name": "List account statements",
+                  "id": "a69a171f-5e4a-4aa9-be5c-32e28fd20bd4",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/accounts/:id/statements?limit=10&pageKey=<uuid>&startTime=<date>&endTime=<date>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "accounts",
+                        ":id",
+                        "statements"
+                      ],
+                      "query": [
+                        {
+                          "description": "Number of results per page. Clamped to the range 10\u2013100.",
+                          "key": "limit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response.",
+                          "key": "pageKey",
+                          "value": "<uuid>"
+                        },
+                        {
+                          "description": "Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.",
+                          "key": "startTime",
+                          "value": "<date>"
+                        },
+                        {
+                          "description": "End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.",
+                          "key": "endTime",
+                          "value": "<date>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "e3bcb3d8-4299-405e-9945-d9c1b92d6413",
+                          "key": "id",
+                          "value": "<uuid>",
+                          "description": "(Required) Unique identifier for the account"
+                        }
+                      ]
+                    },
+                    "description": "Get a paginated list of statements for an account. When specifying a date range, both startTime and endTime must be provided together. Defaults to the last 7 days if no date range is specified. Data is available for up to 24 months from the current date."
+                  },
+                  "response": [
+                    {
+                      "id": "30ce8416-ffad-46de-b843-ace8c6c0c0cc",
+                      "name": "A paginated list of statements",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/accounts/:id/statements?limit=10&pageKey=<uuid>&startTime=<date>&endTime=<date>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "accounts",
+                            ":id",
+                            "statements"
+                          ],
+                          "query": [
+                            {
+                              "description": "Number of results per page. Clamped to the range 10\u2013100.",
+                              "key": "limit",
+                              "value": "10"
+                            },
+                            {
+                              "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response.",
+                              "key": "pageKey",
+                              "value": "<uuid>"
+                            },
+                            {
+                              "description": "Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.",
+                              "key": "startTime",
+                              "value": "<date>"
+                            },
+                            {
+                              "description": "End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.",
+                              "key": "endTime",
+                              "value": "<date>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"statements\": [\n    {\n      \"statementId\": \"<string>\",\n      \"accountId\": \"<string>\",\n      \"statementDate\": \"<dateTime>\",\n      \"description\": \"<string>\",\n      \"status\": \"AVAILABLE\",\n      \"links\": [\n        {\n          \"href\": \"<string>\"\n        },\n        {\n          \"href\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"statementId\": \"<string>\",\n      \"accountId\": \"<string>\",\n      \"statementDate\": \"<dateTime>\",\n      \"description\": \"<string>\",\n      \"status\": \"AVAILABLE\",\n      \"links\": [\n        {\n          \"href\": \"<string>\"\n        },\n        {\n          \"href\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"page\": {\n    \"nextPageKey\": \"<string>\",\n    \"totalElements\": \"<integer>\"\n  }\n}",
+                      "createdAt": "2026-07-28T01:20:09.000Z",
+                      "updatedAt": "2026-07-28T01:20:09.000Z",
+                      "uid": "35240-30ce8416-ffad-46de-b843-ace8c6c0c0cc"
+                    },
+                    {
+                      "id": "a2dee497-685d-48a4-b5a5-c7d29f90a14e",
+                      "name": "Invalid request parameters",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/accounts/:id/statements?limit=10&pageKey=<uuid>&startTime=<date>&endTime=<date>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "accounts",
+                            ":id",
+                            "statements"
+                          ],
+                          "query": [
+                            {
+                              "description": "Number of results per page. Clamped to the range 10\u2013100.",
+                              "key": "limit",
+                              "value": "10"
+                            },
+                            {
+                              "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response.",
+                              "key": "pageKey",
+                              "value": "<uuid>"
+                            },
+                            {
+                              "description": "Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.",
+                              "key": "startTime",
+                              "value": "<date>"
+                            },
+                            {
+                              "description": "End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.",
+                              "key": "endTime",
+                              "value": "<date>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:09.000Z",
+                      "updatedAt": "2026-07-28T01:20:09.000Z",
+                      "uid": "35240-a2dee497-685d-48a4-b5a5-c7d29f90a14e"
+                    },
+                    {
+                      "id": "d3cddc26-3e5e-4f5e-a68a-d4a2790b0643",
+                      "name": "Missing or invalid OAuth 2.0 Bearer token",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/accounts/:id/statements?limit=10&pageKey=<uuid>&startTime=<date>&endTime=<date>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "accounts",
+                            ":id",
+                            "statements"
+                          ],
+                          "query": [
+                            {
+                              "description": "Number of results per page. Clamped to the range 10\u2013100.",
+                              "key": "limit",
+                              "value": "10"
+                            },
+                            {
+                              "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response.",
+                              "key": "pageKey",
+                              "value": "<uuid>"
+                            },
+                            {
+                              "description": "Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.",
+                              "key": "startTime",
+                              "value": "<date>"
+                            },
+                            {
+                              "description": "End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.",
+                              "key": "endTime",
+                              "value": "<date>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:09.000Z",
+                      "updatedAt": "2026-07-28T01:20:09.000Z",
+                      "uid": "35240-d3cddc26-3e5e-4f5e-a68a-d4a2790b0643"
+                    },
+                    {
+                      "id": "ef847cfc-ecfc-463e-b238-18fca94328f8",
+                      "name": "Insufficient permissions or IP not whitelisted",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/accounts/:id/statements?limit=10&pageKey=<uuid>&startTime=<date>&endTime=<date>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "accounts",
+                            ":id",
+                            "statements"
+                          ],
+                          "query": [
+                            {
+                              "description": "Number of results per page. Clamped to the range 10\u2013100.",
+                              "key": "limit",
+                              "value": "10"
+                            },
+                            {
+                              "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response.",
+                              "key": "pageKey",
+                              "value": "<uuid>"
+                            },
+                            {
+                              "description": "Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.",
+                              "key": "startTime",
+                              "value": "<date>"
+                            },
+                            {
+                              "description": "End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.",
+                              "key": "endTime",
+                              "value": "<date>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:09.000Z",
+                      "updatedAt": "2026-07-28T01:20:09.000Z",
+                      "uid": "35240-ef847cfc-ecfc-463e-b238-18fca94328f8"
+                    },
+                    {
+                      "id": "22ceb5ff-8aca-4c77-9b81-f55b256b18af",
+                      "name": "Resource not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/accounts/:id/statements?limit=10&pageKey=<uuid>&startTime=<date>&endTime=<date>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "accounts",
+                            ":id",
+                            "statements"
+                          ],
+                          "query": [
+                            {
+                              "description": "Number of results per page. Clamped to the range 10\u2013100.",
+                              "key": "limit",
+                              "value": "10"
+                            },
+                            {
+                              "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response.",
+                              "key": "pageKey",
+                              "value": "<uuid>"
+                            },
+                            {
+                              "description": "Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.",
+                              "key": "startTime",
+                              "value": "<date>"
+                            },
+                            {
+                              "description": "End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.",
+                              "key": "endTime",
+                              "value": "<date>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:09.000Z",
+                      "updatedAt": "2026-07-28T01:20:09.000Z",
+                      "uid": "35240-22ceb5ff-8aca-4c77-9b81-f55b256b18af"
+                    },
+                    {
+                      "id": "123ce9b5-a2d9-4e3e-a791-641f588a6e49",
+                      "name": "Unexpected server error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/accounts/:id/statements?limit=10&pageKey=<uuid>&startTime=<date>&endTime=<date>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "accounts",
+                            ":id",
+                            "statements"
+                          ],
+                          "query": [
+                            {
+                              "description": "Number of results per page. Clamped to the range 10\u2013100.",
+                              "key": "limit",
+                              "value": "10"
+                            },
+                            {
+                              "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response.",
+                              "key": "pageKey",
+                              "value": "<uuid>"
+                            },
+                            {
+                              "description": "Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.",
+                              "key": "startTime",
+                              "value": "<date>"
+                            },
+                            {
+                              "description": "End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.",
+                              "key": "endTime",
+                              "value": "<date>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:09.000Z",
+                      "updatedAt": "2026-07-28T01:20:09.000Z",
+                      "uid": "35240-123ce9b5-a2d9-4e3e-a791-641f588a6e49"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:20:09.000Z",
+                  "updatedAt": "2026-07-28T01:20:09.000Z",
+                  "uid": "35240-a69a171f-5e4a-4aa9-be5c-32e28fd20bd4"
+                }
+              ],
+              "id": "772a1119-267f-42e3-a7ea-307322bb917c",
+              "createdAt": "2026-07-28T01:20:09.000Z",
+              "updatedAt": "2026-07-28T01:20:09.000Z",
+              "uid": "35240-772a1119-267f-42e3-a7ea-307322bb917c"
+            }
+          ],
+          "id": "8ea9509f-73f9-4cd6-969c-39b8ac97b140",
+          "createdAt": "2026-07-28T01:20:09.000Z",
+          "updatedAt": "2026-07-28T01:20:09.000Z",
+          "uid": "35240-8ea9509f-73f9-4cd6-969c-39b8ac97b140"
+        }
+      ],
+      "id": "fb09b555-4a1e-49a1-ad13-9337b417fcd5",
+      "createdAt": "2026-07-28T01:20:09.000Z",
+      "updatedAt": "2026-07-28T01:20:09.000Z",
+      "uid": "35240-fb09b555-4a1e-49a1-ad13-9337b417fcd5"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read:bank_accounts sync:connected_accounts",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.givechariot.com/auth/oauth/token",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://dashboard.givechariot.com/oauth/authorize",
+        "type": "string"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.givechariot.com/fdx/v6"
+    }
+  ]
+}

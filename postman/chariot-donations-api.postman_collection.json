@@ -1,0 +1,936 @@
+{
+  "info": {
+    "_postman_id": "24676ff6-514a-4fdc-8917-89f349446bbe",
+    "name": "Chariot FDX Accounts donations API",
+    "description": "Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.\n\nContact Support:\n Name: Chariot Development Team\n Email: developers@givechariot.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:19:27.000Z",
+    "updatedAt": "2026-07-28T01:19:28.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-24676ff6-514a-4fdc-8917-89f349446bbe"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "donations",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "Get a Donation",
+                  "id": "02575f6e-428d-4d7c-8a36-ebf27337ea96",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/donations/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "donations",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "id": "8b7a856d-e4c9-4a41-a351-930ab3fc889f",
+                          "key": "id",
+                          "value": "<string>",
+                          "description": "(Required) The unique identifier for the donation"
+                        }
+                      ]
+                    },
+                    "description": "Get a donation by its unique identifier."
+                  },
+                  "response": [
+                    {
+                      "id": "31b21c73-528c-4e75-b4ea-73c4cb55af65",
+                      "name": "The donation was retrieved",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donations/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donations",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"payment_source_id\": \"<string>\",\n  \"amount_gross\": \"<long>\",\n  \"amount_net\": \"<long>\",\n  \"amount_fee\": \"<long>\",\n  \"currency\": \"<string>\",\n  \"purpose\": \"<string>\",\n  \"note\": \"<string>\",\n  \"created_at\": \"<dateTime>\",\n  \"individual_gift_amount\": \"<long>\",\n  \"attribution\": {\n    \"primary_donor\": {\n      \"full_name\": \"<string>\",\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\",\n      \"email\": \"<string>\",\n      \"phone\": \"<string>\",\n      \"address\": {\n        \"city\": \"<string>\",\n        \"country\": \"<string>\",\n        \"line1\": \"<string>\",\n        \"postal_code\": \"<string>\",\n        \"state\": \"<string>\",\n        \"line2\": \"<string>\"\n      }\n    },\n    \"joint_donor\": {\n      \"full_name\": \"<string>\",\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\",\n      \"email\": \"<string>\",\n      \"phone\": \"<string>\",\n      \"address\": {\n        \"city\": \"<string>\",\n        \"country\": \"<string>\",\n        \"line1\": \"<string>\",\n        \"postal_code\": \"<string>\",\n        \"state\": \"<string>\",\n        \"line2\": \"<string>\"\n      }\n    }\n  },\n  \"initiation\": {\n    \"initiated_at\": \"<dateTime>\",\n    \"frequency\": \"MONTHLY\",\n    \"channel\": \"INTEGRATED\",\n    \"web_location_url\": \"<string>\",\n    \"fundraising_platform_name\": \"<string>\",\n    \"dafpay_form\": \"<string>\",\n    \"dafpay_tracking_id\": \"<string>\",\n    \"dafpay_metadata\": {\n      \"Utc6\": \"<string>\",\n      \"veniamcf6\": \"<string>\",\n      \"ea0\": \"<string>\"\n    }\n  },\n  \"settlement\": {\n    \"deposit_id\": \"<string>\",\n    \"received_at\": \"<dateTime>\",\n    \"settled_at\": \"<dateTime>\"\n  },\n  \"donor_advised_fund_grant\": {\n    \"organization_name\": \"<string>\",\n    \"donor_fund_name\": \"<string>\",\n    \"program_name\": \"<string>\",\n    \"sponsor_grant_id\": \"<string>\"\n  },\n  \"platform\": {\n    \"name\": \"<string>\",\n    \"platform_grant_id\": \"<string>\",\n    \"metadata\": {\n      \"consequat_2b2\": \"<string>\",\n      \"ea1a\": \"<string>\"\n    },\n    \"acceptance\": {\n      \"accepted\": \"<boolean>\",\n      \"expires_at\": \"<dateTime>\"\n    }\n  },\n  \"corporate_match\": {\n    \"match_amount\": \"<long>\",\n    \"company_name\": \"<string>\",\n    \"program_name\": \"<string>\",\n    \"source\": \"<string>\"\n  },\n  \"properties\": [\n    {\n      \"property_id\": \"<string>\",\n      \"value\": {\n        \"type\": \"boolean\",\n        \"text_value\": \"<string>\",\n        \"enum_value_id\": \"<string>\",\n        \"user_value_id\": \"<string>\",\n        \"boolean_value\": \"<boolean>\",\n        \"date_value\": \"<dateTime>\",\n        \"empty\": \"<boolean>\"\n      }\n    },\n    {\n      \"property_id\": \"<string>\",\n      \"value\": {\n        \"type\": \"date\",\n        \"text_value\": \"<string>\",\n        \"enum_value_id\": \"<string>\",\n        \"user_value_id\": \"<string>\",\n        \"boolean_value\": \"<boolean>\",\n        \"date_value\": \"<dateTime>\",\n        \"empty\": \"<boolean>\"\n      }\n    }\n  ],\n  \"artifacts\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"file_id\": \"<string>\",\n      \"created_at\": \"<dateTime>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"file_id\": \"<string>\",\n      \"created_at\": \"<dateTime>\"\n    }\n  ],\n  \"updated_at\": \"<dateTime>\",\n  \"canceled_at\": \"<dateTime>\",\n  \"payment_status\": \"INCOMING_TO_CHARIOT\"\n}",
+                      "createdAt": "2026-07-28T01:19:28.000Z",
+                      "updatedAt": "2026-07-28T01:19:28.000Z",
+                      "uid": "35240-31b21c73-528c-4e75-b4ea-73c4cb55af65"
+                    },
+                    {
+                      "id": "5cfdc1bd-5cc1-421e-a601-118ea099dd1e",
+                      "name": "The request is invalid or contains invalid parameters",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donations/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donations",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:28.000Z",
+                      "updatedAt": "2026-07-28T01:19:28.000Z",
+                      "uid": "35240-5cfdc1bd-5cc1-421e-a601-118ea099dd1e"
+                    },
+                    {
+                      "id": "01a20258-0d17-47a5-bfec-5feca995cb17",
+                      "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donations/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donations",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:28.000Z",
+                      "updatedAt": "2026-07-28T01:19:28.000Z",
+                      "uid": "35240-01a20258-0d17-47a5-bfec-5feca995cb17"
+                    },
+                    {
+                      "id": "63dab932-6f1f-4199-9f4c-047a12b279f4",
+                      "name": "Access denied",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donations/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donations",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:28.000Z",
+                      "updatedAt": "2026-07-28T01:19:28.000Z",
+                      "uid": "35240-63dab932-6f1f-4199-9f4c-047a12b279f4"
+                    },
+                    {
+                      "id": "abbbfe46-941c-4048-bbb8-5c1f3eafe7d2",
+                      "name": "Resource Not Found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donations/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donations",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:28.000Z",
+                      "updatedAt": "2026-07-28T01:19:28.000Z",
+                      "uid": "35240-abbbfe46-941c-4048-bbb8-5c1f3eafe7d2"
+                    },
+                    {
+                      "id": "a5594751-7cc8-4486-895e-2fc0ab46a54e",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donations/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donations",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:28.000Z",
+                      "updatedAt": "2026-07-28T01:19:28.000Z",
+                      "uid": "35240-a5594751-7cc8-4486-895e-2fc0ab46a54e"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:19:28.000Z",
+                  "updatedAt": "2026-07-28T01:19:28.000Z",
+                  "uid": "35240-02575f6e-428d-4d7c-8a36-ebf27337ea96"
+                }
+              ],
+              "id": "99fd79ce-9b89-41d9-8fbd-ea9acc54ffaf",
+              "createdAt": "2026-07-28T01:19:28.000Z",
+              "updatedAt": "2026-07-28T01:19:28.000Z",
+              "uid": "35240-99fd79ce-9b89-41d9-8fbd-ea9acc54ffaf"
+            },
+            {
+              "name": "List Donations",
+              "id": "f90e6e02-0d2c-4f79-95c0-bef2284ade04",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/donations?limit=<integer>&page_token=<string>&payment_source_id=<string>&deposit_id=<string>&created_at.after=<dateTime>&created_at.before=<dateTime>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "donations"
+                  ],
+                  "query": [
+                    {
+                      "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                      "key": "page_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "The unique identifier for the payment sources to filter donations by. Comma separated list of payment source IDs.",
+                      "key": "payment_source_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "The unique identifier for the deposit to filter donations by.",
+                      "key": "deposit_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Return donations created after the given date and time.",
+                      "key": "created_at.after",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "description": "Return donations created before the given date and time.",
+                      "key": "created_at.before",
+                      "value": "<dateTime>"
+                    }
+                  ]
+                },
+                "description": "List donations for your account."
+              },
+              "response": [
+                {
+                  "id": "46000473-8d35-457e-8a96-f5cab98f6cfa",
+                  "name": "The response for Donations.list",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/donations?limit=<integer>&page_token=<string>&payment_source_id=<string>&deposit_id=<string>&created_at.after=<dateTime>&created_at.before=<dateTime>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "donations"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The unique identifier for the payment sources to filter donations by. Comma separated list of payment source IDs.",
+                          "key": "payment_source_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The unique identifier for the deposit to filter donations by.",
+                          "key": "deposit_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Return donations created after the given date and time.",
+                          "key": "created_at.after",
+                          "value": "<dateTime>"
+                        },
+                        {
+                          "description": "Return donations created before the given date and time.",
+                          "key": "created_at.before",
+                          "value": "<dateTime>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"results\": [\n    {\n      \"id\": \"<string>\",\n      \"payment_source_id\": \"<string>\",\n      \"amount_gross\": \"<long>\",\n      \"amount_net\": \"<long>\",\n      \"amount_fee\": \"<long>\",\n      \"currency\": \"<string>\",\n      \"purpose\": \"<string>\",\n      \"note\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"individual_gift_amount\": \"<long>\",\n      \"attribution\": {\n        \"primary_donor\": {\n          \"full_name\": \"<string>\",\n          \"first_name\": \"<string>\",\n          \"last_name\": \"<string>\",\n          \"email\": \"<string>\",\n          \"phone\": \"<string>\",\n          \"address\": {\n            \"city\": \"<string>\",\n            \"country\": \"<string>\",\n            \"line1\": \"<string>\",\n            \"postal_code\": \"<string>\",\n            \"state\": \"<string>\",\n            \"line2\": \"<string>\"\n          }\n        },\n        \"joint_donor\": {\n          \"full_name\": \"<string>\",\n          \"first_name\": \"<string>\",\n          \"last_name\": \"<string>\",\n          \"email\": \"<string>\",\n          \"phone\": \"<string>\",\n          \"address\": {\n            \"city\": \"<string>\",\n            \"country\": \"<string>\",\n            \"line1\": \"<string>\",\n            \"postal_code\": \"<string>\",\n            \"state\": \"<string>\",\n            \"line2\": \"<string>\"\n          }\n        }\n      },\n      \"initiation\": {\n        \"initiated_at\": \"<dateTime>\",\n        \"frequency\": \"MONTHLY\",\n        \"channel\": \"INTEGRATED\",\n        \"web_location_url\": \"<string>\",\n        \"fundraising_platform_name\": \"<string>\",\n        \"dafpay_form\": \"<string>\",\n        \"dafpay_tracking_id\": \"<string>\",\n        \"dafpay_metadata\": {\n          \"aute_1a\": \"<string>\",\n          \"velit35d\": \"<string>\"\n        }\n      },\n      \"settlement\": {\n        \"deposit_id\": \"<string>\",\n        \"received_at\": \"<dateTime>\",\n        \"settled_at\": \"<dateTime>\"\n      },\n      \"donor_advised_fund_grant\": {\n        \"organization_name\": \"<string>\",\n        \"donor_fund_name\": \"<string>\",\n        \"program_name\": \"<string>\",\n        \"sponsor_grant_id\": \"<string>\"\n      },\n      \"platform\": {\n        \"name\": \"<string>\",\n        \"platform_grant_id\": \"<string>\",\n        \"metadata\": {\n          \"fugiat9\": \"<string>\",\n          \"commodo__\": \"<string>\",\n          \"enim2\": \"<string>\",\n          \"non71\": \"<string>\"\n        },\n        \"acceptance\": {\n          \"accepted\": \"<boolean>\",\n          \"expires_at\": \"<dateTime>\"\n        }\n      },\n      \"corporate_match\": {\n        \"match_amount\": \"<long>\",\n        \"company_name\": \"<string>\",\n        \"program_name\": \"<string>\",\n        \"source\": \"<string>\"\n      },\n      \"properties\": [\n        {\n          \"property_id\": \"<string>\",\n          \"value\": {\n            \"type\": \"date\",\n            \"text_value\": \"<string>\",\n            \"enum_value_id\": \"<string>\",\n            \"user_value_id\": \"<string>\",\n            \"boolean_value\": \"<boolean>\",\n            \"date_value\": \"<dateTime>\",\n            \"empty\": \"<boolean>\"\n          }\n        },\n        {\n          \"property_id\": \"<string>\",\n          \"value\": {\n            \"type\": \"date\",\n            \"text_value\": \"<string>\",\n            \"enum_value_id\": \"<string>\",\n            \"user_value_id\": \"<string>\",\n            \"boolean_value\": \"<boolean>\",\n            \"date_value\": \"<dateTime>\",\n            \"empty\": \"<boolean>\"\n          }\n        }\n      ],\n      \"artifacts\": [\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"file_id\": \"<string>\",\n          \"created_at\": \"<dateTime>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"file_id\": \"<string>\",\n          \"created_at\": \"<dateTime>\"\n        }\n      ],\n      \"updated_at\": \"<dateTime>\",\n      \"canceled_at\": \"<dateTime>\",\n      \"payment_status\": \"INCOMING_OUTSIDE_CHARIOT\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"payment_source_id\": \"<string>\",\n      \"amount_gross\": \"<long>\",\n      \"amount_net\": \"<long>\",\n      \"amount_fee\": \"<long>\",\n      \"currency\": \"<string>\",\n      \"purpose\": \"<string>\",\n      \"note\": \"<string>\",\n      \"created_at\": \"<dateTime>\",\n      \"individual_gift_amount\": \"<long>\",\n      \"attribution\": {\n        \"primary_donor\": {\n          \"full_name\": \"<string>\",\n          \"first_name\": \"<string>\",\n          \"last_name\": \"<string>\",\n          \"email\": \"<string>\",\n          \"phone\": \"<string>\",\n          \"address\": {\n            \"city\": \"<string>\",\n            \"country\": \"<string>\",\n            \"line1\": \"<string>\",\n            \"postal_code\": \"<string>\",\n            \"state\": \"<string>\",\n            \"line2\": \"<string>\"\n          }\n        },\n        \"joint_donor\": {\n          \"full_name\": \"<string>\",\n          \"first_name\": \"<string>\",\n          \"last_name\": \"<string>\",\n          \"email\": \"<string>\",\n          \"phone\": \"<string>\",\n          \"address\": {\n            \"city\": \"<string>\",\n            \"country\": \"<string>\",\n            \"line1\": \"<string>\",\n            \"postal_code\": \"<string>\",\n            \"state\": \"<string>\",\n            \"line2\": \"<string>\"\n          }\n        }\n      },\n      \"initiation\": {\n        \"initiated_at\": \"<dateTime>\",\n        \"frequency\": \"MONTHLY\",\n        \"channel\": \"UNINTEGRATED\",\n        \"web_location_url\": \"<string>\",\n        \"fundraising_platform_name\": \"<string>\",\n        \"dafpay_form\": \"<string>\",\n        \"dafpay_tracking_id\": \"<string>\",\n        \"dafpay_metadata\": {\n          \"ea_666\": \"<string>\"\n        }\n      },\n      \"settlement\": {\n        \"deposit_id\": \"<string>\",\n        \"received_at\": \"<dateTime>\",\n        \"settled_at\": \"<dateTime>\"\n      },\n      \"donor_advised_fund_grant\": {\n        \"organization_name\": \"<string>\",\n        \"donor_fund_name\": \"<string>\",\n        \"program_name\": \"<string>\",\n        \"sponsor_grant_id\": \"<string>\"\n      },\n      \"platform\": {\n        \"name\": \"<string>\",\n        \"platform_grant_id\": \"<string>\",\n        \"metadata\": {\n          \"non_1\": \"<string>\",\n          \"elit_fa\": \"<string>\"\n        },\n        \"acceptance\": {\n          \"accepted\": \"<boolean>\",\n          \"expires_at\": \"<dateTime>\"\n        }\n      },\n      \"corporate_match\": {\n        \"match_amount\": \"<long>\",\n        \"company_name\": \"<string>\",\n        \"program_name\": \"<string>\",\n        \"source\": \"<string>\"\n      },\n      \"properties\": [\n        {\n          \"property_id\": \"<string>\",\n          \"value\": {\n            \"type\": \"user\",\n            \"text_value\": \"<string>\",\n            \"enum_value_id\": \"<string>\",\n            \"user_value_id\": \"<string>\",\n            \"boolean_value\": \"<boolean>\",\n            \"date_value\": \"<dateTime>\",\n            \"empty\": \"<boolean>\"\n          }\n        },\n        {\n          \"property_id\": \"<string>\",\n          \"value\": {\n            \"type\": \"text\",\n            \"text_value\": \"<string>\",\n            \"enum_value_id\": \"<string>\",\n            \"user_value_id\": \"<string>\",\n            \"boolean_value\": \"<boolean>\",\n            \"date_value\": \"<dateTime>\",\n            \"empty\": \"<boolean>\"\n          }\n        }\n      ],\n      \"artifacts\": [\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"file_id\": \"<string>\",\n          \"created_at\": \"<dateTime>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"file_id\": \"<string>\",\n          \"created_at\": \"<dateTime>\"\n        }\n      ],\n      \"updated_at\": \"<dateTime>\",\n      \"canceled_at\": \"<dateTime>\",\n      \"payment_status\": \"CANCELED\"\n    }\n  ],\n  \"next_page_token\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:28.000Z",
+                  "updatedAt": "2026-07-28T01:19:28.000Z",
+                  "uid": "35240-46000473-8d35-457e-8a96-f5cab98f6cfa"
+                },
+                {
+                  "id": "35f5cab0-f272-4042-834f-733560f5612b",
+                  "name": "The request is invalid or contains invalid parameters",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/donations?limit=<integer>&page_token=<string>&payment_source_id=<string>&deposit_id=<string>&created_at.after=<dateTime>&created_at.before=<dateTime>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "donations"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The unique identifier for the payment sources to filter donations by. Comma separated list of payment source IDs.",
+                          "key": "payment_source_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The unique identifier for the deposit to filter donations by.",
+                          "key": "deposit_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Return donations created after the given date and time.",
+                          "key": "created_at.after",
+                          "value": "<dateTime>"
+                        },
+                        {
+                          "description": "Return donations created before the given date and time.",
+                          "key": "created_at.before",
+                          "value": "<dateTime>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:28.000Z",
+                  "updatedAt": "2026-07-28T01:19:28.000Z",
+                  "uid": "35240-35f5cab0-f272-4042-834f-733560f5612b"
+                },
+                {
+                  "id": "96bcde8f-e986-4b38-9a53-afc74564c24d",
+                  "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/donations?limit=<integer>&page_token=<string>&payment_source_id=<string>&deposit_id=<string>&created_at.after=<dateTime>&created_at.before=<dateTime>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "donations"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The unique identifier for the payment sources to filter donations by. Comma separated list of payment source IDs.",
+                          "key": "payment_source_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The unique identifier for the deposit to filter donations by.",
+                          "key": "deposit_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Return donations created after the given date and time.",
+                          "key": "created_at.after",
+                          "value": "<dateTime>"
+                        },
+                        {
+                          "description": "Return donations created before the given date and time.",
+                          "key": "created_at.before",
+                          "value": "<dateTime>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:28.000Z",
+                  "updatedAt": "2026-07-28T01:19:28.000Z",
+                  "uid": "35240-96bcde8f-e986-4b38-9a53-afc74564c24d"
+                },
+                {
+                  "id": "6046cbce-753d-4ba2-8d70-d52231993dc9",
+                  "name": "Access denied",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/donations?limit=<integer>&page_token=<string>&payment_source_id=<string>&deposit_id=<string>&created_at.after=<dateTime>&created_at.before=<dateTime>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "donations"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The unique identifier for the payment sources to filter donations by. Comma separated list of payment source IDs.",
+                          "key": "payment_source_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The unique identifier for the deposit to filter donations by.",
+                          "key": "deposit_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Return donations created after the given date and time.",
+                          "key": "created_at.after",
+                          "value": "<dateTime>"
+                        },
+                        {
+                          "description": "Return donations created before the given date and time.",
+                          "key": "created_at.before",
+                          "value": "<dateTime>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:28.000Z",
+                  "updatedAt": "2026-07-28T01:19:28.000Z",
+                  "uid": "35240-6046cbce-753d-4ba2-8d70-d52231993dc9"
+                },
+                {
+                  "id": "1b2329f7-537e-4dcd-ac01-eacfc9eccdee",
+                  "name": "Internal Server Error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/donations?limit=<integer>&page_token=<string>&payment_source_id=<string>&deposit_id=<string>&created_at.after=<dateTime>&created_at.before=<dateTime>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "donations"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The unique identifier for the payment sources to filter donations by. Comma separated list of payment source IDs.",
+                          "key": "payment_source_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The unique identifier for the deposit to filter donations by.",
+                          "key": "deposit_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Return donations created after the given date and time.",
+                          "key": "created_at.after",
+                          "value": "<dateTime>"
+                        },
+                        {
+                          "description": "Return donations created before the given date and time.",
+                          "key": "created_at.before",
+                          "value": "<dateTime>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:28.000Z",
+                  "updatedAt": "2026-07-28T01:19:28.000Z",
+                  "uid": "35240-1b2329f7-537e-4dcd-ac01-eacfc9eccdee"
+                }
+              ],
+              "createdAt": "2026-07-28T01:19:28.000Z",
+              "updatedAt": "2026-07-28T01:19:28.000Z",
+              "uid": "35240-f90e6e02-0d2c-4f79-95c0-bef2284ade04"
+            }
+          ],
+          "id": "d1fe80c7-00fb-4634-a2ec-5093e922826f",
+          "createdAt": "2026-07-28T01:19:28.000Z",
+          "updatedAt": "2026-07-28T01:19:28.000Z",
+          "uid": "35240-d1fe80c7-00fb-4634-a2ec-5093e922826f"
+        }
+      ],
+      "id": "d3ec9c0e-5309-4e0f-b18f-fed84417197e",
+      "createdAt": "2026-07-28T01:19:28.000Z",
+      "updatedAt": "2026-07-28T01:19:28.000Z",
+      "uid": "35240-d3ec9c0e-5309-4e0f-b18f-fed84417197e"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read:bank_accounts sync:connected_accounts",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.givechariot.com/auth/oauth/token",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://dashboard.givechariot.com/oauth/authorize",
+        "type": "string"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.givechariot.com/fdx/v6"
+    }
+  ]
+}

@@ -1,0 +1,361 @@
+openapi: 3.0.0
+info:
+  title: Chariot FDX Accounts Connects API
+  version: '6.0'
+  description: Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.
+  contact:
+    name: Chariot Development Team
+    url: https://givechariot.com/contact
+    email: developers@givechariot.com
+servers:
+- url: https://api.givechariot.com/fdx/v6
+  description: Production
+- url: https://devapi.givechariot.com/fdx/v6
+  description: Staging
+security:
+- oauth2: []
+tags:
+- name: Connects
+paths:
+  /v1/connects:
+    post:
+      summary: Create Connect
+      description: 'Get an existing connect or create a new connect for an existing nonprofit organization.
+
+
+        The returned Connect can be used to integrate the client-side Chariot Connect component using the `id` property (CID) and also query for data generated from the Chariot Connect instance using the connect_id query parameter in any of the List Grants API endpoints.
+
+
+        <Note>
+
+        Only one Connect object can be created per organization.
+
+        If one already exists, this will return a `200 OK` status with the existing object.
+
+        </Note>'
+      operationId: create-connect
+      tags:
+      - Connects
+      security:
+      - bearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/CreateConnectRequest'
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Connect'
+              examples:
+                Simple:
+                  $ref: '#/components/examples/ConnectOutput'
+        '201':
+          description: Created
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Connect'
+              examples:
+                Simple:
+                  $ref: '#/components/examples/ConnectOutput'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/connects/{id}:
+    get:
+      summary: Get Connect
+      description: Retrieve a connect with the given ID.
+      operationId: get-connect
+      tags:
+      - Connects
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: the unique id of the connect
+        schema:
+          type: string
+        required: true
+        example: live_xJd0lUrvpDkzeGBWZbuI2wbvEdM
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Connect'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    Connect:
+      type: object
+      description: 'A Connect represents an instance of Chariot Connect for a particular nonprofit. A nonprofit organization will create Connect objects in order to integrate Chariot Connect into their websites or fundraising platforms to start accepting donations directly from Donor Advised Funds. Each nonprofit can have multiple Connect objects where each one represents a logical separation for how the organization wants to organize their sources of donations. For example, they might have 2 Connect instances, one that they use to integrate Chariot Connect directly on their website and the other that they provide to a 3rd party fundraising platform. On the client side, Chariot Connect is instantiated with the `id` of the Connect object, also called the `cid`. A connect object also contains an `apiKey`. This is useful for nonprofits to provide to fundraising platforms on their behalf to programatically integrate Chariot Connect and access resources and information created from the Connect instance through various Chariot API endpoints. More information on integrating Chariot Connect into a client-side application can be found here: https://givechariot.readme.io'
+      required:
+      - id
+      - apiKey
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: The unique identifier for this object. This is also the 'publishable' cid to use for initializing Connect for client-side integration.
+          example: test_connect123
+        name:
+          type: string
+          description: A human readable name for the connect, optional.
+          example: website
+        apiKey:
+          type: string
+          readOnly: true
+          description: (deprecated) A secure token that can be used to make M2M API calls to read data generated by this object.
+          example: test_apiTokenABC
+        active:
+          type: boolean
+          description: A flag to indicate if this connect is active. If true, then this Connect can process donations and grants, otherwise this Connect cannot process grants.
+          example: true
+        createdAt:
+          type: string
+          readOnly: true
+          format: date-time
+          description: Time when this object was created. Expressed in RFC 3339 format.
+          example: '2020-01-31T23:00:00Z'
+        updatedAt:
+          type: string
+          readOnly: true
+          format: date-time
+          description: Time when this object was last updated. Expressed in RFC 3339 format.
+          example: '2020-01-31T23:59:59Z'
+        createdBy:
+          type: string
+          readOnly: true
+          description: ID of the user who created this object.
+          example: auth0-user-id-123
+        archived:
+          type: boolean
+          readOnly: true
+          description: A flag to indicate if this object is marked for deletion.
+          example: false
+        metadata:
+          type: object
+          description: A map of arbitrary string keys and values to store information about the object.
+          additionalProperties:
+            type: string
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
+  responses:
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+  examples:
+    ConnectOutput:
+      summary: Simple connect output
+      value:
+        id: test_de5a2e7d-c960-4eaa-8bd2-e8d2cc5b1a55
+        name: website
+        apiKey: test_98235982835
+        active: true
+        createdAt: '2021-07-10 15:00:00.000'
+        updatedAt: '2020-01-31T23:59:59Z'
+        createdBy: user123
+        metadata:
+          tag1: value1
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
+    Location:
+      description: The URI of the created object
+      schema:
+        type: string
+  requestBodies:
+    CreateConnectRequest:
+      description: The request to create a new Connect object for a nonprofit.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - organization_id
+            - contact
+            properties:
+              organization_id:
+                type: string
+                description: The unique identifier for the organization
+                example: org_1234567890
+              contact:
+                type: object
+                required:
+                - email
+                properties:
+                  email:
+                    type: string
+                    description: The email address for the nonprofit account contact
+                    example: ben.give@co.com
+                  phone:
+                    type: string
+                    description: The phone number for the nonprofit account contact
+                    example: '9127772424'
+                  first_name:
+                    type: string
+                    description: The first name of the nonprofit account contact that manages this Connect
+                    example: Ben
+                  last_name:
+                    type: string
+                    description: The last name of the nonprofit account contact that manages this Connect
+                    example: Give
+              name:
+                type: string
+                description: A human readable name of the Connect, optional.
+              metadata:
+                type: object
+                description: A map of arbitrary string keys and values to store information about the object.
+                additionalProperties:
+                  type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 Bearer token. A client may hold both scopes, but each FDX authorization must contain exactly one — they are mutually exclusive per authorization. An authorization containing both will be rejected. See the Authentication page for token exchange details.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://dashboard.givechariot.com/oauth/authorize
+          tokenUrl: https://api.givechariot.com/auth/oauth/token
+          scopes:
+            read:bank_accounts: Read access to bank account data
+            sync:connected_accounts: Sync access to connected account data

@@ -1,0 +1,322 @@
+openapi: 3.0.0
+info:
+  title: Chariot FDX Accounts API
+  version: '6.0'
+  description: Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.
+  contact:
+    name: Chariot Development Team
+    url: https://givechariot.com/contact
+    email: developers@givechariot.com
+servers:
+- url: https://api.givechariot.com/fdx/v6
+  description: Production
+- url: https://devapi.givechariot.com/fdx/v6
+  description: Staging
+security:
+- oauth2: []
+tags:
+- name: Accounts
+  description: Bank account information and balances
+paths:
+  /accounts:
+    get:
+      summary: List accounts
+      description: Search and retrieve customer deposit accounts.
+      operationId: listAccounts
+      tags:
+      - Accounts
+      parameters:
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/PageKey'
+      responses:
+        '200':
+          description: A paginated list of deposit accounts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAccountsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /accounts/{id}:
+    get:
+      summary: Get account
+      description: Get account balances, liabilities, and other detailed account information for a single deposit account.
+      operationId: getAccount
+      tags:
+      - Accounts
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: The deposit account details including balances
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepositAccountDetails'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Number of results per page. Clamped to the range 10–100.
+      schema:
+        type: integer
+        minimum: 10
+        maximum: 100
+        default: 10
+    AccountId:
+      name: id
+      in: path
+      required: true
+      description: Unique identifier for the account
+      schema:
+        type: string
+        format: uuid
+    PageKey:
+      name: pageKey
+      in: query
+      required: false
+      description: Cursor token for pagination. Pass the `nextPageKey` value from a previous response.
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    ListAccountsResponse:
+      type: object
+      description: Paginated list of deposit accounts.
+      required:
+      - accounts
+      properties:
+        organizationId:
+          type: string
+          format: uuid
+          description: The organization that owns the accounts. Equivalent to the customerId returned by GET /customers/current.
+        page:
+          $ref: '#/components/schemas/Page'
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepositAccount'
+    Currency:
+      type: object
+      description: Currency information.
+      required:
+      - currencyCode
+      properties:
+        currencyCode:
+          type: string
+          description: ISO 4217 currency code
+          example: USD
+    Page:
+      type: object
+      description: Pagination metadata for list responses.
+      properties:
+        nextPageKey:
+          type: string
+          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
+        totalElements:
+          type: integer
+          description: Total number of elements across all pages
+    AccountCategory:
+      type: string
+      description: Category of account
+      enum:
+      - DEPOSIT_ACCOUNT
+    AccountStatus:
+      type: string
+      description: Status of the account
+      enum:
+      - OPEN
+      - CLOSED
+      - DELINQUENT
+      - NEGATIVECURRENTBALANCE
+      - PAID
+      - PENDINGCLOSE
+      - PENDINGOPEN
+      - RESTRICTED
+    ProblemDetails:
+      type: object
+      description: Error response following RFC 7807 Problem Details for HTTP APIs.
+      required:
+      - type
+      - title
+      - status
+      properties:
+        type:
+          type: string
+          description: A URI reference that identifies the problem type
+          example: about:blank
+        title:
+          type: string
+          description: A short human-readable summary of the problem type
+          example: Bad Request
+        status:
+          type: integer
+          description: The HTTP status code
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem
+          example: The startTime parameter must be before endTime
+        instance:
+          type: string
+          description: A URI reference that identifies the specific occurrence of the problem
+    AccountType:
+      type: string
+      description: Type of deposit account
+      enum:
+      - CHECKING
+    DepositAccount:
+      type: object
+      description: A deposit (bank) account.
+      required:
+      - accountCategory
+      - accountType
+      - accountId
+      - accountNumber
+      - accountNumberDisplay
+      - productName
+      - currency
+      - status
+      - accountOpenDate
+      properties:
+        accountCategory:
+          $ref: '#/components/schemas/AccountCategory'
+        accountType:
+          $ref: '#/components/schemas/AccountType'
+        accountId:
+          type: string
+          description: Unique identifier for the account
+        accountNumber:
+          type: string
+          description: Full account number
+        accountNumberDisplay:
+          type: string
+          description: Masked or truncated account number for display
+        productName:
+          type: string
+          description: Product name for the account
+        nickName:
+          type: string
+          description: User-assigned nickname for the account
+        nickname:
+          type: string
+          description: Alternate nickname field
+        currency:
+          $ref: '#/components/schemas/Currency'
+        status:
+          $ref: '#/components/schemas/AccountStatus'
+        description:
+          type: string
+          description: Description of the account
+        accountOpenDate:
+          type: string
+          format: date
+          description: Date the account was opened (YYYY-MM-DD)
+        accountCloseDate:
+          type: string
+          format: date
+          description: Date the account was closed (YYYY-MM-DD). Present only for closed accounts.
+    BalanceType:
+      type: string
+      description: Type of balance
+      enum:
+      - ASSET
+    DepositAccountDetails:
+      description: Detailed deposit account information including balances.
+      allOf:
+      - $ref: '#/components/schemas/DepositAccount'
+      - type: object
+        required:
+        - currentBalance
+        - availableBalance
+        - balanceType
+        - routingTransitNumber
+        properties:
+          currentBalance:
+            type: number
+            format: double
+            description: Current balance of the account
+          availableBalance:
+            type: number
+            format: double
+            description: Available balance of the account
+          balanceAsOf:
+            type: string
+            format: date-time
+            description: Timestamp of when the balance was calculated
+          lineOfBusiness:
+            type: string
+            description: Line of business for the account
+          routingTransitNumber:
+            type: string
+            description: Routing transit number (RTN) for the account
+          balanceType:
+            $ref: '#/components/schemas/BalanceType'
+          interestRate:
+            type: number
+            format: double
+            description: Interest rate for the account
+          transferIn:
+            type: boolean
+            description: Whether the account supports incoming transfers
+          transferOut:
+            type: boolean
+            description: Whether the account supports outgoing transfers
+  responses:
+    Forbidden:
+      description: Insufficient permissions or IP not whitelisted
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Unauthorized:
+      description: Missing or invalid OAuth 2.0 Bearer token
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    InternalServerError:
+      description: Unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    NotFound:
+      description: Resource not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 Bearer token. A client may hold both scopes, but each FDX authorization must contain exactly one — they are mutually exclusive per authorization. An authorization containing both will be rejected. See the Authentication page for token exchange details.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://dashboard.givechariot.com/oauth/authorize
+          tokenUrl: https://api.givechariot.com/auth/oauth/token
+          scopes:
+            read:bank_accounts: Read access to bank account data
+            sync:connected_accounts: Sync access to connected account data

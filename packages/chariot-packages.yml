@@ -1,0 +1,28 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.givechariot.com/api/sdks
+packages:
+  - language: typescript
+    registry: npm
+    name: "@chariot-giving/typescript-sdk"
+    url: https://www.npmjs.com/package/@chariot-giving/typescript-sdk
+    repository: https://github.com/chariot-giving/typescript-sdk
+    install: npm install --save @chariot-giving/typescript-sdk
+    latest: 2.0.0-a0
+    generator: fern
+    kind: server-sdk
+    official: true
+  - language: javascript
+    registry: npm
+    name: react-chariot-connect
+    url: https://www.npmjs.com/package/react-chariot-connect
+    repository: https://github.com/chariot-giving/react-chariot-connect
+    install: npm install react-chariot-connect
+    latest: 1.2.0
+    kind: client-component
+    description: React hook and component for integrating with Chariot Connect (the DAFpay embed).
+    official: true
+notes: >-
+  Chariot SDKs are generated with Fern from the OpenAPI at github.com/chariot-giving/chariot-openapi.
+  The docs SDK page lists the TypeScript server SDK with "More coming soon!" for additional languages.
+  react-chariot-connect is the first-party client library for embedding the Connect / DAFpay flow.

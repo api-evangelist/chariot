@@ -1,0 +1,423 @@
+aid: chariot
+name: Chariot
+description: >-
+  Chariot is the leading payments platform for charitable giving, best known for DAFpay — the first
+  donor-advised fund (DAF) payment option, named one of TIME's Best Inventions of 2025. Its REST API
+  lets nonprofits, fundraising platforms, and grantmakers connect donor-advised funds, accept DAF
+  donations through the embeddable Chariot Connect flow, move grant money via disbursements and
+  inbound transfers, subscribe to webhook events, and read connected bank-account data through a
+  Financial Data Exchange (FDX) v6 open-banking API. Chariot is building financial infrastructure
+  for the multi-hundred-billion-dollar donor-advised fund market, the fastest-growing segment of
+  philanthropy.
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://givechariot.com/api/media/file/daf-giving-simplified-1200x630.png
+url: https://raw.githubusercontent.com/api-evangelist/chariot/refs/heads/main/apis.yml
+x-type: company
+x-source: vc-portfolio
+x-backed-by:
+- uncork-capital
+x-tier: stub
+x-tier-reason: portfolio-lead
+specificationVersion: '0.20'
+created: '2026-07-17'
+modified: '2026-07-18'
+tags:
+- Payments
+- Donor Advised Funds
+- Charitable Giving
+- Nonprofit
+- Fintech
+- DAFpay
+- Grants
+- Disbursements
+- Open Banking
+- FDX
+- Webhooks
+- Company
+apis:
+- aid: chariot:chariot-accounts-api
+  name: Chariot Accounts API
+  description: Bank account information and balances
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-accounts-api-openapi.yml
+- aid: chariot:chariot-authorization-tokens-api
+  name: Chariot Authorization Tokens API
+  description: The Authorization Tokens API from Chariot — 4 operation(s) for authorization tokens.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - Authorization Tokens
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-authorization-tokens-api-openapi.yml
+- aid: chariot:chariot-connects-api
+  name: Chariot Connects API
+  description: The Connects API from Chariot — 2 operation(s) for connects.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - Connects
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-connects-api-openapi.yml
+- aid: chariot:chariot-contact-api
+  name: Chariot Contact API
+  description: Account contact and holder information
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - Contact
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-contact-api-openapi.yml
+- aid: chariot:chariot-customers-api
+  name: Chariot Customers API
+  description: Account customer (organization) identity
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - Customers
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-customers-api-openapi.yml
+- aid: chariot:chariot-deposits-api
+  name: Chariot deposits API
+  description: The deposits API from Chariot — 2 operation(s) for deposits.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - deposits
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-deposits-api-openapi.yml
+- aid: chariot:chariot-disbursements-api
+  name: Chariot disbursements API
+  description: The disbursements API from Chariot — 9 operation(s) for disbursements.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - disbursements
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-disbursements-api-openapi.yml
+- aid: chariot:chariot-donations-api
+  name: Chariot donations API
+  description: The donations API from Chariot — 2 operation(s) for donations.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - donations
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-donations-api-openapi.yml
+- aid: chariot:chariot-donor-accounts-api
+  name: Chariot Donor Accounts API
+  description: The Donor Accounts API from Chariot — 4 operation(s) for donor accounts.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - Donor Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-donor-accounts-api-openapi.yml
+- aid: chariot:chariot-donor-advised-funds-api
+  name: Chariot Donor Advised Funds API
+  description: The Donor Advised Funds API from Chariot — 2 operation(s) for donor advised funds.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - Donor Advised Funds
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-donor-advised-funds-api-openapi.yml
+- aid: chariot:chariot-event-subscriptions-api
+  name: Chariot Event Subscriptions API
+  description: The Event Subscriptions API from Chariot — 2 operation(s) for event subscriptions.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - Event Subscriptions
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-event-subscriptions-api-openapi.yml
+- aid: chariot:chariot-events-api
+  name: Chariot Events API
+  description: The Events API from Chariot — 2 operation(s) for events.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - Events
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-events-api-openapi.yml
+- aid: chariot:chariot-financial-accounts-api
+  name: Chariot financial_accounts API
+  description: The financial_accounts API from Chariot — 3 operation(s) for financial_accounts.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - financial_accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-financial-accounts-api-openapi.yml
+- aid: chariot:chariot-giving-pools-api
+  name: Chariot Giving Pools API
+  description: The Giving Pools API from Chariot — 2 operation(s) for giving pools.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - Giving Pools
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-giving-pools-api-openapi.yml
+- aid: chariot:chariot-grant-requests-api
+  name: Chariot Grant Requests API
+  description: The Grant Requests API from Chariot — 4 operation(s) for grant requests.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - Grant Requests
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-grant-requests-api-openapi.yml
+- aid: chariot:chariot-grants-api
+  name: Chariot Grants API
+  description: The Grants API from Chariot — 4 operation(s) for grants.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - Grants
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-grants-api-openapi.yml
+- aid: chariot:chariot-inboundtransfers-api
+  name: Chariot inboundTransfers API
+  description: The inboundTransfers API from Chariot — 5 operation(s) for inboundtransfers.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - inboundTransfers
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-inboundtransfers-api-openapi.yml
+- aid: chariot:chariot-mailbox-api
+  name: Chariot mailbox API
+  description: The mailbox API from Chariot — 2 operation(s) for mailbox.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - mailbox
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-mailbox-api-openapi.yml
+- aid: chariot:chariot-nonprofitaddresses-api
+  name: Chariot nonprofitAddresses API
+  description: The nonprofitAddresses API from Chariot — 1 operation(s) for nonprofitaddresses.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - nonprofitAddresses
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-nonprofitaddresses-api-openapi.yml
+- aid: chariot:chariot-nonprofitcontacts-api
+  name: Chariot nonprofitContacts API
+  description: The nonprofitContacts API from Chariot — 1 operation(s) for nonprofitcontacts.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - nonprofitContacts
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-nonprofitcontacts-api-openapi.yml
+- aid: chariot:chariot-organizations-api
+  name: Chariot Organizations API
+  description: The Organizations API from Chariot — 3 operation(s) for organizations.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - Organizations
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-organizations-api-openapi.yml
+- aid: chariot:chariot-paymentsources-api
+  name: Chariot paymentSources API
+  description: The paymentSources API from Chariot — 2 operation(s) for paymentsources.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - paymentSources
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-paymentsources-api-openapi.yml
+- aid: chariot:chariot-programs-api
+  name: Chariot Programs API
+  description: The Programs API from Chariot — 2 operation(s) for programs.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - Programs
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-programs-api-openapi.yml
+- aid: chariot:chariot-properties-api
+  name: Chariot properties API
+  description: The properties API from Chariot — 4 operation(s) for properties.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - properties
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-properties-api-openapi.yml
+- aid: chariot:chariot-recurring-grants-api
+  name: Chariot recurring_grants API
+  description: The recurring_grants API from Chariot — 2 operation(s) for recurring_grants.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - recurring_grants
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-recurring-grants-api-openapi.yml
+- aid: chariot:chariot-statements-api
+  name: Chariot Statements API
+  description: Account statements and statement documents
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - Statements
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-statements-api-openapi.yml
+- aid: chariot:chariot-transactions-api
+  name: Chariot Transactions API
+  description: Account transaction history
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - Transactions
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-transactions-api-openapi.yml
+- aid: chariot:chariot-unintegrated-grants-api
+  name: Chariot unintegrated_grants API
+  description: The unintegrated_grants API from Chariot — 2 operation(s) for unintegrated_grants.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - unintegrated_grants
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-unintegrated-grants-api-openapi.yml
+- aid: chariot:chariot-verificationrequests-api
+  name: Chariot verificationRequests API
+  description: The verificationRequests API from Chariot — 2 operation(s) for verificationrequests.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - verificationRequests
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-verificationrequests-api-openapi.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+- FN: APIs.json
+  email: info@apis.io
+common:
+- type: PostmanWorkspace
+  url: https://www.postman.com/kinlaneapi/chariot/overview
+# --- link properties ---
+- type: DeveloperPortal
+  url: https://docs.givechariot.com
+- type: Documentation
+  url: https://docs.givechariot.com/chariot-documentation
+- type: APIReference
+  url: https://docs.givechariot.com/api
+- type: GettingStarted
+  url: https://docs.givechariot.com/guides
+- type: Support
+  url: https://help.givechariot.com/
+- type: Blog
+  url: https://www.givechariot.com/blog
+- type: GitHubOrganization
+  url: https://github.com/chariot-giving
+- type: Pricing
+  url: https://www.givechariot.com/pricing
+- type: SignUp
+  url: https://dashboard.givechariot.com/signup
+- type: Login
+  url: https://dashboard.givechariot.com/login
+- type: TermsOfService
+  url: https://www.givechariot.com/legal-nonprofit
+- type: PrivacyPolicy
+  url: https://www.givechariot.com/privacy
+- type: StatusPage
+  url: https://status.givechariot.com
+- type: ChangeLog
+  url: https://docs.givechariot.com/changelog
+- type: Postman
+  url: https://raw.githubusercontent.com/chariot-giving/chariot-openapi/main/postman/collections/Chariot%20API.json
+# --- artifacts ---
+- type: Authentication
+  url: authentication/chariot-authentication.yml
+- type: OAuthScopes
+  url: scopes/chariot-scopes.yml
+- type: DomainSecurity
+  url: security/chariot-domain-security.yml
+- type: AgenticAccess
+  url: agentic-access/chariot-agentic-access.yml
+- type: Packages
+  url: packages/chariot-packages.yml
+- type: SDKs
+  url: packages/chariot-packages.yml
+- type: WellKnown
+  url: well-known/chariot-well-known.yml
+- type: MCPServer
+  url: mcp/chariot-mcp.yml
+- type: LLMsTxt
+  url: llms/chariot-llms.txt
+- type: Conformance
+  url: conformance/chariot-conformance.yml
+- type: ErrorCatalog
+  url: errors/chariot-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/chariot-lifecycle.yml
+- type: Conventions
+  url: conventions/chariot-conventions.yml
+- type: Idempotency
+  url: conventions/chariot-conventions.yml
+- type: ChangeLog
+  url: changelog/chariot-changelog.yml
+- type: Webhooks
+  url: asyncapi/chariot-webhooks.yml
+- type: DataModel
+  url: data-model/chariot-data-model.yml
+- type: Sandbox
+  url: sandbox/chariot-sandbox.yml
+- type: Components
+  url: components/chariot-components.yml
+- type: AgentSkill
+  url: skills/_index.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

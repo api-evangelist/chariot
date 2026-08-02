@@ -1,0 +1,2562 @@
+{
+  "info": {
+    "_postman_id": "3aca0337-2a7f-422b-a7e1-94b7d330b8af",
+    "name": "Chariot FDX Accounts Authorization Tokens API",
+    "description": "Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.\n\nContact Support:\n Name: Chariot Development Team\n Email: developers@givechariot.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:19:05.000Z",
+    "updatedAt": "2026-07-28T01:19:05.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-3aca0337-2a7f-422b-a7e1-94b7d330b8af"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "donor_accounts",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "authorization_tokens",
+                  "item": [
+                    {
+                      "name": "Create Authorization Token",
+                      "id": "52167fd2-cf3d-4e56-99a1-ff881adc7b98",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"expires_in\": \"<integer>\",\n  \"metadata\": {\n    \"in_2\": \"<string>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donor_accounts/:id/authorization_tokens",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donor_accounts",
+                            ":id",
+                            "authorization_tokens"
+                          ],
+                          "variable": [
+                            {
+                              "id": "f49d46f0-93bd-4768-89dd-eb126e97c626",
+                              "key": "id",
+                              "value": "<string>",
+                              "description": "(Required) The unique id of the Donor Account"
+                            }
+                          ]
+                        },
+                        "description": "Create a single-use Authorization Token bound to a Donor Account.\n\nAuthorization Tokens are the binding credential used to verify a donor's identity between DAFpay and the DAF.\nThey are used in two distinct flows:\n\n- **DAF-Initiated Setup**: The DAF creates a Donor Account and then creates an Authorization Token. The DAF surfaces the token's `code` to the donor via their portal. The donor enters the `code` into DAFpay during profile setup, automatically approving the Donor Account.\n- **Donor-Initiated Verification**: After a donor submits a Grant Request, DAFpay automatically issues an Authorization Token and emails the `code` to the donor. The donor provides the `code` to the DAF (e.g. via a portal form or phone call). The DAF then calls [Verify Authorization Token](/api/authorization-tokens/verify) with the `code` to verify and approve the linked Donor Account.\n\nTokens expire **30 days** after creation by default. Override the lifetime by passing `expires_in` (seconds) on the request body \u2014 supported range is 60 seconds to 90 days. Once a token expires it transitions to `expired` and can no longer be verified; create a new token to issue a fresh code.\n\n<Warning>\nThe token's `code` value is **only returned once** in this response. Treat it as a credential \u2014 store it securely and never log it. If the code is lost before being verified, [revoke](/api/authorization-tokens/revoke) the token and create a new one.\n</Warning>"
+                      },
+                      "response": [
+                        {
+                          "id": "4d90b23d-f1f9-4a25-8f48-c303a84ba397",
+                          "name": "Created",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"expires_in\": \"<integer>\",\n  \"metadata\": {\n    \"in_2\": \"<string>\"\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/authorization_tokens",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "authorization_tokens"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Created",
+                          "code": 201,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "The URI reference of the created authorization token.",
+                                "type": "text/plain"
+                              },
+                              "key": "Location",
+                              "value": "<uri>"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"donor_account_id\": \"<string>\",\n  \"status\": \"expired\",\n  \"created_at\": \"<dateTime>\",\n  \"expires_at\": \"<dateTime>\",\n  \"code\": \"<string>\",\n  \"verified_at\": \"<dateTime>\",\n  \"revoked_at\": \"<dateTime>\",\n  \"metadata\": {\n    \"suntf\": \"<string>\",\n    \"commodo_b\": \"<string>\",\n    \"minim_3\": \"<string>\",\n    \"ut_b\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-07-28T01:19:05.000Z",
+                          "updatedAt": "2026-07-28T01:19:05.000Z",
+                          "uid": "35240-4d90b23d-f1f9-4a25-8f48-c303a84ba397"
+                        },
+                        {
+                          "id": "7ba31253-7c32-46e8-8cba-d0488f8fecd5",
+                          "name": "The request is invalid or contains invalid parameters",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"expires_in\": \"<integer>\",\n  \"metadata\": {\n    \"in_2\": \"<string>\"\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/authorization_tokens",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "authorization_tokens"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:05.000Z",
+                          "updatedAt": "2026-07-28T01:19:05.000Z",
+                          "uid": "35240-7ba31253-7c32-46e8-8cba-d0488f8fecd5"
+                        },
+                        {
+                          "id": "bec9277e-d33f-462c-9ad6-da5320b6e70b",
+                          "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"expires_in\": \"<integer>\",\n  \"metadata\": {\n    \"in_2\": \"<string>\"\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/authorization_tokens",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "authorization_tokens"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:05.000Z",
+                          "updatedAt": "2026-07-28T01:19:05.000Z",
+                          "uid": "35240-bec9277e-d33f-462c-9ad6-da5320b6e70b"
+                        },
+                        {
+                          "id": "2bb50c69-727d-4bf3-ad98-d5323694485c",
+                          "name": "Access denied",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"expires_in\": \"<integer>\",\n  \"metadata\": {\n    \"in_2\": \"<string>\"\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/authorization_tokens",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "authorization_tokens"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:05.000Z",
+                          "updatedAt": "2026-07-28T01:19:05.000Z",
+                          "uid": "35240-2bb50c69-727d-4bf3-ad98-d5323694485c"
+                        },
+                        {
+                          "id": "4f6a963c-8d9a-4c03-974a-d6ca48b0b9ad",
+                          "name": "Resource Not Found",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"expires_in\": \"<integer>\",\n  \"metadata\": {\n    \"in_2\": \"<string>\"\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/authorization_tokens",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "authorization_tokens"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:05.000Z",
+                          "updatedAt": "2026-07-28T01:19:05.000Z",
+                          "uid": "35240-4f6a963c-8d9a-4c03-974a-d6ca48b0b9ad"
+                        },
+                        {
+                          "id": "215bd9c9-8c72-4fb5-ba5a-a643e858c497",
+                          "name": "Internal Server Error",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"expires_in\": \"<integer>\",\n  \"metadata\": {\n    \"in_2\": \"<string>\"\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/authorization_tokens",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "authorization_tokens"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:05.000Z",
+                          "updatedAt": "2026-07-28T01:19:05.000Z",
+                          "uid": "35240-215bd9c9-8c72-4fb5-ba5a-a643e858c497"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:19:05.000Z",
+                      "updatedAt": "2026-07-28T01:19:05.000Z",
+                      "uid": "35240-52167fd2-cf3d-4e56-99a1-ff881adc7b98"
+                    },
+                    {
+                      "name": "List Authorization Tokens",
+                      "id": "ea081a31-f9ea-4b37-875f-70d9081df698",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/donor_accounts/:id/authorization_tokens?status=revoked&page_limit=10&page_token=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "donor_accounts",
+                            ":id",
+                            "authorization_tokens"
+                          ],
+                          "query": [
+                            {
+                              "description": "Filter tokens by status.",
+                              "key": "status",
+                              "value": "revoked"
+                            },
+                            {
+                              "description": "the number of results to return; defaults to 10, max is 100",
+                              "key": "page_limit",
+                              "value": "10"
+                            },
+                            {
+                              "description": "A cursor for paginating; pass the value from `next_page_token` of the previous response.",
+                              "key": "page_token",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "id": "5695c61d-ac98-4854-8e15-0db0eb287960",
+                              "key": "id",
+                              "value": "<string>",
+                              "description": "(Required) The unique id of the Donor Account"
+                            }
+                          ]
+                        },
+                        "description": "List Authorization Tokens for a Donor Account.\nToken codes are never returned by this endpoint \u2014 only the metadata is returned."
+                      },
+                      "response": [
+                        {
+                          "id": "c12f476b-5eaa-492b-a508-21b9b55a4c1e",
+                          "name": "The response for DonorAccounts.listAuthorizationTokens",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/authorization_tokens?status=revoked&page_limit=10&page_token=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "authorization_tokens"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Filter tokens by status.",
+                                  "key": "status",
+                                  "value": "revoked"
+                                },
+                                {
+                                  "description": "the number of results to return; defaults to 10, max is 100",
+                                  "key": "page_limit",
+                                  "value": "10"
+                                },
+                                {
+                                  "description": "A cursor for paginating; pass the value from `next_page_token` of the previous response.",
+                                  "key": "page_token",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"results\": [\n    {\n      \"id\": \"<string>\",\n      \"donor_account_id\": \"<string>\",\n      \"status\": \"pending\",\n      \"created_at\": \"<dateTime>\",\n      \"expires_at\": \"<dateTime>\",\n      \"code\": \"<string>\",\n      \"verified_at\": \"<dateTime>\",\n      \"revoked_at\": \"<dateTime>\",\n      \"metadata\": {\n        \"inb\": \"<string>\",\n        \"aliquipa4b\": \"<string>\",\n        \"ullamco7_\": \"<string>\"\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"donor_account_id\": \"<string>\",\n      \"status\": \"verified\",\n      \"created_at\": \"<dateTime>\",\n      \"expires_at\": \"<dateTime>\",\n      \"code\": \"<string>\",\n      \"verified_at\": \"<dateTime>\",\n      \"revoked_at\": \"<dateTime>\",\n      \"metadata\": {\n        \"consectetur_c7\": \"<string>\",\n        \"et_b\": \"<string>\",\n        \"Ut420\": \"<string>\",\n        \"sint_c6\": \"<string>\"\n      }\n    }\n  ],\n  \"next_page_token\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:05.000Z",
+                          "updatedAt": "2026-07-28T01:19:05.000Z",
+                          "uid": "35240-c12f476b-5eaa-492b-a508-21b9b55a4c1e"
+                        },
+                        {
+                          "id": "ba50f2ca-85f5-4381-b7bf-ab0486d17139",
+                          "name": "The request is invalid or contains invalid parameters",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/authorization_tokens?status=revoked&page_limit=10&page_token=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "authorization_tokens"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Filter tokens by status.",
+                                  "key": "status",
+                                  "value": "revoked"
+                                },
+                                {
+                                  "description": "the number of results to return; defaults to 10, max is 100",
+                                  "key": "page_limit",
+                                  "value": "10"
+                                },
+                                {
+                                  "description": "A cursor for paginating; pass the value from `next_page_token` of the previous response.",
+                                  "key": "page_token",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:05.000Z",
+                          "updatedAt": "2026-07-28T01:19:05.000Z",
+                          "uid": "35240-ba50f2ca-85f5-4381-b7bf-ab0486d17139"
+                        },
+                        {
+                          "id": "3b832352-25af-4781-a9ce-91d369b94f25",
+                          "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/authorization_tokens?status=revoked&page_limit=10&page_token=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "authorization_tokens"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Filter tokens by status.",
+                                  "key": "status",
+                                  "value": "revoked"
+                                },
+                                {
+                                  "description": "the number of results to return; defaults to 10, max is 100",
+                                  "key": "page_limit",
+                                  "value": "10"
+                                },
+                                {
+                                  "description": "A cursor for paginating; pass the value from `next_page_token` of the previous response.",
+                                  "key": "page_token",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:05.000Z",
+                          "updatedAt": "2026-07-28T01:19:05.000Z",
+                          "uid": "35240-3b832352-25af-4781-a9ce-91d369b94f25"
+                        },
+                        {
+                          "id": "50c6d13e-0709-4d18-acbc-e8f787e95511",
+                          "name": "Access denied",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/authorization_tokens?status=revoked&page_limit=10&page_token=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "authorization_tokens"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Filter tokens by status.",
+                                  "key": "status",
+                                  "value": "revoked"
+                                },
+                                {
+                                  "description": "the number of results to return; defaults to 10, max is 100",
+                                  "key": "page_limit",
+                                  "value": "10"
+                                },
+                                {
+                                  "description": "A cursor for paginating; pass the value from `next_page_token` of the previous response.",
+                                  "key": "page_token",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:05.000Z",
+                          "updatedAt": "2026-07-28T01:19:05.000Z",
+                          "uid": "35240-50c6d13e-0709-4d18-acbc-e8f787e95511"
+                        },
+                        {
+                          "id": "03d54aa3-74a9-410c-9007-f90f955dfa7c",
+                          "name": "Resource Not Found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/authorization_tokens?status=revoked&page_limit=10&page_token=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "authorization_tokens"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Filter tokens by status.",
+                                  "key": "status",
+                                  "value": "revoked"
+                                },
+                                {
+                                  "description": "the number of results to return; defaults to 10, max is 100",
+                                  "key": "page_limit",
+                                  "value": "10"
+                                },
+                                {
+                                  "description": "A cursor for paginating; pass the value from `next_page_token` of the previous response.",
+                                  "key": "page_token",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:05.000Z",
+                          "updatedAt": "2026-07-28T01:19:05.000Z",
+                          "uid": "35240-03d54aa3-74a9-410c-9007-f90f955dfa7c"
+                        },
+                        {
+                          "id": "b7786d3c-0dc6-427b-bfce-25870d206478",
+                          "name": "Internal Server Error",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/donor_accounts/:id/authorization_tokens?status=revoked&page_limit=10&page_token=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "donor_accounts",
+                                ":id",
+                                "authorization_tokens"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Filter tokens by status.",
+                                  "key": "status",
+                                  "value": "revoked"
+                                },
+                                {
+                                  "description": "the number of results to return; defaults to 10, max is 100",
+                                  "key": "page_limit",
+                                  "value": "10"
+                                },
+                                {
+                                  "description": "A cursor for paginating; pass the value from `next_page_token` of the previous response.",
+                                  "key": "page_token",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:05.000Z",
+                          "updatedAt": "2026-07-28T01:19:05.000Z",
+                          "uid": "35240-b7786d3c-0dc6-427b-bfce-25870d206478"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:19:05.000Z",
+                      "updatedAt": "2026-07-28T01:19:05.000Z",
+                      "uid": "35240-ea081a31-f9ea-4b37-875f-70d9081df698"
+                    }
+                  ],
+                  "id": "95d7c982-75a7-4357-a7f6-ecad46133c65",
+                  "createdAt": "2026-07-28T01:19:05.000Z",
+                  "updatedAt": "2026-07-28T01:19:05.000Z",
+                  "uid": "35240-95d7c982-75a7-4357-a7f6-ecad46133c65"
+                }
+              ],
+              "id": "9896759d-0ed0-4698-a543-f5b2ad2cdc2f",
+              "createdAt": "2026-07-28T01:19:05.000Z",
+              "updatedAt": "2026-07-28T01:19:05.000Z",
+              "uid": "35240-9896759d-0ed0-4698-a543-f5b2ad2cdc2f"
+            }
+          ],
+          "id": "77f49666-e3b4-4927-aeab-1b74b2ed5387",
+          "createdAt": "2026-07-28T01:19:05.000Z",
+          "updatedAt": "2026-07-28T01:19:05.000Z",
+          "uid": "35240-77f49666-e3b4-4927-aeab-1b74b2ed5387"
+        },
+        {
+          "name": "authorization_tokens",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "revoke",
+                  "item": [
+                    {
+                      "name": "Revoke Authorization Token",
+                      "id": "7c001927-2853-499b-9954-f27b8c85340a",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/authorization_tokens/:id/revoke",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "authorization_tokens",
+                            ":id",
+                            "revoke"
+                          ],
+                          "variable": [
+                            {
+                              "id": "bf9d6e1e-3213-469c-9de2-f45076e65405",
+                              "key": "id",
+                              "value": "<string>",
+                              "description": "(Required) The unique id of the Authorization Token"
+                            }
+                          ]
+                        },
+                        "description": "Revoke an unverified Authorization Token. Once revoked, the `code` can no longer be verified.\nTokens that have already been verified or expired cannot be revoked and will return status `412 Precondition Failed`."
+                      },
+                      "response": [
+                        {
+                          "id": "57c9e8c6-adda-4f4b-b9bc-cb611e2ef157",
+                          "name": "The token was revoked",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/authorization_tokens/:id/revoke",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "authorization_tokens",
+                                ":id",
+                                "revoke"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"id\": \"<string>\",\n  \"donor_account_id\": \"<string>\",\n  \"status\": \"expired\",\n  \"created_at\": \"<dateTime>\",\n  \"expires_at\": \"<dateTime>\",\n  \"code\": \"<string>\",\n  \"verified_at\": \"<dateTime>\",\n  \"revoked_at\": \"<dateTime>\",\n  \"metadata\": {\n    \"suntf\": \"<string>\",\n    \"commodo_b\": \"<string>\",\n    \"minim_3\": \"<string>\",\n    \"ut_b\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-07-28T01:19:05.000Z",
+                          "updatedAt": "2026-07-28T01:19:05.000Z",
+                          "uid": "35240-57c9e8c6-adda-4f4b-b9bc-cb611e2ef157"
+                        },
+                        {
+                          "id": "e4b393c7-99ca-4def-8085-263a222404ef",
+                          "name": "The request is invalid or contains invalid parameters",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/authorization_tokens/:id/revoke",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "authorization_tokens",
+                                ":id",
+                                "revoke"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:05.000Z",
+                          "updatedAt": "2026-07-28T01:19:05.000Z",
+                          "uid": "35240-e4b393c7-99ca-4def-8085-263a222404ef"
+                        },
+                        {
+                          "id": "59720f34-3825-48d0-86a5-1d95c2b0b2c5",
+                          "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/authorization_tokens/:id/revoke",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "authorization_tokens",
+                                ":id",
+                                "revoke"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:05.000Z",
+                          "updatedAt": "2026-07-28T01:19:05.000Z",
+                          "uid": "35240-59720f34-3825-48d0-86a5-1d95c2b0b2c5"
+                        },
+                        {
+                          "id": "5eab0e17-d689-448f-b5aa-418375f654bd",
+                          "name": "Access denied",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/authorization_tokens/:id/revoke",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "authorization_tokens",
+                                ":id",
+                                "revoke"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:05.000Z",
+                          "updatedAt": "2026-07-28T01:19:05.000Z",
+                          "uid": "35240-5eab0e17-d689-448f-b5aa-418375f654bd"
+                        },
+                        {
+                          "id": "fc407b7d-eb19-4402-8264-f4fc5c219fa7",
+                          "name": "Resource Not Found",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/authorization_tokens/:id/revoke",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "authorization_tokens",
+                                ":id",
+                                "revoke"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:05.000Z",
+                          "updatedAt": "2026-07-28T01:19:05.000Z",
+                          "uid": "35240-fc407b7d-eb19-4402-8264-f4fc5c219fa7"
+                        },
+                        {
+                          "id": "76345971-e2a5-4b72-8c9a-642adbcc4f0d",
+                          "name": "Precondition Failed",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/authorization_tokens/:id/revoke",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "authorization_tokens",
+                                ":id",
+                                "revoke"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Precondition Failed",
+                          "code": 412,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:05.000Z",
+                          "updatedAt": "2026-07-28T01:19:05.000Z",
+                          "uid": "35240-76345971-e2a5-4b72-8c9a-642adbcc4f0d"
+                        },
+                        {
+                          "id": "36bb5c55-1ead-4d82-90eb-a27af64177b7",
+                          "name": "Internal Server Error",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/authorization_tokens/:id/revoke",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "authorization_tokens",
+                                ":id",
+                                "revoke"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:19:05.000Z",
+                          "updatedAt": "2026-07-28T01:19:05.000Z",
+                          "uid": "35240-36bb5c55-1ead-4d82-90eb-a27af64177b7"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:19:05.000Z",
+                      "updatedAt": "2026-07-28T01:19:05.000Z",
+                      "uid": "35240-7c001927-2853-499b-9954-f27b8c85340a"
+                    }
+                  ],
+                  "id": "256296ef-9fd3-4aa6-a5f8-d958df7030df",
+                  "createdAt": "2026-07-28T01:19:05.000Z",
+                  "updatedAt": "2026-07-28T01:19:05.000Z",
+                  "uid": "35240-256296ef-9fd3-4aa6-a5f8-d958df7030df"
+                },
+                {
+                  "name": "Get Authorization Token",
+                  "id": "2c4a5547-b356-44c1-86b8-4274f6ec04bf",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/authorization_tokens/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "authorization_tokens",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "id": "d2906184-d5b0-446d-8e09-d1368436e4dc",
+                          "key": "id",
+                          "value": "<string>",
+                          "description": "(Required) The unique id of the Authorization Token"
+                        }
+                      ]
+                    },
+                    "description": "Retrieve an Authorization Token with the given ID.\nThe token's `code` is never returned \u2014 only the metadata is returned."
+                  },
+                  "response": [
+                    {
+                      "id": "3784b814-cac4-4a3a-a463-75ef2516a0f6",
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/authorization_tokens/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "authorization_tokens",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"donor_account_id\": \"<string>\",\n  \"status\": \"expired\",\n  \"created_at\": \"<dateTime>\",\n  \"expires_at\": \"<dateTime>\",\n  \"code\": \"<string>\",\n  \"verified_at\": \"<dateTime>\",\n  \"revoked_at\": \"<dateTime>\",\n  \"metadata\": {\n    \"suntf\": \"<string>\",\n    \"commodo_b\": \"<string>\",\n    \"minim_3\": \"<string>\",\n    \"ut_b\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-07-28T01:19:05.000Z",
+                      "updatedAt": "2026-07-28T01:19:05.000Z",
+                      "uid": "35240-3784b814-cac4-4a3a-a463-75ef2516a0f6"
+                    },
+                    {
+                      "id": "59196d75-9ba3-42a5-9b8a-079bec2a7000",
+                      "name": "The request is invalid or contains invalid parameters",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/authorization_tokens/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "authorization_tokens",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:05.000Z",
+                      "updatedAt": "2026-07-28T01:19:05.000Z",
+                      "uid": "35240-59196d75-9ba3-42a5-9b8a-079bec2a7000"
+                    },
+                    {
+                      "id": "16c9bebf-1571-4163-96e2-b30610400bc0",
+                      "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/authorization_tokens/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "authorization_tokens",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:05.000Z",
+                      "updatedAt": "2026-07-28T01:19:05.000Z",
+                      "uid": "35240-16c9bebf-1571-4163-96e2-b30610400bc0"
+                    },
+                    {
+                      "id": "7408343a-af7c-4210-9ecf-4b9d4ddf2152",
+                      "name": "Access denied",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/authorization_tokens/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "authorization_tokens",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:05.000Z",
+                      "updatedAt": "2026-07-28T01:19:05.000Z",
+                      "uid": "35240-7408343a-af7c-4210-9ecf-4b9d4ddf2152"
+                    },
+                    {
+                      "id": "b074baa5-878f-4336-bfa1-15df316a6a14",
+                      "name": "Resource Not Found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/authorization_tokens/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "authorization_tokens",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:05.000Z",
+                      "updatedAt": "2026-07-28T01:19:05.000Z",
+                      "uid": "35240-b074baa5-878f-4336-bfa1-15df316a6a14"
+                    },
+                    {
+                      "id": "4168925c-7d19-4ed9-aba9-1e710b3560d6",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/authorization_tokens/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "authorization_tokens",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:05.000Z",
+                      "updatedAt": "2026-07-28T01:19:05.000Z",
+                      "uid": "35240-4168925c-7d19-4ed9-aba9-1e710b3560d6"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:19:05.000Z",
+                  "updatedAt": "2026-07-28T01:19:05.000Z",
+                  "uid": "35240-2c4a5547-b356-44c1-86b8-4274f6ec04bf"
+                }
+              ],
+              "id": "9e9e795f-bf0d-42d7-889f-11fc6bef773e",
+              "createdAt": "2026-07-28T01:19:05.000Z",
+              "updatedAt": "2026-07-28T01:19:05.000Z",
+              "uid": "35240-9e9e795f-bf0d-42d7-889f-11fc6bef773e"
+            },
+            {
+              "name": "verify",
+              "item": [
+                {
+                  "name": "Verify Authorization Token",
+                  "id": "cfd17cc9-985c-470f-8cde-27b2f1b4f480",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"code\": \"<string>\",\n  \"external_id\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/authorization_tokens/verify",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "authorization_tokens",
+                        "verify"
+                      ]
+                    },
+                    "description": "Verify an Authorization Token by its `code` value.\n\nThis endpoint is used by DAFs in the **Donor-Initiated Verification** flow: when a donor presents the `code` they received from DAFpay (via email after submitting a Grant Request), the DAF calls this endpoint with the `code` to confirm the donor's identity.\n\nOn success:\n- The Authorization Token transitions to `verified`.\n- The linked Donor Account is automatically transitioned to `approved` if it is currently `pending`.\n- The full Donor Account is returned (including the `id` you can use to call subsequent endpoints).\n\nCodes are only valid until the token's `expires_at` \u2014 **30 days** after creation by default (configurable via `expires_in` on [Create Authorization Token](/api/authorization-tokens/create), 60 seconds to 90 days). After that point, the token's status becomes `expired` and verification will fail. If the donor's code has expired, prompt them to submit a new Grant Request \u2014 DAFpay will issue and email a fresh code automatically.\n\n<Warning>\nError handling:\n- If the `code` is unknown, expired, revoked, or already verified, the request will return status `404 Not Found` or `410 Gone` to avoid leaking information about valid codes. Expired codes are intentionally indistinguishable from other invalid codes in the response \u2014 surface a generic \"code is invalid or has expired\" message to the donor and ask them to request a new code.\n- If the linked Donor Account has already been rejected, the request will return status `409 Conflict`.\n- To prevent brute-force attacks, this endpoint enforces strict per-DAF rate limits. Repeated failures will return status `429 Too Many Requests`.\n</Warning>"
+                  },
+                  "response": [
+                    {
+                      "id": "23df4b42-3778-4d20-86dc-a8989fbeb7df",
+                      "name": "The token was successfully verified and the Donor Account was approved.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"code\": \"<string>\",\n  \"external_id\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/authorization_tokens/verify",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "authorization_tokens",
+                            "verify"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"status\": \"approved\",\n  \"donor\": {\n    \"email\": \"<string>\",\n    \"first_name\": \"<string>\",\n    \"last_name\": \"<string>\",\n    \"phone\": \"<string>\"\n  },\n  \"created_at\": \"<dateTime>\",\n  \"updated_at\": \"<dateTime>\",\n  \"external_id\": \"<string>\",\n  \"approval\": {\n    \"approved_at\": \"<dateTime>\",\n    \"approved_by\": \"<string>\"\n  },\n  \"rejection\": {\n    \"rejected_at\": \"<dateTime>\",\n    \"rejected_by\": \"<string>\",\n    \"rejection_reason\": \"<string>\"\n  },\n  \"disabled\": false,\n  \"metadata\": {\n    \"occaecat7\": \"<string>\",\n    \"fugiat__\": \"<string>\",\n    \"eu_8\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-07-28T01:19:05.000Z",
+                      "updatedAt": "2026-07-28T01:19:05.000Z",
+                      "uid": "35240-23df4b42-3778-4d20-86dc-a8989fbeb7df"
+                    },
+                    {
+                      "id": "cae2fa6b-a513-495a-a1c6-bd7f7d102395",
+                      "name": "The request is invalid or contains invalid parameters",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"code\": \"<string>\",\n  \"external_id\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/authorization_tokens/verify",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "authorization_tokens",
+                            "verify"
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:05.000Z",
+                      "updatedAt": "2026-07-28T01:19:05.000Z",
+                      "uid": "35240-cae2fa6b-a513-495a-a1c6-bd7f7d102395"
+                    },
+                    {
+                      "id": "ef534ec4-e08d-4a29-8a13-f2d69822ecc5",
+                      "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"code\": \"<string>\",\n  \"external_id\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/authorization_tokens/verify",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "authorization_tokens",
+                            "verify"
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:05.000Z",
+                      "updatedAt": "2026-07-28T01:19:05.000Z",
+                      "uid": "35240-ef534ec4-e08d-4a29-8a13-f2d69822ecc5"
+                    },
+                    {
+                      "id": "22b78dc1-2a69-4039-bbdf-347e91af0b05",
+                      "name": "Access denied",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"code\": \"<string>\",\n  \"external_id\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/authorization_tokens/verify",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "authorization_tokens",
+                            "verify"
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:05.000Z",
+                      "updatedAt": "2026-07-28T01:19:05.000Z",
+                      "uid": "35240-22b78dc1-2a69-4039-bbdf-347e91af0b05"
+                    },
+                    {
+                      "id": "0ca0ed33-c4c7-4dea-90bf-237a4d9c2d6b",
+                      "name": "Resource Not Found",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"code\": \"<string>\",\n  \"external_id\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/authorization_tokens/verify",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "authorization_tokens",
+                            "verify"
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:05.000Z",
+                      "updatedAt": "2026-07-28T01:19:05.000Z",
+                      "uid": "35240-0ca0ed33-c4c7-4dea-90bf-237a4d9c2d6b"
+                    },
+                    {
+                      "id": "e70bbeb1-0dcc-4bc4-b200-6d4c91d951bb",
+                      "name": "Resource Conflicts",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"code\": \"<string>\",\n  \"external_id\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/authorization_tokens/verify",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "authorization_tokens",
+                            "verify"
+                          ]
+                        }
+                      },
+                      "status": "Conflict",
+                      "code": 409,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:05.000Z",
+                      "updatedAt": "2026-07-28T01:19:05.000Z",
+                      "uid": "35240-e70bbeb1-0dcc-4bc4-b200-6d4c91d951bb"
+                    },
+                    {
+                      "id": "2ea59269-42f7-4dbd-96c3-97df3b61e62d",
+                      "name": "Resource Gone or Expired",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"code\": \"<string>\",\n  \"external_id\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/authorization_tokens/verify",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "authorization_tokens",
+                            "verify"
+                          ]
+                        }
+                      },
+                      "status": "Gone",
+                      "code": 410,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:05.000Z",
+                      "updatedAt": "2026-07-28T01:19:05.000Z",
+                      "uid": "35240-2ea59269-42f7-4dbd-96c3-97df3b61e62d"
+                    },
+                    {
+                      "id": "8d9dc690-2687-4beb-89cb-d594998d3d95",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"code\": \"<string>\",\n  \"external_id\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/authorization_tokens/verify",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "authorization_tokens",
+                            "verify"
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:05.000Z",
+                      "updatedAt": "2026-07-28T01:19:05.000Z",
+                      "uid": "35240-8d9dc690-2687-4beb-89cb-d594998d3d95"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:19:05.000Z",
+                  "updatedAt": "2026-07-28T01:19:05.000Z",
+                  "uid": "35240-cfd17cc9-985c-470f-8cde-27b2f1b4f480"
+                }
+              ],
+              "id": "20c4505a-8fd1-4d45-90dc-88262a9cb1f3",
+              "createdAt": "2026-07-28T01:19:05.000Z",
+              "updatedAt": "2026-07-28T01:19:05.000Z",
+              "uid": "35240-20c4505a-8fd1-4d45-90dc-88262a9cb1f3"
+            }
+          ],
+          "id": "c8326083-7e2b-4da0-84b2-da0578a4e509",
+          "createdAt": "2026-07-28T01:19:05.000Z",
+          "updatedAt": "2026-07-28T01:19:05.000Z",
+          "uid": "35240-c8326083-7e2b-4da0-84b2-da0578a4e509"
+        }
+      ],
+      "id": "bb13c743-1f5b-4f39-adbc-1a0f9ebf50ca",
+      "createdAt": "2026-07-28T01:19:05.000Z",
+      "updatedAt": "2026-07-28T01:19:05.000Z",
+      "uid": "35240-bb13c743-1f5b-4f39-adbc-1a0f9ebf50ca"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read:bank_accounts sync:connected_accounts",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.givechariot.com/auth/oauth/token",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://dashboard.givechariot.com/oauth/authorize",
+        "type": "string"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.givechariot.com/fdx/v6"
+    }
+  ]
+}

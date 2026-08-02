@@ -1,0 +1,57 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.givechariot.com/api + openapi/chariot-openapi-original.yml
+authentication:
+  style: http-bearer
+  header: 'Authorization: Bearer {TOKEN}'
+  key_prefix_test: sk_test_
+  transport: HTTPS TLS 1.2+ only
+  oauth2: FDX API (open banking) uses OAuth 2.0 authorization_code with scopes read:bank_accounts and sync:connected_accounts
+  cross_link: authentication/chariot-authentication.yml
+idempotency:
+  supported: true
+  mechanism: Idempotency-Key request header on mutating operations
+  header: Idempotency-Key
+  applies_to:
+    - createDisbursement
+    - createInboundTransfer
+  query_filter: listDisbursements accepts an idempotency_key query parameter to look up a prior create
+  note: Send a unique Idempotency-Key on POST create operations so retries do not double-execute money movement.
+  cross_link: errors/chariot-problem-types.yml
+pagination:
+  style: cursor
+  request_params:
+    - limit
+    - cursor
+  response_fields:
+    - results
+    - nextPageToken
+  note: List endpoints return results[] plus nextPageToken; pass it back as cursor to page forward.
+request_tracing:
+  header: X-Request-Id
+  direction: response
+  note: Every response includes X-Request-Id; reference it in support requests.
+versioning:
+  scheme: date-based
+  current: v2026-04-01
+  previous: v2026-01-15
+  older: [2025-02-24, 2023-01-01]
+  cross_link: lifecycle/chariot-lifecycle.yml
+error_envelope:
+  format: rfc7807
+  media_type: application/problem+json
+  fields: [type, title, status, detail]
+  cross_link: errors/chariot-problem-types.yml
+environments:
+  sandbox:
+    base_url: https://sandboxapi.givechariot.com
+    fdx_base_url: https://devapi.givechariot.com/fdx/v6
+  production:
+    base_url: https://api.givechariot.com
+    fdx_base_url: https://api.givechariot.com/fdx/v6
+  cross_link: sandbox/chariot-sandbox.yml
+sandbox_simulation:
+  note: Sandbox exposes simulation endpoints to advance async money-movement state machines (complete/fail disbursements, inbound transfers, grants; onboard organizations).
+rate_limiting:
+  documented: false
+  note: The docs reference a rate limit but publish no numeric ceiling or X-RateLimit headers.

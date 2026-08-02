@@ -1,0 +1,57 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/chariot-openapi-original.yml
+docs: https://docs.givechariot.com/api/errors
+format: rfc7807
+media_type: application/problem+json
+envelope:
+  schema: ProblemDetails
+  fields:
+  - type
+  - title
+  - status
+  - detail
+  request_id_header: X-Request-Id
+  note: RFC 7807 problem-details. type is currently about:blank; title is a short summary; status is the
+    integer HTTP code; detail is occurrence-specific.
+problems:
+- status: 400
+  title: Bad Request
+  detail: The request is invalid or contains invalid parameters.
+  remediation: Validate request body and query parameters against the schema.
+  occurs_on_operations: 77
+- status: 401
+  title: Unauthorized
+  detail: Authentication is required or the credential is invalid.
+  remediation: Supply a valid bearer API key in the Authorization header.
+  occurs_on_operations: 78
+- status: 403
+  title: Forbidden
+  detail: Missing/invalid API key or insufficient permissions for this resource.
+  remediation: Confirm the key has access to the resource and the correct environment.
+  occurs_on_operations: 76
+- status: 404
+  title: Not Found
+  detail: The requested resource does not exist.
+  remediation: Verify the resource id; it may belong to another environment.
+  occurs_on_operations: 53
+- status: 409
+  title: Conflict
+  detail: The request conflicts with the current state of the resource.
+  remediation: Re-fetch the resource and retry; check idempotency semantics.
+  occurs_on_operations: 13
+- status: 410
+  title: Gone
+  detail: The resource is no longer available (expired).
+  remediation: Do not retry; the resource has expired.
+  occurs_on_operations: 3
+- status: 412
+  title: Precondition Failed
+  detail: A precondition specified in the request was not met.
+  remediation: Satisfy the required precondition before retrying.
+  occurs_on_operations: 5
+- status: 500
+  title: Internal Server Error
+  detail: A server-side failure occurred despite a valid request.
+  remediation: Retry with backoff; contact support with the X-Request-Id if it persists.
+  occurs_on_operations: 77

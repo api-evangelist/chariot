@@ -1,0 +1,59 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.givechariot.com/api + openapi/chariot-openapi-original.yml
+spec_type: Webhooks
+summary: Chariot delivers events via subscribable webhooks. Create an Event Subscription for a set of
+  event categories; Chariot POSTs Event objects to your endpoint. Events can also be pulled via the Events
+  API.
+delivery:
+  model: push (webhook) + pull (Events API)
+  subscription_operations:
+  - createEventSubscription
+  - listEventSubscriptions
+  - getEventSubscription
+  - updateEventSubscription
+  event_operations:
+  - listEvents
+  - getEvent
+  event_object:
+    fields:
+    - id
+    - category
+    - created_at
+    - associated_object_id
+    - associated_object_type
+    note: The webhook payload is an Event object. It carries the category and the associated object id/type;
+      fetch the object via its resource API to read current state (status transitions are emitted as {resource}.updated).
+  naming: '{resource}.{event_type} where event_type is created or updated'
+resources_with_events:
+- authorization_token
+- deposit
+- disbursement
+- donation
+- donor_account
+- grant
+- grant_request
+- inbound_transfer
+- unintegrated_grant
+- verification_request
+event_categories:
+- grant.created
+- grant.updated
+- unintegrated_grant.created
+- unintegrated_grant.updated
+- donor_account.created
+- donor_account.updated
+- authorization_token.created
+- authorization_token.updated
+- grant_request.created
+- grant_request.updated
+- disbursement.created
+- disbursement.updated
+- inbound_transfer.created
+- inbound_transfer.updated
+- donation.created
+- donation.updated
+- deposit.created
+- deposit.updated
+- verification_request.created
+- verification_request.updated

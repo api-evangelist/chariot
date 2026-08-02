@@ -1,0 +1,464 @@
+openapi: 3.0.0
+info:
+  title: Chariot FDX Accounts properties API
+  version: '6.0'
+  description: Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.
+  contact:
+    name: Chariot Development Team
+    url: https://givechariot.com/contact
+    email: developers@givechariot.com
+servers:
+- url: https://api.givechariot.com/fdx/v6
+  description: Production
+- url: https://devapi.givechariot.com/fdx/v6
+  description: Staging
+security:
+- oauth2: []
+tags:
+- name: properties
+paths:
+  /v1/properties:
+    get:
+      summary: List Properties
+      description: List properties for your account.
+      operationId: listProperties
+      tags:
+      - properties
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: limit
+        in: query
+        description: Limit the size of the list that is returned. The default (and maximum) is 100 objects.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        in: query
+        description: The cursor to use for pagination. If not set, the first page of results will be returned.
+        required: false
+        schema:
+          type: string
+      - name: resource_type
+        in: query
+        description: The type of the resource that the properties are associated with.
+        required: false
+        schema:
+          $ref: '#/components/schemas/ResourceType'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListPropertiesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/properties/{id}:
+    get:
+      summary: Get a Property
+      description: Get a property by its unique identifier.
+      operationId: getProperty
+      tags:
+      - properties
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier for the property
+        required: true
+        schema:
+          type: string
+        example: prop_01j8rs605a4gctmbm58d87mvsj
+      responses:
+        '200':
+          description: The property was retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Property'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/properties/{id}/options:
+    get:
+      summary: List Property Options
+      description: List all options for an enum or user property.
+      operationId: listPropertyOptions
+      tags:
+      - properties
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier for the property
+        required: true
+        schema:
+          type: string
+        example: prop_01j8rs605a4gctmbm58d87mvsj
+      - name: limit
+        in: query
+        description: Limit the size of the list that is returned. The default (and maximum) is 100 objects.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        in: query
+        description: The cursor to use for pagination. If not set, the first page of results will be returned.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/ListPropertyOptionsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/properties/{id}/assign:
+    post:
+      summary: Assign a Property
+      description: 'Appends a Property to one or more Donations or Deposits.
+
+        A maximum of 100 resources can be assigned to a property at a time.
+
+        The resource identifiers must be of the same resource_type as the Property, otherwise a 400 Bad Request error will be returned.'
+      operationId: assignProperty
+      tags:
+      - properties
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier for the property
+        required: true
+        schema:
+          type: string
+        example: prop_01j8rs605a4gctmbm58d87mvsj
+      requestBody:
+        $ref: '#/components/requestBodies/AssignPropertyRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/AssignPropertyResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    Property:
+      type: object
+      description: A custom key-value pair that is associated with a donation.
+      required:
+      - id
+      - name
+      - resource_type
+      - property_type
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: The unique identifier for the property.
+          example: prop_01j8rs605a4gctmbm58d87mvsj
+        name:
+          type: string
+          description: The name of the property.
+          example: Donation Purpose
+        resource_type:
+          $ref: '#/components/schemas/ResourceType'
+        property_type:
+          $ref: '#/components/schemas/PropertyType'
+        options:
+          type: array
+          description: The first 25 options for enum and user properties. Use the [List Property Options](/api-reference/properties/list-options) endpoint to paginate through all options.
+          items:
+            $ref: '#/components/schemas/PropertyOptionValue'
+        total_option_count:
+          type: integer
+          format: int32
+          description: The total number of options for enum and user properties. When this is greater than the length of `options`, use the [List Property Options](/api-reference/properties/list-options) endpoint to paginate through all options.
+    ResourceType:
+      type: string
+      description: The API resource that the property is associated with.
+      enum:
+      - donation
+      - deposit
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
+    PropertyOptionValue:
+      type: object
+      description: A value for an enum or user property.
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the property value.
+        name:
+          type: string
+          description: The human readable string for the property value.
+        description:
+          type: string
+          description: A description of the property option.
+    PropertyType:
+      type: string
+      description: The data type of a property.
+      enum:
+      - text
+      - enum
+      - user
+      - boolean
+      - date
+      example: text
+    PropertyValue:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          $ref: '#/components/schemas/PropertyType'
+        text_value:
+          type: string
+          description: The text value of the property.
+        enum_value_id:
+          type: string
+          description: The unique identifier for the enum value.
+        user_value_id:
+          type: string
+          description: The unique identifier for the user.
+        boolean_value:
+          type: boolean
+          description: The boolean value of the property.
+        date_value:
+          type: string
+          format: date-time
+          description: The date value of the property.
+        empty:
+          type: boolean
+          description: 'Whether the property value is empty.
+
+            Can use this to unset property values when assigning a property.'
+  responses:
+    ListPropertyOptionsResponse:
+      description: The response for Properties.listOptions
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PropertyOptionValue'
+              next_page_token:
+                type: string
+                description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
+    AssignPropertyResponse:
+      description: The response for Properties.assign
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              num_updated:
+                type: integer
+                description: The number of resources that were updated.
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
+    ListPropertiesResponse:
+      description: The response for Properties.list
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Property'
+              next_page_token:
+                type: string
+                description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+  requestBodies:
+    AssignPropertyRequest:
+      description: The request to add a property value to a donation or deposit resource.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - value
+            - resources
+            properties:
+              value:
+                $ref: '#/components/schemas/PropertyValue'
+              resources:
+                type: object
+                required:
+                - ids
+                properties:
+                  ids:
+                    type: array
+                    items:
+                      type: string
+                      description: The unique identifier for the resource
+                      example: donation_01j8rs605a4gctmbm58d87mvsj
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 Bearer token. A client may hold both scopes, but each FDX authorization must contain exactly one — they are mutually exclusive per authorization. An authorization containing both will be rejected. See the Authentication page for token exchange details.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://dashboard.givechariot.com/oauth/authorize
+          tokenUrl: https://api.givechariot.com/auth/oauth/token
+          scopes:
+            read:bank_accounts: Read access to bank account data
+            sync:connected_accounts: Sync access to connected account data

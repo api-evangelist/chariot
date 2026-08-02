@@ -1,0 +1,290 @@
+openapi: 3.0.0
+info:
+  title: Chariot FDX Accounts Giving Pools API
+  version: '6.0'
+  description: Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.
+  contact:
+    name: Chariot Development Team
+    url: https://givechariot.com/contact
+    email: developers@givechariot.com
+servers:
+- url: https://api.givechariot.com/fdx/v6
+  description: Production
+- url: https://devapi.givechariot.com/fdx/v6
+  description: Staging
+security:
+- oauth2: []
+tags:
+- name: Giving Pools
+paths:
+  /v1/giving_pools:
+    get:
+      summary: List Giving Pools
+      description: 'Returns a list of Giving Pools accessible to the authenticated DAF account.
+
+
+        Giving Pools represent individual named giving pools within a donor''s DAF account (e.g. "Smith Family Fund").
+
+        A [Donor Account](/api/donor-accounts) may be associated with multiple Giving Pools.'
+      operationId: list-funds
+      tags:
+      - Giving Pools
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: donor_account_id
+        in: query
+        description: Filter Giving Pools by the ID of the associated [Donor Account](/api/donor-accounts).
+        required: false
+        schema:
+          type: string
+      - name: page_limit
+        in: query
+        description: The number of results to return. Defaults to 10, max is 100.
+        required: false
+        schema:
+          type: integer
+          default: 10
+      - name: page_token
+        in: query
+        description: A token to retrieve the next page of results.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/GivingPool'
+                  next_page_token:
+                    type: string
+                    description: A token to retrieve the next page of results. Absent when there are no more results.
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/giving_pools/{id}:
+    get:
+      summary: Get Giving Pool
+      description: Retrieve a Giving Pool with the given ID.
+      operationId: get-fund
+      tags:
+      - Giving Pools
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: The unique ID of the Giving Pool.
+        schema:
+          type: string
+          format: uuid
+        required: true
+        example: 0bf40881-8ee2-47fb-98ca-f58c7999aa34
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GivingPool'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    GivingPool:
+      type: object
+      description: 'A Giving Pool represents a named giving pool within a donor''s DAF account (e.g. "Smith Family Fund" within a Fidelity Charitable account).
+
+
+        Giving Pools are optional — not every DAF models giving pools, and even within DAFs that do, a [Donor Account](/api/donor-accounts) may exist without any Giving Pools. When present, a Donor Account may have one or more Giving Pools. Each Giving Pool belongs to exactly one Donor Account via `donor_account_id`.'
+      required:
+      - id
+      - name
+      - donor_account_id
+      - created_at
+      - updated_at
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: The unique identifier for this Giving Pool.
+          format: uuid
+          example: 0bf40881-8ee2-47fb-98ca-f58c7999aa34
+        name:
+          type: string
+          description: The display name of the Giving Pool. This is the name that the Donor will see when they are selecting a Giving Pool in DAFpay.
+          example: Smith Family Fund
+        donor_account_id:
+          type: string
+          description: The ID of the [Donor Account](/api/donor-accounts) this Giving Pool belongs to.
+          example: donor_account_01jpjenf5q6cawy43yxfcrxhct
+        created_at:
+          type: string
+          readOnly: true
+          format: date-time
+          description: Time when this object was created, expressed in RFC 3339 format.
+          example: '2026-01-15T09:00:00Z'
+        updated_at:
+          type: string
+          readOnly: true
+          format: date-time
+          description: Time when this object was last updated, expressed in RFC 3339 format.
+          example: '2026-04-01T12:00:00Z'
+        metadata:
+          type: object
+          description: A map of arbitrary string keys and values to store information about the object.
+          additionalProperties:
+            type: string
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
+  responses:
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 Bearer token. A client may hold both scopes, but each FDX authorization must contain exactly one — they are mutually exclusive per authorization. An authorization containing both will be rejected. See the Authentication page for token exchange details.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://dashboard.givechariot.com/oauth/authorize
+          tokenUrl: https://api.givechariot.com/auth/oauth/token
+          scopes:
+            read:bank_accounts: Read access to bank account data
+            sync:connected_accounts: Sync access to connected account data

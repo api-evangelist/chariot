@@ -1,0 +1,1838 @@
+{
+  "info": {
+    "_postman_id": "9b5c7d8c-ab1a-4c45-9506-e614b7d992da",
+    "name": "Chariot FDX Accounts properties API",
+    "description": "Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.\n\nContact Support:\n Name: Chariot Development Team\n Email: developers@givechariot.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:20:06.000Z",
+    "updatedAt": "2026-07-28T01:20:06.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-9b5c7d8c-ab1a-4c45-9506-e614b7d992da"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "properties",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "options",
+                  "item": [
+                    {
+                      "name": "List Property Options",
+                      "id": "75bb4c82-3b9d-4314-b46d-1189252717ae",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/properties/:id/options?limit=<integer>&page_token=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "properties",
+                            ":id",
+                            "options"
+                          ],
+                          "query": [
+                            {
+                              "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                              "key": "limit",
+                              "value": "<integer>"
+                            },
+                            {
+                              "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                              "key": "page_token",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "id": "1d83693f-5ba8-46eb-8b91-0e63267bc9c7",
+                              "key": "id",
+                              "value": "<string>",
+                              "description": "(Required) The unique identifier for the property"
+                            }
+                          ]
+                        },
+                        "description": "List all options for an enum or user property."
+                      },
+                      "response": [
+                        {
+                          "id": "16fbb200-f70a-4c77-a530-cc05aa02d1c9",
+                          "name": "The response for Properties.listOptions",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/properties/:id/options?limit=<integer>&page_token=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "properties",
+                                ":id",
+                                "options"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                                  "key": "limit",
+                                  "value": "<integer>"
+                                },
+                                {
+                                  "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                                  "key": "page_token",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"results\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    }\n  ],\n  \"next_page_token\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:20:07.000Z",
+                          "updatedAt": "2026-07-28T01:20:07.000Z",
+                          "uid": "35240-16fbb200-f70a-4c77-a530-cc05aa02d1c9"
+                        },
+                        {
+                          "id": "4451813f-7212-454e-86e9-4185e0457e6d",
+                          "name": "The request is invalid or contains invalid parameters",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/properties/:id/options?limit=<integer>&page_token=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "properties",
+                                ":id",
+                                "options"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                                  "key": "limit",
+                                  "value": "<integer>"
+                                },
+                                {
+                                  "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                                  "key": "page_token",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:20:07.000Z",
+                          "updatedAt": "2026-07-28T01:20:07.000Z",
+                          "uid": "35240-4451813f-7212-454e-86e9-4185e0457e6d"
+                        },
+                        {
+                          "id": "976691dc-88cf-46c1-a955-ec4fe0ac9936",
+                          "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/properties/:id/options?limit=<integer>&page_token=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "properties",
+                                ":id",
+                                "options"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                                  "key": "limit",
+                                  "value": "<integer>"
+                                },
+                                {
+                                  "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                                  "key": "page_token",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:20:07.000Z",
+                          "updatedAt": "2026-07-28T01:20:07.000Z",
+                          "uid": "35240-976691dc-88cf-46c1-a955-ec4fe0ac9936"
+                        },
+                        {
+                          "id": "3fe352e9-4fd8-477d-8c8f-c54c2e1cb52f",
+                          "name": "Access denied",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/properties/:id/options?limit=<integer>&page_token=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "properties",
+                                ":id",
+                                "options"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                                  "key": "limit",
+                                  "value": "<integer>"
+                                },
+                                {
+                                  "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                                  "key": "page_token",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:20:07.000Z",
+                          "updatedAt": "2026-07-28T01:20:07.000Z",
+                          "uid": "35240-3fe352e9-4fd8-477d-8c8f-c54c2e1cb52f"
+                        },
+                        {
+                          "id": "08702590-1dbc-49e4-88cf-8141f4758962",
+                          "name": "Resource Not Found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/properties/:id/options?limit=<integer>&page_token=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "properties",
+                                ":id",
+                                "options"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                                  "key": "limit",
+                                  "value": "<integer>"
+                                },
+                                {
+                                  "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                                  "key": "page_token",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:20:07.000Z",
+                          "updatedAt": "2026-07-28T01:20:07.000Z",
+                          "uid": "35240-08702590-1dbc-49e4-88cf-8141f4758962"
+                        },
+                        {
+                          "id": "1f63e295-e2e0-4213-abc5-1abc2da938f7",
+                          "name": "Internal Server Error",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/properties/:id/options?limit=<integer>&page_token=<string>",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "properties",
+                                ":id",
+                                "options"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                                  "key": "limit",
+                                  "value": "<integer>"
+                                },
+                                {
+                                  "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                                  "key": "page_token",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:20:07.000Z",
+                          "updatedAt": "2026-07-28T01:20:07.000Z",
+                          "uid": "35240-1f63e295-e2e0-4213-abc5-1abc2da938f7"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:20:07.000Z",
+                      "updatedAt": "2026-07-28T01:20:07.000Z",
+                      "uid": "35240-75bb4c82-3b9d-4314-b46d-1189252717ae"
+                    }
+                  ],
+                  "id": "34420101-b533-4772-8bc3-036764503c8a",
+                  "createdAt": "2026-07-28T01:20:07.000Z",
+                  "updatedAt": "2026-07-28T01:20:07.000Z",
+                  "uid": "35240-34420101-b533-4772-8bc3-036764503c8a"
+                },
+                {
+                  "name": "assign",
+                  "item": [
+                    {
+                      "name": "Assign a Property",
+                      "id": "1ba238fc-137c-4170-aae4-f3f9d0eb6306",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"value\": {\n    \"type\": \"enum\",\n    \"text_value\": \"<string>\",\n    \"enum_value_id\": \"<string>\",\n    \"user_value_id\": \"<string>\",\n    \"boolean_value\": \"<boolean>\",\n    \"date_value\": \"<dateTime>\",\n    \"empty\": \"<boolean>\"\n  },\n  \"resources\": {\n    \"ids\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/properties/:id/assign",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "properties",
+                            ":id",
+                            "assign"
+                          ],
+                          "variable": [
+                            {
+                              "id": "5d603846-7d4c-411e-a7e4-705f4ca11bc1",
+                              "key": "id",
+                              "value": "<string>",
+                              "description": "(Required) The unique identifier for the property"
+                            }
+                          ]
+                        },
+                        "description": "Appends a Property to one or more Donations or Deposits.\nA maximum of 100 resources can be assigned to a property at a time.\nThe resource identifiers must be of the same resource_type as the Property, otherwise a 400 Bad Request error will be returned."
+                      },
+                      "response": [
+                        {
+                          "id": "e4e9b1a9-0647-49a3-aa1b-c27cf3ead92f",
+                          "name": "The response for Properties.assign",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"value\": {\n    \"type\": \"enum\",\n    \"text_value\": \"<string>\",\n    \"enum_value_id\": \"<string>\",\n    \"user_value_id\": \"<string>\",\n    \"boolean_value\": \"<boolean>\",\n    \"date_value\": \"<dateTime>\",\n    \"empty\": \"<boolean>\"\n  },\n  \"resources\": {\n    \"ids\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/properties/:id/assign",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "properties",
+                                ":id",
+                                "assign"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"num_updated\": \"<integer>\"\n}",
+                          "createdAt": "2026-07-28T01:20:07.000Z",
+                          "updatedAt": "2026-07-28T01:20:07.000Z",
+                          "uid": "35240-e4e9b1a9-0647-49a3-aa1b-c27cf3ead92f"
+                        },
+                        {
+                          "id": "dacf7d47-6973-41a5-b8ea-c716708ed768",
+                          "name": "The request is invalid or contains invalid parameters",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"value\": {\n    \"type\": \"enum\",\n    \"text_value\": \"<string>\",\n    \"enum_value_id\": \"<string>\",\n    \"user_value_id\": \"<string>\",\n    \"boolean_value\": \"<boolean>\",\n    \"date_value\": \"<dateTime>\",\n    \"empty\": \"<boolean>\"\n  },\n  \"resources\": {\n    \"ids\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/properties/:id/assign",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "properties",
+                                ":id",
+                                "assign"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:20:07.000Z",
+                          "updatedAt": "2026-07-28T01:20:07.000Z",
+                          "uid": "35240-dacf7d47-6973-41a5-b8ea-c716708ed768"
+                        },
+                        {
+                          "id": "6c2076ce-82e5-43ee-9c57-89cbdacb5412",
+                          "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"value\": {\n    \"type\": \"enum\",\n    \"text_value\": \"<string>\",\n    \"enum_value_id\": \"<string>\",\n    \"user_value_id\": \"<string>\",\n    \"boolean_value\": \"<boolean>\",\n    \"date_value\": \"<dateTime>\",\n    \"empty\": \"<boolean>\"\n  },\n  \"resources\": {\n    \"ids\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/properties/:id/assign",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "properties",
+                                ":id",
+                                "assign"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:20:07.000Z",
+                          "updatedAt": "2026-07-28T01:20:07.000Z",
+                          "uid": "35240-6c2076ce-82e5-43ee-9c57-89cbdacb5412"
+                        },
+                        {
+                          "id": "6074e585-e0c2-4213-87ac-0fad37e1bac9",
+                          "name": "Access denied",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"value\": {\n    \"type\": \"enum\",\n    \"text_value\": \"<string>\",\n    \"enum_value_id\": \"<string>\",\n    \"user_value_id\": \"<string>\",\n    \"boolean_value\": \"<boolean>\",\n    \"date_value\": \"<dateTime>\",\n    \"empty\": \"<boolean>\"\n  },\n  \"resources\": {\n    \"ids\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/properties/:id/assign",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "properties",
+                                ":id",
+                                "assign"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:20:07.000Z",
+                          "updatedAt": "2026-07-28T01:20:07.000Z",
+                          "uid": "35240-6074e585-e0c2-4213-87ac-0fad37e1bac9"
+                        },
+                        {
+                          "id": "cedaddfb-4a7a-41f9-a3f5-024ed1b34461",
+                          "name": "Resource Not Found",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"value\": {\n    \"type\": \"enum\",\n    \"text_value\": \"<string>\",\n    \"enum_value_id\": \"<string>\",\n    \"user_value_id\": \"<string>\",\n    \"boolean_value\": \"<boolean>\",\n    \"date_value\": \"<dateTime>\",\n    \"empty\": \"<boolean>\"\n  },\n  \"resources\": {\n    \"ids\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/properties/:id/assign",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "properties",
+                                ":id",
+                                "assign"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:20:07.000Z",
+                          "updatedAt": "2026-07-28T01:20:07.000Z",
+                          "uid": "35240-cedaddfb-4a7a-41f9-a3f5-024ed1b34461"
+                        },
+                        {
+                          "id": "fbcf1385-d0ae-42c5-8b3d-5c0c2272c61c",
+                          "name": "Internal Server Error",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/problem+json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: oauth2",
+                                "key": "Authorization",
+                                "value": "<token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"value\": {\n    \"type\": \"enum\",\n    \"text_value\": \"<string>\",\n    \"enum_value_id\": \"<string>\",\n    \"user_value_id\": \"<string>\",\n    \"boolean_value\": \"<boolean>\",\n    \"date_value\": \"<dateTime>\",\n    \"empty\": \"<boolean>\"\n  },\n  \"resources\": {\n    \"ids\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/properties/:id/assign",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "properties",
+                                ":id",
+                                "assign"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/problem+json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "X-Request-Id",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                          "createdAt": "2026-07-28T01:20:07.000Z",
+                          "updatedAt": "2026-07-28T01:20:07.000Z",
+                          "uid": "35240-fbcf1385-d0ae-42c5-8b3d-5c0c2272c61c"
+                        }
+                      ],
+                      "createdAt": "2026-07-28T01:20:07.000Z",
+                      "updatedAt": "2026-07-28T01:20:07.000Z",
+                      "uid": "35240-1ba238fc-137c-4170-aae4-f3f9d0eb6306"
+                    }
+                  ],
+                  "id": "51836b1e-00d8-4b47-b314-385f4486c8e4",
+                  "createdAt": "2026-07-28T01:20:07.000Z",
+                  "updatedAt": "2026-07-28T01:20:07.000Z",
+                  "uid": "35240-51836b1e-00d8-4b47-b314-385f4486c8e4"
+                },
+                {
+                  "name": "Get a Property",
+                  "id": "740a90df-c71d-4d63-a6a1-a04965e4b1da",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/properties/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "properties",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "id": "20d69589-ecc6-4683-9f93-a29fc328601a",
+                          "key": "id",
+                          "value": "<string>",
+                          "description": "(Required) The unique identifier for the property"
+                        }
+                      ]
+                    },
+                    "description": "Get a property by its unique identifier."
+                  },
+                  "response": [
+                    {
+                      "id": "e35d947b-43cf-4f52-b7b9-2d76da187b5f",
+                      "name": "The property was retrieved",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/properties/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "properties",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"name\": \"<string>\",\n  \"resource_type\": \"deposit\",\n  \"property_type\": \"date\",\n  \"options\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    }\n  ],\n  \"total_option_count\": \"<integer>\"\n}",
+                      "createdAt": "2026-07-28T01:20:07.000Z",
+                      "updatedAt": "2026-07-28T01:20:07.000Z",
+                      "uid": "35240-e35d947b-43cf-4f52-b7b9-2d76da187b5f"
+                    },
+                    {
+                      "id": "2a70b836-89d6-4ff3-9dd6-a0bafe13db88",
+                      "name": "The request is invalid or contains invalid parameters",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/properties/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "properties",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:07.000Z",
+                      "updatedAt": "2026-07-28T01:20:07.000Z",
+                      "uid": "35240-2a70b836-89d6-4ff3-9dd6-a0bafe13db88"
+                    },
+                    {
+                      "id": "4237eb24-f82e-4d68-b44e-c6293182d8b7",
+                      "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/properties/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "properties",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:07.000Z",
+                      "updatedAt": "2026-07-28T01:20:07.000Z",
+                      "uid": "35240-4237eb24-f82e-4d68-b44e-c6293182d8b7"
+                    },
+                    {
+                      "id": "33f8982c-dd17-4d71-abb9-eaca535b64d3",
+                      "name": "Access denied",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/properties/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "properties",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:07.000Z",
+                      "updatedAt": "2026-07-28T01:20:07.000Z",
+                      "uid": "35240-33f8982c-dd17-4d71-abb9-eaca535b64d3"
+                    },
+                    {
+                      "id": "ed7ee0ab-68d3-41f1-8419-70dc32d99bc3",
+                      "name": "Resource Not Found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/properties/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "properties",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:07.000Z",
+                      "updatedAt": "2026-07-28T01:20:07.000Z",
+                      "uid": "35240-ed7ee0ab-68d3-41f1-8419-70dc32d99bc3"
+                    },
+                    {
+                      "id": "eb83558c-4a86-4a5f-8729-b679b4d2c424",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/properties/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "properties",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:07.000Z",
+                      "updatedAt": "2026-07-28T01:20:07.000Z",
+                      "uid": "35240-eb83558c-4a86-4a5f-8729-b679b4d2c424"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:20:07.000Z",
+                  "updatedAt": "2026-07-28T01:20:07.000Z",
+                  "uid": "35240-740a90df-c71d-4d63-a6a1-a04965e4b1da"
+                }
+              ],
+              "id": "bf3ebb95-db42-47a3-8d89-b85e0c3c7da1",
+              "createdAt": "2026-07-28T01:20:07.000Z",
+              "updatedAt": "2026-07-28T01:20:07.000Z",
+              "uid": "35240-bf3ebb95-db42-47a3-8d89-b85e0c3c7da1"
+            },
+            {
+              "name": "List Properties",
+              "id": "054310ba-daee-4240-a39e-38dec8eacc7b",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/properties?limit=<integer>&page_token=<string>&resource_type=donation",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "properties"
+                  ],
+                  "query": [
+                    {
+                      "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                      "key": "page_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "The type of the resource that the properties are associated with.",
+                      "key": "resource_type",
+                      "value": "donation"
+                    }
+                  ]
+                },
+                "description": "List properties for your account."
+              },
+              "response": [
+                {
+                  "id": "7cc924ab-bff1-425e-9fcf-420f6194c209",
+                  "name": "The response for Properties.list",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/properties?limit=<integer>&page_token=<string>&resource_type=donation",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "properties"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The type of the resource that the properties are associated with.",
+                          "key": "resource_type",
+                          "value": "donation"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"results\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"resource_type\": \"deposit\",\n      \"property_type\": \"boolean\",\n      \"options\": [\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"description\": \"<string>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"description\": \"<string>\"\n        }\n      ],\n      \"total_option_count\": \"<integer>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"resource_type\": \"donation\",\n      \"property_type\": \"boolean\",\n      \"options\": [\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"description\": \"<string>\"\n        },\n        {\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"description\": \"<string>\"\n        }\n      ],\n      \"total_option_count\": \"<integer>\"\n    }\n  ],\n  \"next_page_token\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:07.000Z",
+                  "updatedAt": "2026-07-28T01:20:07.000Z",
+                  "uid": "35240-7cc924ab-bff1-425e-9fcf-420f6194c209"
+                },
+                {
+                  "id": "cc700a5b-c155-4908-82e7-23baa528fa12",
+                  "name": "The request is invalid or contains invalid parameters",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/properties?limit=<integer>&page_token=<string>&resource_type=donation",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "properties"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The type of the resource that the properties are associated with.",
+                          "key": "resource_type",
+                          "value": "donation"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:07.000Z",
+                  "updatedAt": "2026-07-28T01:20:07.000Z",
+                  "uid": "35240-cc700a5b-c155-4908-82e7-23baa528fa12"
+                },
+                {
+                  "id": "b98efb35-8c45-44f5-9202-f765de86d526",
+                  "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/properties?limit=<integer>&page_token=<string>&resource_type=donation",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "properties"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The type of the resource that the properties are associated with.",
+                          "key": "resource_type",
+                          "value": "donation"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:07.000Z",
+                  "updatedAt": "2026-07-28T01:20:07.000Z",
+                  "uid": "35240-b98efb35-8c45-44f5-9202-f765de86d526"
+                },
+                {
+                  "id": "c07e541b-2266-4f87-93ae-2a1aa83d16fd",
+                  "name": "Access denied",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/properties?limit=<integer>&page_token=<string>&resource_type=donation",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "properties"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The type of the resource that the properties are associated with.",
+                          "key": "resource_type",
+                          "value": "donation"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:07.000Z",
+                  "updatedAt": "2026-07-28T01:20:07.000Z",
+                  "uid": "35240-c07e541b-2266-4f87-93ae-2a1aa83d16fd"
+                },
+                {
+                  "id": "a336890f-c963-4a89-a103-bfbf23813c6a",
+                  "name": "Internal Server Error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/properties?limit=<integer>&page_token=<string>&resource_type=donation",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "properties"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The type of the resource that the properties are associated with.",
+                          "key": "resource_type",
+                          "value": "donation"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:07.000Z",
+                  "updatedAt": "2026-07-28T01:20:07.000Z",
+                  "uid": "35240-a336890f-c963-4a89-a103-bfbf23813c6a"
+                }
+              ],
+              "createdAt": "2026-07-28T01:20:07.000Z",
+              "updatedAt": "2026-07-28T01:20:07.000Z",
+              "uid": "35240-054310ba-daee-4240-a39e-38dec8eacc7b"
+            }
+          ],
+          "id": "1f535b88-1bb0-4808-82c6-f9c626356add",
+          "createdAt": "2026-07-28T01:20:07.000Z",
+          "updatedAt": "2026-07-28T01:20:07.000Z",
+          "uid": "35240-1f535b88-1bb0-4808-82c6-f9c626356add"
+        }
+      ],
+      "id": "7cb07663-c335-4f7f-848f-e05d440e24a2",
+      "createdAt": "2026-07-28T01:20:07.000Z",
+      "updatedAt": "2026-07-28T01:20:07.000Z",
+      "uid": "35240-7cb07663-c335-4f7f-848f-e05d440e24a2"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read:bank_accounts sync:connected_accounts",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.givechariot.com/auth/oauth/token",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://dashboard.givechariot.com/oauth/authorize",
+        "type": "string"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.givechariot.com/fdx/v6"
+    }
+  ]
+}

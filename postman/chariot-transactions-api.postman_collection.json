@@ -1,0 +1,561 @@
+{
+  "info": {
+    "_postman_id": "c19ea874-4a8d-44a0-b0e2-d86ef233f360",
+    "name": "Chariot FDX Accounts Transactions API",
+    "description": "Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.\n\nContact Support:\n Name: Chariot Development Team\n Email: developers@givechariot.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:20:09.000Z",
+    "updatedAt": "2026-07-28T01:20:09.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-c19ea874-4a8d-44a0-b0e2-d86ef233f360"
+  },
+  "item": [
+    {
+      "name": "accounts",
+      "item": [
+        {
+          "name": "{id}",
+          "item": [
+            {
+              "name": "transactions",
+              "item": [
+                {
+                  "name": "List account transactions",
+                  "id": "e7b6a65f-3460-4175-ba4c-f2eab9acf6da",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/accounts/:id/transactions?limit=10&pageKey=<uuid>&startTime=<date>&endTime=<date>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "accounts",
+                        ":id",
+                        "transactions"
+                      ],
+                      "query": [
+                        {
+                          "description": "Number of results per page. Clamped to the range 10\u2013100.",
+                          "key": "limit",
+                          "value": "10"
+                        },
+                        {
+                          "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response.",
+                          "key": "pageKey",
+                          "value": "<uuid>"
+                        },
+                        {
+                          "description": "Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.",
+                          "key": "startTime",
+                          "value": "<date>"
+                        },
+                        {
+                          "description": "End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.",
+                          "key": "endTime",
+                          "value": "<date>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "026d775e-0026-479c-a0d5-23cedc7cb41a",
+                          "key": "id",
+                          "value": "<uuid>",
+                          "description": "(Required) Unique identifier for the account"
+                        }
+                      ]
+                    },
+                    "description": "Get a paginated list of transactions for an account. When specifying a date range, both startTime and endTime must be provided together. Defaults to the last 7 days if no date range is specified. Data is available for up to 24 months from the current date."
+                  },
+                  "response": [
+                    {
+                      "id": "035ec96c-c40c-4f3c-90d2-aded7923712f",
+                      "name": "A paginated list of transactions",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/accounts/:id/transactions?limit=10&pageKey=<uuid>&startTime=<date>&endTime=<date>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "accounts",
+                            ":id",
+                            "transactions"
+                          ],
+                          "query": [
+                            {
+                              "description": "Number of results per page. Clamped to the range 10\u2013100.",
+                              "key": "limit",
+                              "value": "10"
+                            },
+                            {
+                              "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response.",
+                              "key": "pageKey",
+                              "value": "<uuid>"
+                            },
+                            {
+                              "description": "Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.",
+                              "key": "startTime",
+                              "value": "<date>"
+                            },
+                            {
+                              "description": "End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.",
+                              "key": "endTime",
+                              "value": "<date>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"transactions\": [\n    {\n      \"accountCategory\": \"DEPOSIT_ACCOUNT\",\n      \"accountId\": \"<string>\",\n      \"transactionId\": \"<string>\",\n      \"transactionTimestamp\": \"<dateTime>\",\n      \"description\": \"<string>\",\n      \"debitCreditMemo\": \"DEBIT\",\n      \"status\": \"AUTHORIZATION\",\n      \"amount\": \"<double>\",\n      \"postedTimestamp\": \"<dateTime>\",\n      \"memo\": \"<string>\",\n      \"category\": \"<string>\",\n      \"subCategory\": \"<string>\",\n      \"lineItem\": [\n        {\n          \"description\": \"<string>\",\n          \"amount\": \"<double>\",\n          \"checkNumber\": \"<integer>\",\n          \"memo\": \"<string>\",\n          \"reference\": \"<string>\"\n        },\n        {\n          \"description\": \"<string>\",\n          \"amount\": \"<double>\",\n          \"checkNumber\": \"<integer>\",\n          \"memo\": \"<string>\",\n          \"reference\": \"<string>\"\n        }\n      ],\n      \"reward\": {\n        \"categoryId\": \"<string>\",\n        \"accrued\": \"<double>\",\n        \"adjusted\": \"<double>\"\n      },\n      \"reference\": \"<string>\",\n      \"links\": [\n        {\n          \"href\": \"<string>\"\n        },\n        {\n          \"href\": \"<string>\"\n        }\n      ],\n      \"fiAttributes\": [\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"transactionType\": \"INTEREST\",\n      \"payee\": \"<string>\",\n      \"checkNumber\": \"<integer>\"\n    },\n    {\n      \"accountCategory\": \"DEPOSIT_ACCOUNT\",\n      \"accountId\": \"<string>\",\n      \"transactionId\": \"<string>\",\n      \"transactionTimestamp\": \"<dateTime>\",\n      \"description\": \"<string>\",\n      \"debitCreditMemo\": \"CREDIT\",\n      \"status\": \"POSTED\",\n      \"amount\": \"<double>\",\n      \"postedTimestamp\": \"<dateTime>\",\n      \"memo\": \"<string>\",\n      \"category\": \"<string>\",\n      \"subCategory\": \"<string>\",\n      \"lineItem\": [\n        {\n          \"description\": \"<string>\",\n          \"amount\": \"<double>\",\n          \"checkNumber\": \"<integer>\",\n          \"memo\": \"<string>\",\n          \"reference\": \"<string>\"\n        },\n        {\n          \"description\": \"<string>\",\n          \"amount\": \"<double>\",\n          \"checkNumber\": \"<integer>\",\n          \"memo\": \"<string>\",\n          \"reference\": \"<string>\"\n        }\n      ],\n      \"reward\": {\n        \"categoryId\": \"<string>\",\n        \"accrued\": \"<double>\",\n        \"adjusted\": \"<double>\"\n      },\n      \"reference\": \"<string>\",\n      \"links\": [\n        {\n          \"href\": \"<string>\"\n        },\n        {\n          \"href\": \"<string>\"\n        }\n      ],\n      \"fiAttributes\": [\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"value\": \"<string>\"\n        }\n      ],\n      \"transactionType\": \"POSCREDIT\",\n      \"payee\": \"<string>\",\n      \"checkNumber\": \"<integer>\"\n    }\n  ],\n  \"page\": {\n    \"nextPageKey\": \"<string>\",\n    \"totalElements\": \"<integer>\"\n  }\n}",
+                      "createdAt": "2026-07-28T01:20:10.000Z",
+                      "updatedAt": "2026-07-28T01:20:10.000Z",
+                      "uid": "35240-035ec96c-c40c-4f3c-90d2-aded7923712f"
+                    },
+                    {
+                      "id": "42951ac2-a145-4a66-be4b-a36c32d6768a",
+                      "name": "Invalid request parameters",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/accounts/:id/transactions?limit=10&pageKey=<uuid>&startTime=<date>&endTime=<date>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "accounts",
+                            ":id",
+                            "transactions"
+                          ],
+                          "query": [
+                            {
+                              "description": "Number of results per page. Clamped to the range 10\u2013100.",
+                              "key": "limit",
+                              "value": "10"
+                            },
+                            {
+                              "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response.",
+                              "key": "pageKey",
+                              "value": "<uuid>"
+                            },
+                            {
+                              "description": "Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.",
+                              "key": "startTime",
+                              "value": "<date>"
+                            },
+                            {
+                              "description": "End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.",
+                              "key": "endTime",
+                              "value": "<date>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:10.000Z",
+                      "updatedAt": "2026-07-28T01:20:10.000Z",
+                      "uid": "35240-42951ac2-a145-4a66-be4b-a36c32d6768a"
+                    },
+                    {
+                      "id": "68d408de-2632-4acb-9993-0cb03b4381ae",
+                      "name": "Missing or invalid OAuth 2.0 Bearer token",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/accounts/:id/transactions?limit=10&pageKey=<uuid>&startTime=<date>&endTime=<date>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "accounts",
+                            ":id",
+                            "transactions"
+                          ],
+                          "query": [
+                            {
+                              "description": "Number of results per page. Clamped to the range 10\u2013100.",
+                              "key": "limit",
+                              "value": "10"
+                            },
+                            {
+                              "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response.",
+                              "key": "pageKey",
+                              "value": "<uuid>"
+                            },
+                            {
+                              "description": "Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.",
+                              "key": "startTime",
+                              "value": "<date>"
+                            },
+                            {
+                              "description": "End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.",
+                              "key": "endTime",
+                              "value": "<date>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:10.000Z",
+                      "updatedAt": "2026-07-28T01:20:10.000Z",
+                      "uid": "35240-68d408de-2632-4acb-9993-0cb03b4381ae"
+                    },
+                    {
+                      "id": "5eb7644f-ef0e-486d-8bbb-1159a6c8a277",
+                      "name": "Insufficient permissions or IP not whitelisted",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/accounts/:id/transactions?limit=10&pageKey=<uuid>&startTime=<date>&endTime=<date>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "accounts",
+                            ":id",
+                            "transactions"
+                          ],
+                          "query": [
+                            {
+                              "description": "Number of results per page. Clamped to the range 10\u2013100.",
+                              "key": "limit",
+                              "value": "10"
+                            },
+                            {
+                              "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response.",
+                              "key": "pageKey",
+                              "value": "<uuid>"
+                            },
+                            {
+                              "description": "Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.",
+                              "key": "startTime",
+                              "value": "<date>"
+                            },
+                            {
+                              "description": "End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.",
+                              "key": "endTime",
+                              "value": "<date>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:10.000Z",
+                      "updatedAt": "2026-07-28T01:20:10.000Z",
+                      "uid": "35240-5eb7644f-ef0e-486d-8bbb-1159a6c8a277"
+                    },
+                    {
+                      "id": "08ae1e35-0def-4a46-ad08-14c0d8ad39b4",
+                      "name": "Resource not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/accounts/:id/transactions?limit=10&pageKey=<uuid>&startTime=<date>&endTime=<date>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "accounts",
+                            ":id",
+                            "transactions"
+                          ],
+                          "query": [
+                            {
+                              "description": "Number of results per page. Clamped to the range 10\u2013100.",
+                              "key": "limit",
+                              "value": "10"
+                            },
+                            {
+                              "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response.",
+                              "key": "pageKey",
+                              "value": "<uuid>"
+                            },
+                            {
+                              "description": "Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.",
+                              "key": "startTime",
+                              "value": "<date>"
+                            },
+                            {
+                              "description": "End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.",
+                              "key": "endTime",
+                              "value": "<date>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:10.000Z",
+                      "updatedAt": "2026-07-28T01:20:10.000Z",
+                      "uid": "35240-08ae1e35-0def-4a46-ad08-14c0d8ad39b4"
+                    },
+                    {
+                      "id": "4ab60181-c4c9-4a3f-b640-15c240c31c62",
+                      "name": "Unexpected server error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/accounts/:id/transactions?limit=10&pageKey=<uuid>&startTime=<date>&endTime=<date>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "accounts",
+                            ":id",
+                            "transactions"
+                          ],
+                          "query": [
+                            {
+                              "description": "Number of results per page. Clamped to the range 10\u2013100.",
+                              "key": "limit",
+                              "value": "10"
+                            },
+                            {
+                              "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response.",
+                              "key": "pageKey",
+                              "value": "<uuid>"
+                            },
+                            {
+                              "description": "Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.",
+                              "key": "startTime",
+                              "value": "<date>"
+                            },
+                            {
+                              "description": "End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.",
+                              "key": "endTime",
+                              "value": "<date>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:10.000Z",
+                      "updatedAt": "2026-07-28T01:20:10.000Z",
+                      "uid": "35240-4ab60181-c4c9-4a3f-b640-15c240c31c62"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:20:09.000Z",
+                  "updatedAt": "2026-07-28T01:20:09.000Z",
+                  "uid": "35240-e7b6a65f-3460-4175-ba4c-f2eab9acf6da"
+                }
+              ],
+              "id": "06ebc92a-f941-40f5-bdeb-837ad1fca96a",
+              "createdAt": "2026-07-28T01:20:09.000Z",
+              "updatedAt": "2026-07-28T01:20:09.000Z",
+              "uid": "35240-06ebc92a-f941-40f5-bdeb-837ad1fca96a"
+            }
+          ],
+          "id": "14121374-99f1-4a2c-adec-aaa586feb7e2",
+          "createdAt": "2026-07-28T01:20:09.000Z",
+          "updatedAt": "2026-07-28T01:20:09.000Z",
+          "uid": "35240-14121374-99f1-4a2c-adec-aaa586feb7e2"
+        }
+      ],
+      "id": "3788e39d-0a73-4658-b898-b74924749cbb",
+      "createdAt": "2026-07-28T01:20:09.000Z",
+      "updatedAt": "2026-07-28T01:20:09.000Z",
+      "uid": "35240-3788e39d-0a73-4658-b898-b74924749cbb"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read:bank_accounts sync:connected_accounts",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.givechariot.com/auth/oauth/token",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://dashboard.givechariot.com/oauth/authorize",
+        "type": "string"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.givechariot.com/fdx/v6"
+    }
+  ]
+}

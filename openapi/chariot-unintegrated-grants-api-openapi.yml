@@ -1,0 +1,390 @@
+openapi: 3.0.0
+info:
+  title: Chariot FDX Accounts unintegrated_grants API
+  version: '6.0'
+  description: Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.
+  contact:
+    name: Chariot Development Team
+    url: https://givechariot.com/contact
+    email: developers@givechariot.com
+servers:
+- url: https://api.givechariot.com/fdx/v6
+  description: Production
+- url: https://devapi.givechariot.com/fdx/v6
+  description: Staging
+security:
+- oauth2: []
+tags:
+- name: unintegrated_grants
+paths:
+  /v1/unintegrated_grants:
+    get:
+      summary: List Unintegrated Grants
+      description: Returns a list of all unintegrated grants for a given Connect. This API allows for paginating over many results.
+      operationId: list-unintegrated-grants
+      tags:
+      - unintegrated_grants
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: connect_id
+        in: query
+        description: the `id` of the Connect object. This can be used to filter the unintegrated grants by a specific Connect if you have more than one.
+        schema:
+          type: string
+        required: false
+        example: REDACTED_LOB_KEY
+      - name: pageLimit
+        in: query
+        description: the number of results to return; defaults to 10, max is 100
+        schema:
+          type: integer
+          default: 10
+      - name: pageToken
+        in: query
+        description: A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls and the value of this field should be from the nextPageToken in the previous response.
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/ListUnintegratedGrantsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/unintegrated_grants/{id}:
+    get:
+      summary: Get Unintegrated Grant
+      description: Retrieve an unintegrated grant with a given ID.
+      operationId: get-unintegrated-grant
+      tags:
+      - unintegrated_grants
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: 'The unique id of the unintegrated grant.
+
+          The format should be a v4 UUID according to RFC 4122.'
+        schema:
+          type: string
+          format: uuid
+        required: true
+        example: 10229488-08d2-4629-b70c-a2f4f4d25344
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnintegratedGrant'
+              examples:
+                Simple:
+                  $ref: '#/components/examples/UnintegratedGrantOutput'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  examples:
+    UnintegratedGrantOutput:
+      summary: Simple unintegrated grant output
+      value:
+        id: 1e60800e-849b-43d1-870e-57afc8d75473
+        workflowSessionId: cfe09e64-6a74-4dab-a565-361185a6f248
+        fundId: daf-id
+        createdAt: '2021-08-10 15:00:00.000'
+        updatedAt: '2021-08-11 15:34:00.000'
+        amount: 15000
+  schemas:
+    GrantAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+          description: 'Address line 1 (e.g. street, PO Box, or company name). Maximum length: 255 characters.'
+        line2:
+          type: string
+          description: 'Address line 2 (e.g. apartment, suite, unit, or building). Maximum length: 255 characters.'
+        city:
+          type: string
+          description: 'City, district, suburb, town, or village.. Maximum length: 255 characters.'
+        state:
+          type: string
+          description: 'State, county, province, or region. Maximum length: 255 characters.'
+        postalCode:
+          type: string
+          description: 'ZIP or postal code. Maximum length: 255 characters.'
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
+    UnintegratedGrant:
+      type: object
+      description: 'An Unintegrated Grant represents a grant requested through a provider that Chariot does not support.
+
+        Unintegrated grants should be treated as donation intents as Chariot can not guarantee that the grant was submitted or will be fulfilled.
+
+        Nonprofits should use the information provided in the unintegrated grant to follow up with the donor and/or the provider to check the status of the grant.
+
+        These are sometimes referred to as "Manual Grants".'
+      required:
+      - id
+      - workflowSessionId
+      - fundId
+      - amount
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: The unique identifier for the object
+          format: uuid
+          example: cfe09e64-6a74-4dab-a565-361185a6f248
+        userFriendlyId:
+          type: string
+          readOnly: true
+          description: Often referred to as the "Chariot ID", this is the ID that will be included in the payment from the DAF provider.
+          example: '1234455'
+          deprecated: true
+        trackingId:
+          type: string
+          readOnly: true
+          description: The tracking ID for the unintegrated grant
+          example: L9E182VBGP
+        workflowSessionId:
+          type: string
+          readOnly: true
+          description: ID of the Connect Workflow Session associated with this grant
+          format: uuid
+          example: 2d4b2a43-a5b4-4be1-ad1f-f932016ca4a6
+        fundId:
+          type: string
+          readOnly: true
+          description: ID of the donor advised fund
+          example: daf-id
+        createdAt:
+          type: string
+          readOnly: true
+          format: date-time
+          description: Time when this object was created; expressed in RFC 3339 format
+          example: '2020-01-31T23:00:00Z'
+        updatedAt:
+          type: string
+          readOnly: true
+          format: date-time
+          description: Time when this object was last updated; expressed in RFC 3339 format
+          example: '2020-01-31T23:59:59Z'
+        amount:
+          type: number
+          format: integer
+          description: The grant amount expressed in units of whole cents
+          example: 15000
+        status:
+          type: string
+          description: The status of the unintegrated grant.
+          enum:
+          - Unknown
+          - Completed
+          - Canceled
+          example: Unknown
+        metadata:
+          type: object
+          description: A map of arbitrary string keys and values to store information about the object
+          additionalProperties:
+            type: string
+        firstName:
+          type: string
+          description: The donor's first name
+          example: Warren
+        lastName:
+          type: string
+          description: The donor's last name
+          example: Buffet
+        phone:
+          type: string
+          description: The donor's phone number
+          example: '1237861020'
+        email:
+          type: string
+          description: The donor's email
+          example: warrenBuffet@example.com
+        address:
+          $ref: '#/components/schemas/GrantAddress'
+        note:
+          type: string
+          description: An note inputted by the user at submisson
+          example: Please dedicate in memory of grandma
+        paymentChannel:
+          type: string
+          readOnly: true
+          description: 'The payment channel for the unintegrated grant. This is useful to know how the grant will be sent.
+
+            The payment channel for unintegrated grants will always be:
+
+            - offline: Grant was initiated outside of Chariot so we''re unable to confirm how the grant will be sent.'
+          enum:
+          - offline
+          example: offline
+  responses:
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    ListUnintegratedGrantsResponse:
+      description: The response for UnintegratedGrants.list
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UnintegratedGrant'
+              nextPageToken:
+                type: string
+                description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
+          example:
+            results:
+            - id: 1e60800e-849b-43d1-870e-57afc8d75473
+              workflowSessionId: cfe09e64-6a74-4dab-a565-361185a6f248
+              fundId: daf-id
+              createdAt: '2021-08-10 15:00:00.000'
+              updatedAt: '2021-08-11 15:34:00.000'
+              amount: 15000
+            nextPageToken: c3f685f2-2dda-4956-815b-39867a5e5638
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 Bearer token. A client may hold both scopes, but each FDX authorization must contain exactly one — they are mutually exclusive per authorization. An authorization containing both will be rejected. See the Authentication page for token exchange details.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://dashboard.givechariot.com/oauth/authorize
+          tokenUrl: https://api.givechariot.com/auth/oauth/token
+          scopes:
+            read:bank_accounts: Read access to bank account data
+            sync:connected_accounts: Sync access to connected account data

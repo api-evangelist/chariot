@@ -1,0 +1,334 @@
+openapi: 3.0.0
+info:
+  title: Chariot FDX Accounts Donor Advised Funds API
+  version: '6.0'
+  description: Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.
+  contact:
+    name: Chariot Development Team
+    url: https://givechariot.com/contact
+    email: developers@givechariot.com
+servers:
+- url: https://api.givechariot.com/fdx/v6
+  description: Production
+- url: https://devapi.givechariot.com/fdx/v6
+  description: Staging
+security:
+- oauth2: []
+tags:
+- name: Donor Advised Funds
+paths:
+  /v1/dafs:
+    get:
+      summary: List Donor Advised Funds
+      description: 'Returns a list of all Donor Advised Funds within Chariot''s system. This API allows for paginating over many results.
+
+
+        <Note>
+
+        If there are DAFs missing from the list, please contact support at support@givechariot.com.
+
+        </Note>'
+      operationId: list-dafs
+      tags:
+      - Donor Advised Funds
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: supportedOnly
+        in: query
+        description: If set to true, filters DAFs to only those that have a direct integration with Chariot.
+        schema:
+          type: boolean
+          default: false
+      - name: query
+        in: query
+        description: If included, filters DAFs to only those that contain the query. This parameter is case insensitive.
+        schema:
+          type: string
+      - name: pageLimit
+        in: query
+        description: the number of results to return; defaults to 10, max is 100
+        schema:
+          type: integer
+          default: 10
+      - name: pageToken
+        in: query
+        description: A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls.
+        schema:
+          type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/ListDafsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/dafs/{id}:
+    get:
+      summary: Get Donor Advised Fund
+      description: Retrieve a DAF with a given ID.
+      operationId: get-daf
+      tags:
+      - Donor Advised Funds
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: 'The unique id of the DAF.
+
+          The format should be a v4 UUID according to RFC 4122.'
+        schema:
+          type: string
+          format: uuid
+        required: true
+        example: f9e28217-e0f7-4a54-9764-d664ffb10722
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Daf'
+              examples:
+                Npt:
+                  $ref: '#/components/examples/DafOutput'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    Daf:
+      type: object
+      description: 'A Donor-Advised Fund, or `DAF` for short, is a special-purpose, tax-advantaged charitable account.
+
+        For more information, please see the [IRS website](https://www.irs.gov/charities-non-profits/charitable-organizations/donor-advised-funds) for a full description.
+
+        In the case that a DAF is supported, a donor will be able to initiate a grant directly through DAFpay.'
+      required:
+      - id
+      - orgName
+      - address
+      - address2
+      - city
+      - state
+      - zip
+      - supported
+      - minimumGrantAmount
+      - institutionDown
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: The unique identifier for this object.
+          example: 0bf40881-8ee2-47fb-98ca-f58c7999aa34
+        orgName:
+          type: string
+          readOnly: true
+          description: A human readable name for the DAF.
+          example: website
+        address:
+          type: string
+          readOnly: true
+          description: The first address line.
+          example: 123 Main St.
+        address2:
+          type: string
+          readOnly: true
+          description: The second address line.
+          example: Apt 100
+        city:
+          type: string
+          readOnly: true
+          description: The city name for the address.
+          example: New York City
+        state:
+          type: string
+          readOnly: true
+          description: The state name for the address.
+          example: New York
+        zip:
+          type: string
+          readOnly: true
+          description: The zipcode for the address.
+          example: '12345'
+        supported:
+          type: boolean
+          readOnly: true
+          description: A flag to indicate if this DAF is supported by DAFpay.
+          example: false
+        minimumGrantAmount:
+          type: number
+          readOnly: true
+          description: The minimum grant amount in cents allowed for this DAF.
+          example: 5000
+        institutionDown:
+          type: boolean
+          readOnly: true
+          description: A flag to indicate if the institution is down.
+          example: false
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
+  responses:
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    ListDafsResponse:
+      description: The response for Dafs.list
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Daf'
+              nextPageToken:
+                type: string
+                description: A cursor token to use to retrieve the next page of results by making another API call to the same endpoint with the same parameters (only substituting the pageToken with this value). If specified, then more results exist on the server that were not returned, otherwise no more results exist on the server.
+          example:
+            results:
+            - id: 0bf40881-8ee2-47fb-98ca-f58c7999aa34
+              orgName: National Philanthropic Trust
+              address: 123 Main St.
+              address2: Apt 100
+              city: New York
+              state: NY
+              zip: '12345'
+              supported: true
+              minimumGrantAmount: 5000
+              institutionDown: false
+            nextPageToken: c3f685f2-2dda-4956-815b-39867a5e5638
+  examples:
+    DafOutput:
+      summary: NPT DAF
+      value:
+        id: 0bf40881-8ee2-47fb-98ca-f58c7999aa34
+        orgName: National Philanthropic Trust
+        address: 123 Main St.
+        address2: Apt 100
+        city: New York City
+        state: New York
+        zip: '12345'
+        supported: true
+        minimumGrantAmount: 25000
+        institutionDown: false
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 Bearer token. A client may hold both scopes, but each FDX authorization must contain exactly one — they are mutually exclusive per authorization. An authorization containing both will be rejected. See the Authentication page for token exchange details.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://dashboard.givechariot.com/oauth/authorize
+          tokenUrl: https://api.givechariot.com/auth/oauth/token
+          scopes:
+            read:bank_accounts: Read access to bank account data
+            sync:connected_accounts: Sync access to connected account data

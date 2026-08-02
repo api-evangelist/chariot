@@ -1,0 +1,318 @@
+openapi: 3.0.0
+info:
+  title: Chariot FDX Accounts financial_accounts API
+  version: '6.0'
+  description: Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.
+  contact:
+    name: Chariot Development Team
+    url: https://givechariot.com/contact
+    email: developers@givechariot.com
+servers:
+- url: https://api.givechariot.com/fdx/v6
+  description: Production
+- url: https://devapi.givechariot.com/fdx/v6
+  description: Staging
+security:
+- oauth2: []
+tags:
+- name: financial_accounts
+paths:
+  /v1/financial_accounts:
+    get:
+      summary: List financial accounts
+      description: 'Returns a list of financial accounts.
+
+        '
+      operationId: listFinancialAccounts
+      tags:
+      - financial_accounts
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/ListFinancialAccountsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/financial_accounts/{id}:
+    get:
+      summary: Get a financial account
+      description: 'Get a financial account by its unique identifier.
+
+        '
+      operationId: getFinancialAccount
+      tags:
+      - financial_accounts
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier for the financial account
+        required: true
+        schema:
+          type: string
+        example: account_01jpjenf5q6cawy43yxfcrxhct
+      responses:
+        '200':
+          description: The financial account was retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinancialAccount'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/financial_accounts/{id}/balance:
+    get:
+      summary: Get a financial account balance
+      description: 'Get a financial account balance by its unique identifier.
+
+        '
+      operationId: getFinancialAccountBalance
+      tags:
+      - financial_accounts
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier for the financial account
+        required: true
+        schema:
+          type: string
+        example: account_01jpjenf5q6cawy43yxfcrxhct
+      responses:
+        '200':
+          description: The financial account was retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinancialAccountBalance'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    ListFinancialAccountsResponse:
+      description: The response for FinancialAccounts.list
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FinancialAccount'
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+  schemas:
+    FinancialAccountBalance:
+      type: object
+      required:
+      - current_balance
+      - available_balance
+      - timestamp
+      properties:
+        current_balance:
+          type: number
+          description: The current balance is the amount of money in the account. This value is in minor currency units (USD cents).
+          example: 10000
+        available_balance:
+          type: number
+          description: The available balance is the amount of money in the account that is available to be spent or transferred. This value is in minor currency units (USD cents).
+          example: 10000
+        timestamp:
+          type: string
+          format: date-time
+          description: The time the balance was retrieved
+          example: '2020-01-31T23:00:00Z'
+    FinancialAccount:
+      type: object
+      description: 'A financial account represents a financial, depository (bank) account managed by Chariot.
+
+        Chariot maintains a ledger and balances for the account.
+
+        This account should be funded and have a sufficient available balance before disbursements can be created.
+
+        Chariot is a financial technology company, not a bank. Chariot Deposit Accounts come through our banking services partner, Column, N.A.'
+      required:
+      - id
+      - name
+      - account_type
+      - bank_provider
+      - created_at
+      - updated_at
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the account
+          example: account_01jpjenf5q6cawy43yxfcrxhct
+        account_type:
+          type: string
+          description: The type of account
+          enum:
+          - disbursements
+          - processing
+          example: disbursements
+        bank_provider:
+          type: string
+          description: The bank provider for the account
+          example: mock_alpha
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time the account was created
+          example: '2020-01-31T23:00:00Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time the account was last updated
+          example: '2020-01-31T23:00:00Z'
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 Bearer token. A client may hold both scopes, but each FDX authorization must contain exactly one — they are mutually exclusive per authorization. An authorization containing both will be rejected. See the Authentication page for token exchange details.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://dashboard.givechariot.com/oauth/authorize
+          tokenUrl: https://api.givechariot.com/auth/oauth/token
+          scopes:
+            read:bank_accounts: Read access to bank account data
+            sync:connected_accounts: Sync access to connected account data

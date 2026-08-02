@@ -1,0 +1,1437 @@
+{
+  "info": {
+    "_postman_id": "b27000c2-835f-495a-a07c-a3e199a428d4",
+    "name": "Chariot FDX Accounts Organizations API",
+    "description": "Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.\n\nContact Support:\n Name: Chariot Development Team\n Email: developers@givechariot.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:20:02.000Z",
+    "updatedAt": "2026-07-28T01:20:02.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-b27000c2-835f-495a-a07c-a3e199a428d4"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "organizations",
+          "item": [
+            {
+              "name": "search",
+              "item": [
+                {
+                  "name": "Search organizations",
+                  "id": "5f314057-18c4-46ea-8807-5906db2cd118",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/organizations/search?q=<string>&ein=<string>&name=<string>&limit=<integer>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "organizations",
+                        "search"
+                      ],
+                      "query": [
+                        {
+                          "description": "(Required) The query string to search for. If this is in the format of an EIN, the search will be limited exclusively to the organization with that EIN. Otherwise, this will be a fuzzy search on organization name.",
+                          "key": "q",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The Employer Identification Number (EIN) or TaxID for the nonprofit entity. This is deprecated in favor of the `q` parameter.",
+                          "key": "ein",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The name of the organization. This is deprecated in favor of the `q` parameter.",
+                          "key": "name",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 20 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        }
+                      ]
+                    },
+                    "description": "Search for organizations by name or EIN.\nThis endpoint exists to support a typeahead search or quick lookup by nonprofit EIN or name.\nThe Get Organization API should be used to retrieve detailed information about an organization."
+                  },
+                  "response": [
+                    {
+                      "id": "e36ddc21-59b5-44d9-8337-1186e4ebf7fc",
+                      "name": "The response for Organizations.search",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/organizations/search?q=<string>&ein=<string>&name=<string>&limit=<integer>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "organizations",
+                            "search"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) The query string to search for. If this is in the format of an EIN, the search will be limited exclusively to the organization with that EIN. Otherwise, this will be a fuzzy search on organization name.",
+                              "key": "q",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "The Employer Identification Number (EIN) or TaxID for the nonprofit entity. This is deprecated in favor of the `q` parameter.",
+                              "key": "ein",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "The name of the organization. This is deprecated in favor of the `q` parameter.",
+                              "key": "name",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Limit the size of the list that is returned. The default (and maximum) is 20 objects.",
+                              "key": "limit",
+                              "value": "<integer>"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"results\": [\n    {\n      \"id\": \"<string>\",\n      \"ein\": \"<string>\",\n      \"name\": \"<string>\",\n      \"daf_eligible\": \"<boolean>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"ein\": \"<string>\",\n      \"name\": \"<string>\",\n      \"daf_eligible\": \"<boolean>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T01:20:02.000Z",
+                      "updatedAt": "2026-07-28T01:20:02.000Z",
+                      "uid": "35240-e36ddc21-59b5-44d9-8337-1186e4ebf7fc"
+                    },
+                    {
+                      "id": "cc64833f-ade8-4cb9-8d59-f9728a0ddd1a",
+                      "name": "The request is invalid or contains invalid parameters",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/organizations/search?q=<string>&ein=<string>&name=<string>&limit=<integer>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "organizations",
+                            "search"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) The query string to search for. If this is in the format of an EIN, the search will be limited exclusively to the organization with that EIN. Otherwise, this will be a fuzzy search on organization name.",
+                              "key": "q",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "The Employer Identification Number (EIN) or TaxID for the nonprofit entity. This is deprecated in favor of the `q` parameter.",
+                              "key": "ein",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "The name of the organization. This is deprecated in favor of the `q` parameter.",
+                              "key": "name",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Limit the size of the list that is returned. The default (and maximum) is 20 objects.",
+                              "key": "limit",
+                              "value": "<integer>"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:02.000Z",
+                      "updatedAt": "2026-07-28T01:20:02.000Z",
+                      "uid": "35240-cc64833f-ade8-4cb9-8d59-f9728a0ddd1a"
+                    },
+                    {
+                      "id": "b0cb96c8-530a-477b-ba25-2a20a8595426",
+                      "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/organizations/search?q=<string>&ein=<string>&name=<string>&limit=<integer>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "organizations",
+                            "search"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) The query string to search for. If this is in the format of an EIN, the search will be limited exclusively to the organization with that EIN. Otherwise, this will be a fuzzy search on organization name.",
+                              "key": "q",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "The Employer Identification Number (EIN) or TaxID for the nonprofit entity. This is deprecated in favor of the `q` parameter.",
+                              "key": "ein",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "The name of the organization. This is deprecated in favor of the `q` parameter.",
+                              "key": "name",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Limit the size of the list that is returned. The default (and maximum) is 20 objects.",
+                              "key": "limit",
+                              "value": "<integer>"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:02.000Z",
+                      "updatedAt": "2026-07-28T01:20:02.000Z",
+                      "uid": "35240-b0cb96c8-530a-477b-ba25-2a20a8595426"
+                    },
+                    {
+                      "id": "af1ab2d4-d970-46a1-a953-e7a06d5b91e6",
+                      "name": "Access denied",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/organizations/search?q=<string>&ein=<string>&name=<string>&limit=<integer>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "organizations",
+                            "search"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) The query string to search for. If this is in the format of an EIN, the search will be limited exclusively to the organization with that EIN. Otherwise, this will be a fuzzy search on organization name.",
+                              "key": "q",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "The Employer Identification Number (EIN) or TaxID for the nonprofit entity. This is deprecated in favor of the `q` parameter.",
+                              "key": "ein",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "The name of the organization. This is deprecated in favor of the `q` parameter.",
+                              "key": "name",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Limit the size of the list that is returned. The default (and maximum) is 20 objects.",
+                              "key": "limit",
+                              "value": "<integer>"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:02.000Z",
+                      "updatedAt": "2026-07-28T01:20:02.000Z",
+                      "uid": "35240-af1ab2d4-d970-46a1-a953-e7a06d5b91e6"
+                    },
+                    {
+                      "id": "da897ef9-ecdd-40ed-8a4f-09853dae615c",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/organizations/search?q=<string>&ein=<string>&name=<string>&limit=<integer>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "organizations",
+                            "search"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) The query string to search for. If this is in the format of an EIN, the search will be limited exclusively to the organization with that EIN. Otherwise, this will be a fuzzy search on organization name.",
+                              "key": "q",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "The Employer Identification Number (EIN) or TaxID for the nonprofit entity. This is deprecated in favor of the `q` parameter.",
+                              "key": "ein",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "The name of the organization. This is deprecated in favor of the `q` parameter.",
+                              "key": "name",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "Limit the size of the list that is returned. The default (and maximum) is 20 objects.",
+                              "key": "limit",
+                              "value": "<integer>"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:02.000Z",
+                      "updatedAt": "2026-07-28T01:20:02.000Z",
+                      "uid": "35240-da897ef9-ecdd-40ed-8a4f-09853dae615c"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:20:02.000Z",
+                  "updatedAt": "2026-07-28T01:20:02.000Z",
+                  "uid": "35240-5f314057-18c4-46ea-8807-5906db2cd118"
+                }
+              ],
+              "id": "d52cac36-75e8-4602-9942-a06670522689",
+              "createdAt": "2026-07-28T01:20:02.000Z",
+              "updatedAt": "2026-07-28T01:20:02.000Z",
+              "uid": "35240-d52cac36-75e8-4602-9942-a06670522689"
+            },
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "Get organization",
+                  "id": "ba1ed42b-4768-4b62-9d49-f065b5f1a7b2",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/organizations/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "organizations",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "id": "6182f294-19c2-498d-a19d-615855378394",
+                          "key": "id",
+                          "value": "<string>",
+                          "description": "(Required) The unique identifier for the organization"
+                        }
+                      ]
+                    },
+                    "description": "Retrieves the organization with the given ID."
+                  },
+                  "response": [
+                    {
+                      "id": "58a85a43-8211-4ff0-91c2-53c8a47a231b",
+                      "name": "OK",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/organizations/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "organizations",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"ein\": \"<string>\",\n  \"name\": \"<string>\",\n  \"parent_organization_id\": \"<string>\",\n  \"physical_address\": {\n    \"city\": \"<string>\",\n    \"country\": \"<string>\",\n    \"line1\": \"<string>\",\n    \"postal_code\": \"<string>\",\n    \"state\": \"<string>\",\n    \"line2\": \"<string>\"\n  },\n  \"classification\": {\n    \"group_exemption_number\": \"<string>\",\n    \"subsection_code\": {\n      \"name\": \"<string>\",\n      \"code\": \"<integer>\",\n      \"description\": \"<string>\"\n    },\n    \"filing_requirement_code\": {\n      \"name\": \"<string>\",\n      \"code\": \"<integer>\",\n      \"description\": \"<string>\"\n    },\n    \"foundation_code\": {\n      \"name\": \"<string>\",\n      \"code\": \"<integer>\",\n      \"description\": \"<string>\"\n    },\n    \"affiliation_code\": {\n      \"name\": \"<string>\",\n      \"code\": \"<integer>\",\n      \"description\": \"<string>\"\n    },\n    \"organization_code\": {\n      \"name\": \"<string>\",\n      \"code\": \"<integer>\",\n      \"description\": \"<string>\"\n    },\n    \"exempt_status_code\": {\n      \"name\": \"<string>\",\n      \"code\": \"<integer>\",\n      \"description\": \"<string>\"\n    },\n    \"deductibility_code\": {\n      \"name\": \"<string>\",\n      \"code\": \"<integer>\",\n      \"description\": \"<string>\"\n    },\n    \"ntee_code\": {\n      \"code\": \"<string>\",\n      \"description\": \"<string>\",\n      \"parent_code\": \"<string>\",\n      \"parent_description\": \"<string>\"\n    },\n    \"naics_code\": {\n      \"naics2\": \"<string>\",\n      \"naics2_description\": \"<string>\",\n      \"naics4\": \"<string>\",\n      \"naics4_description\": \"<string>\",\n      \"naics6\": \"<string>\",\n      \"naics6_description\": \"<string>\"\n    }\n  },\n  \"compliance\": {\n    \"daf_eligible\": \"<boolean>\",\n    \"irs_pub_78\": {\n      \"compliant\": \"<boolean>\",\n      \"reason\": \"<string>\",\n      \"last_found_at\": \"<dateTime>\"\n    },\n    \"ofac\": {\n      \"compliant\": \"<boolean>\",\n      \"reason\": \"<string>\",\n      \"last_found_at\": \"<dateTime>\"\n    },\n    \"foundation_code\": {\n      \"compliant\": \"<boolean>\",\n      \"reason\": \"<string>\",\n      \"last_found_at\": \"<dateTime>\"\n    },\n    \"california_attorney_general_registry\": {\n      \"compliant\": \"<boolean>\",\n      \"reason\": \"<string>\",\n      \"last_found_at\": \"<dateTime>\"\n    },\n    \"california_franchise_tax_board\": {\n      \"compliant\": \"<boolean>\",\n      \"reason\": \"<string>\",\n      \"last_found_at\": \"<dateTime>\"\n    }\n  },\n  \"mission_statement\": \"<string>\",\n  \"web\": {\n    \"domain\": \"<string>\"\n  },\n  \"brand\": {\n    \"icon_url\": \"<string>\",\n    \"logo_url\": \"<string>\"\n  },\n  \"officers\": [\n    {\n      \"name\": \"<string>\",\n      \"title\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"title\": \"<string>\"\n    }\n  ],\n  \"claimed\": \"<boolean>\",\n  \"incorporation\": {\n    \"formation_year\": \"<string>\",\n    \"state\": \"<string>\",\n    \"ruling_date\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-07-28T01:20:02.000Z",
+                      "updatedAt": "2026-07-28T01:20:02.000Z",
+                      "uid": "35240-58a85a43-8211-4ff0-91c2-53c8a47a231b"
+                    },
+                    {
+                      "id": "3a3c2da6-fbcd-4df1-9000-55dd89210c47",
+                      "name": "The request is invalid or contains invalid parameters",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/organizations/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "organizations",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:02.000Z",
+                      "updatedAt": "2026-07-28T01:20:02.000Z",
+                      "uid": "35240-3a3c2da6-fbcd-4df1-9000-55dd89210c47"
+                    },
+                    {
+                      "id": "0f63507d-8ed5-4070-820c-abb0a1b178bb",
+                      "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/organizations/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "organizations",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:02.000Z",
+                      "updatedAt": "2026-07-28T01:20:02.000Z",
+                      "uid": "35240-0f63507d-8ed5-4070-820c-abb0a1b178bb"
+                    },
+                    {
+                      "id": "0b3fa4f8-c99e-41ad-a88e-cdba14a8605c",
+                      "name": "Access denied",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/organizations/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "organizations",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:02.000Z",
+                      "updatedAt": "2026-07-28T01:20:02.000Z",
+                      "uid": "35240-0b3fa4f8-c99e-41ad-a88e-cdba14a8605c"
+                    },
+                    {
+                      "id": "c405b86e-0f30-400c-b4b5-3ee6de14400b",
+                      "name": "Resource Not Found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/organizations/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "organizations",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:02.000Z",
+                      "updatedAt": "2026-07-28T01:20:02.000Z",
+                      "uid": "35240-c405b86e-0f30-400c-b4b5-3ee6de14400b"
+                    },
+                    {
+                      "id": "df847d9d-4ee1-4827-8ae3-58eb0382627f",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/organizations/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "organizations",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:02.000Z",
+                      "updatedAt": "2026-07-28T01:20:02.000Z",
+                      "uid": "35240-df847d9d-4ee1-4827-8ae3-58eb0382627f"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:20:02.000Z",
+                  "updatedAt": "2026-07-28T01:20:02.000Z",
+                  "uid": "35240-ba1ed42b-4768-4b62-9d49-f065b5f1a7b2"
+                }
+              ],
+              "id": "87c4f839-768c-405c-9fb1-8a6ded9075e1",
+              "createdAt": "2026-07-28T01:20:02.000Z",
+              "updatedAt": "2026-07-28T01:20:02.000Z",
+              "uid": "35240-87c4f839-768c-405c-9fb1-8a6ded9075e1"
+            }
+          ],
+          "id": "ef9169c0-2f92-4534-aa2d-ab2bfeca5117",
+          "createdAt": "2026-07-28T01:20:02.000Z",
+          "updatedAt": "2026-07-28T01:20:02.000Z",
+          "uid": "35240-ef9169c0-2f92-4534-aa2d-ab2bfeca5117"
+        },
+        {
+          "name": "simulations",
+          "item": [
+            {
+              "name": "organizations",
+              "item": [
+                {
+                  "name": "onboard",
+                  "item": [
+                    {
+                      "name": "{id}",
+                      "item": [
+                        {
+                          "name": "Sandbox: Onboard an organization",
+                          "id": "bacfdbe2-d292-41d5-8103-58380609ec8b",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"settlement\": \"SANDBOX_SETTLEMENT_ACCOUNT_TRANSFER\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/simulations/organizations/onboard/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "simulations",
+                                "organizations",
+                                "onboard",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "b03f15a3-8736-4a9d-90ca-c1b67bcdd627",
+                                  "key": "id",
+                                  "value": "<string>",
+                                  "description": "(Required) The unique identifier for the organization to onboard."
+                                }
+                              ]
+                            },
+                            "description": "Creates a Chariot account for a sandbox recipient organization so that\ndisbursements to it settle electronically instead of via a mailed check.\n\nBy default a sandbox organization has no Chariot account, so disbursements\nto it are mailed as a physical check. Call this endpoint to provision an\naccount for the organization and choose which electronic rail its\ndisbursements should settle on.\n\nThe `settlement` is fixed on the first successful call. Onboarding the same\norganization again with a different `settlement` returns an error.\n\n<Note title=\"Sandbox Only\" icon=\"fa-light fa-atom-simple\">\nThis API is only available in the sandbox environment.\n</Note>\n"
+                          },
+                          "response": [
+                            {
+                              "id": "e5d99b09-3a7a-4ca1-a182-413c1c459c3d",
+                              "name": "OK",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: oauth2",
+                                    "key": "Authorization",
+                                    "value": "<token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"settlement\": \"SANDBOX_SETTLEMENT_ACCOUNT_TRANSFER\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/simulations/organizations/onboard/:id",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "simulations",
+                                    "organizations",
+                                    "onboard",
+                                    ":id"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                },
+                                {
+                                  "disabled": false,
+                                  "description": {
+                                    "content": "",
+                                    "type": "text/plain"
+                                  },
+                                  "key": "X-Request-Id",
+                                  "value": ""
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"id\": \"<string>\",\n  \"ein\": \"<string>\",\n  \"name\": \"<string>\",\n  \"parent_organization_id\": \"<string>\",\n  \"physical_address\": {\n    \"city\": \"<string>\",\n    \"country\": \"<string>\",\n    \"line1\": \"<string>\",\n    \"postal_code\": \"<string>\",\n    \"state\": \"<string>\",\n    \"line2\": \"<string>\"\n  },\n  \"classification\": {\n    \"group_exemption_number\": \"<string>\",\n    \"subsection_code\": {\n      \"name\": \"<string>\",\n      \"code\": \"<integer>\",\n      \"description\": \"<string>\"\n    },\n    \"filing_requirement_code\": {\n      \"name\": \"<string>\",\n      \"code\": \"<integer>\",\n      \"description\": \"<string>\"\n    },\n    \"foundation_code\": {\n      \"name\": \"<string>\",\n      \"code\": \"<integer>\",\n      \"description\": \"<string>\"\n    },\n    \"affiliation_code\": {\n      \"name\": \"<string>\",\n      \"code\": \"<integer>\",\n      \"description\": \"<string>\"\n    },\n    \"organization_code\": {\n      \"name\": \"<string>\",\n      \"code\": \"<integer>\",\n      \"description\": \"<string>\"\n    },\n    \"exempt_status_code\": {\n      \"name\": \"<string>\",\n      \"code\": \"<integer>\",\n      \"description\": \"<string>\"\n    },\n    \"deductibility_code\": {\n      \"name\": \"<string>\",\n      \"code\": \"<integer>\",\n      \"description\": \"<string>\"\n    },\n    \"ntee_code\": {\n      \"code\": \"<string>\",\n      \"description\": \"<string>\",\n      \"parent_code\": \"<string>\",\n      \"parent_description\": \"<string>\"\n    },\n    \"naics_code\": {\n      \"naics2\": \"<string>\",\n      \"naics2_description\": \"<string>\",\n      \"naics4\": \"<string>\",\n      \"naics4_description\": \"<string>\",\n      \"naics6\": \"<string>\",\n      \"naics6_description\": \"<string>\"\n    }\n  },\n  \"compliance\": {\n    \"daf_eligible\": \"<boolean>\",\n    \"irs_pub_78\": {\n      \"compliant\": \"<boolean>\",\n      \"reason\": \"<string>\",\n      \"last_found_at\": \"<dateTime>\"\n    },\n    \"ofac\": {\n      \"compliant\": \"<boolean>\",\n      \"reason\": \"<string>\",\n      \"last_found_at\": \"<dateTime>\"\n    },\n    \"foundation_code\": {\n      \"compliant\": \"<boolean>\",\n      \"reason\": \"<string>\",\n      \"last_found_at\": \"<dateTime>\"\n    },\n    \"california_attorney_general_registry\": {\n      \"compliant\": \"<boolean>\",\n      \"reason\": \"<string>\",\n      \"last_found_at\": \"<dateTime>\"\n    },\n    \"california_franchise_tax_board\": {\n      \"compliant\": \"<boolean>\",\n      \"reason\": \"<string>\",\n      \"last_found_at\": \"<dateTime>\"\n    }\n  },\n  \"mission_statement\": \"<string>\",\n  \"web\": {\n    \"domain\": \"<string>\"\n  },\n  \"brand\": {\n    \"icon_url\": \"<string>\",\n    \"logo_url\": \"<string>\"\n  },\n  \"officers\": [\n    {\n      \"name\": \"<string>\",\n      \"title\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"title\": \"<string>\"\n    }\n  ],\n  \"claimed\": \"<boolean>\",\n  \"incorporation\": {\n    \"formation_year\": \"<string>\",\n    \"state\": \"<string>\",\n    \"ruling_date\": \"<string>\"\n  }\n}",
+                              "createdAt": "2026-07-28T01:20:02.000Z",
+                              "updatedAt": "2026-07-28T01:20:02.000Z",
+                              "uid": "35240-e5d99b09-3a7a-4ca1-a182-413c1c459c3d"
+                            },
+                            {
+                              "id": "98219cbe-d94b-4ad9-85bd-136d63072d31",
+                              "name": "The request is invalid or contains invalid parameters",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/problem+json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: oauth2",
+                                    "key": "Authorization",
+                                    "value": "<token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"settlement\": \"SANDBOX_SETTLEMENT_ACCOUNT_TRANSFER\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/simulations/organizations/onboard/:id",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "simulations",
+                                    "organizations",
+                                    "onboard",
+                                    ":id"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Bad Request",
+                              "code": 400,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/problem+json"
+                                },
+                                {
+                                  "disabled": false,
+                                  "description": {
+                                    "content": "",
+                                    "type": "text/plain"
+                                  },
+                                  "key": "X-Request-Id",
+                                  "value": ""
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:20:02.000Z",
+                              "updatedAt": "2026-07-28T01:20:02.000Z",
+                              "uid": "35240-98219cbe-d94b-4ad9-85bd-136d63072d31"
+                            },
+                            {
+                              "id": "0f107a21-d357-41f2-9480-efa70be23014",
+                              "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/problem+json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: oauth2",
+                                    "key": "Authorization",
+                                    "value": "<token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"settlement\": \"SANDBOX_SETTLEMENT_ACCOUNT_TRANSFER\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/simulations/organizations/onboard/:id",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "simulations",
+                                    "organizations",
+                                    "onboard",
+                                    ":id"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Unauthorized",
+                              "code": 401,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/problem+json"
+                                },
+                                {
+                                  "disabled": false,
+                                  "description": {
+                                    "content": "",
+                                    "type": "text/plain"
+                                  },
+                                  "key": "X-Request-Id",
+                                  "value": ""
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:20:02.000Z",
+                              "updatedAt": "2026-07-28T01:20:02.000Z",
+                              "uid": "35240-0f107a21-d357-41f2-9480-efa70be23014"
+                            },
+                            {
+                              "id": "73fa36e4-fcc5-4535-a4f1-d35c07e4619a",
+                              "name": "Access denied",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/problem+json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: oauth2",
+                                    "key": "Authorization",
+                                    "value": "<token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"settlement\": \"SANDBOX_SETTLEMENT_ACCOUNT_TRANSFER\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/simulations/organizations/onboard/:id",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "simulations",
+                                    "organizations",
+                                    "onboard",
+                                    ":id"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Forbidden",
+                              "code": 403,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/problem+json"
+                                },
+                                {
+                                  "disabled": false,
+                                  "description": {
+                                    "content": "",
+                                    "type": "text/plain"
+                                  },
+                                  "key": "X-Request-Id",
+                                  "value": ""
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:20:02.000Z",
+                              "updatedAt": "2026-07-28T01:20:02.000Z",
+                              "uid": "35240-73fa36e4-fcc5-4535-a4f1-d35c07e4619a"
+                            },
+                            {
+                              "id": "c9234997-9c61-4979-a14b-8f3091b32d0c",
+                              "name": "Resource Not Found",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/problem+json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: oauth2",
+                                    "key": "Authorization",
+                                    "value": "<token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"settlement\": \"SANDBOX_SETTLEMENT_ACCOUNT_TRANSFER\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/simulations/organizations/onboard/:id",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "simulations",
+                                    "organizations",
+                                    "onboard",
+                                    ":id"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/problem+json"
+                                },
+                                {
+                                  "disabled": false,
+                                  "description": {
+                                    "content": "",
+                                    "type": "text/plain"
+                                  },
+                                  "key": "X-Request-Id",
+                                  "value": ""
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:20:02.000Z",
+                              "updatedAt": "2026-07-28T01:20:02.000Z",
+                              "uid": "35240-c9234997-9c61-4979-a14b-8f3091b32d0c"
+                            },
+                            {
+                              "id": "a5da4e04-c655-4d92-95c8-9a045360a28b",
+                              "name": "Internal Server Error",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/problem+json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: oauth2",
+                                    "key": "Authorization",
+                                    "value": "<token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"settlement\": \"SANDBOX_SETTLEMENT_ACCOUNT_TRANSFER\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/simulations/organizations/onboard/:id",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "simulations",
+                                    "organizations",
+                                    "onboard",
+                                    ":id"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "id"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Internal Server Error",
+                              "code": 500,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/problem+json"
+                                },
+                                {
+                                  "disabled": false,
+                                  "description": {
+                                    "content": "",
+                                    "type": "text/plain"
+                                  },
+                                  "key": "X-Request-Id",
+                                  "value": ""
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                              "createdAt": "2026-07-28T01:20:02.000Z",
+                              "updatedAt": "2026-07-28T01:20:02.000Z",
+                              "uid": "35240-a5da4e04-c655-4d92-95c8-9a045360a28b"
+                            }
+                          ],
+                          "createdAt": "2026-07-28T01:20:02.000Z",
+                          "updatedAt": "2026-07-28T01:20:02.000Z",
+                          "uid": "35240-bacfdbe2-d292-41d5-8103-58380609ec8b"
+                        }
+                      ],
+                      "id": "bcf58621-f847-4be7-92ee-4b1c1f50aa02",
+                      "createdAt": "2026-07-28T01:20:02.000Z",
+                      "updatedAt": "2026-07-28T01:20:02.000Z",
+                      "uid": "35240-bcf58621-f847-4be7-92ee-4b1c1f50aa02"
+                    }
+                  ],
+                  "id": "91b685ba-ac41-4f7d-afc5-272845fe0c67",
+                  "createdAt": "2026-07-28T01:20:02.000Z",
+                  "updatedAt": "2026-07-28T01:20:02.000Z",
+                  "uid": "35240-91b685ba-ac41-4f7d-afc5-272845fe0c67"
+                }
+              ],
+              "id": "c2894bc3-5326-41bd-a1ac-df3d89b035ad",
+              "createdAt": "2026-07-28T01:20:02.000Z",
+              "updatedAt": "2026-07-28T01:20:02.000Z",
+              "uid": "35240-c2894bc3-5326-41bd-a1ac-df3d89b035ad"
+            }
+          ],
+          "id": "50bd1653-0d26-49e6-ae0b-0156926346cc",
+          "createdAt": "2026-07-28T01:20:02.000Z",
+          "updatedAt": "2026-07-28T01:20:02.000Z",
+          "uid": "35240-50bd1653-0d26-49e6-ae0b-0156926346cc"
+        }
+      ],
+      "id": "e62842a7-4b63-494c-8b2f-bddbaf249367",
+      "createdAt": "2026-07-28T01:20:02.000Z",
+      "updatedAt": "2026-07-28T01:20:02.000Z",
+      "uid": "35240-e62842a7-4b63-494c-8b2f-bddbaf249367"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read:bank_accounts sync:connected_accounts",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.givechariot.com/auth/oauth/token",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://dashboard.givechariot.com/oauth/authorize",
+        "type": "string"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.givechariot.com/fdx/v6"
+    }
+  ]
+}

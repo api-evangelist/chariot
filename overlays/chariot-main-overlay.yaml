@@ -1,0 +1,26 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Chariot API
+  version: 1.0.0
+extends: openapi/chariot-openapi-original.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-07-18'
+    x-apievangelist-artifacts:
+    - authentication
+    - conventions
+    - errors
+    - data-model
+    - webhooks
+    - sandbox
+    - lifecycle
+    - conformance
+    - well-known
+    - packages
+    - mcp
+- target: $.info
+  update:
+    x-idempotency: Idempotency-Key header on POST create operations (disbursements, inbound transfers)
+    x-error-format: rfc7807 application/problem+json (ProblemDetails)
+    x-pagination: 'cursor: limit + cursor request, results + nextPageToken response'

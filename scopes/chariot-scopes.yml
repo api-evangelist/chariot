@@ -1,0 +1,39 @@
+generated: '2026-07-18'
+method: searched
+source: openapi/chariot-fdx-openapi-original.yml, well-known/chariot-openid-configuration.json
+docs: https://docs.givechariot.com/api/authentication
+schemes:
+- name: oauth2
+  source: openapi/chariot-fdx-openapi-original.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://dashboard.givechariot.com/oauth/authorize
+    tokenUrl: https://api.givechariot.com/auth/oauth/token
+  description: OAuth 2.0 Bearer token. A client may hold both scopes, but each FDX authorization
+    must contain exactly one — they are mutually exclusive per authorization. An authorization
+    containing both will be rejected. See the Authentication page for token exchange details.
+scopes:
+- scope: read:bank_accounts
+  description: Read access to bank account data
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/chariot-fdx-openapi-original.yml
+- scope: sync:connected_accounts
+  description: Sync access to connected account data
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/chariot-fdx-openapi-original.yml
+- scope: openid
+  description: OpenID Connect authentication (present in OIDC discovery scopes_supported).
+  sources:
+  - well-known/chariot-openid-configuration.json
+- scope: offline_access
+  description: Request a refresh token for long-lived access (present in OIDC discovery scopes_supported).
+  sources:
+  - well-known/chariot-openid-configuration.json
+note: >-
+  The two FDX scopes are mutually exclusive per authorization. OIDC discovery
+  (/.well-known/openid-configuration) additionally advertises openid and offline_access, and grant
+  types authorization_code, refresh_token, client_credentials, and token-exchange.

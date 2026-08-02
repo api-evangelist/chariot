@@ -1,0 +1,43 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/chariot-openapi-original.yml, openapi/chariot-fdx-openapi-original.yml, well-known/chariot-openid-configuration.json
+standards:
+  - id: oauth2
+    conforms: true
+    evidence: FDX API declares oauth2 authorizationCode flow; OIDC discovery advertises authorization_code, refresh_token, client_credentials, and token-exchange grant types.
+  - id: oidc
+    conforms: true
+    evidence: /.well-known/openid-configuration present with issuer, jwks_uri, userinfo_endpoint, id_token signing algs.
+  - id: oauth-pkce
+    conforms: true
+    evidence: code_challenge_methods_supported includes S256.
+  - id: rfc8414-as-metadata
+    conforms: true
+    evidence: /.well-known/oauth-authorization-server (200) publishes Authorization Server Metadata.
+  - id: rfc9727-api-catalog
+    conforms: true
+    evidence: /.well-known/api-catalog (200) linkset points at api-reference.yaml and fdx-api-reference.yaml.
+  - id: rfc7807-problem-details
+    conforms: true
+    evidence: error responses use application/problem+json with the ProblemDetails schema (type/title/status/detail).
+  - id: fdx-6.0
+    conforms: true
+    evidence: Dedicated Financial Data Exchange (FDX) v6.0 API for open-banking account/transaction/statement access.
+  - id: idempotency
+    conforms: true
+    evidence: Idempotency-Key header on createDisbursement and createInboundTransfer.
+  - id: cursor-pagination
+    conforms: true
+    evidence: list endpoints use limit + cursor and return nextPageToken.
+  - id: bearer-token-auth
+    conforms: true
+    evidence: primary REST API uses HTTP bearer (sk_test_ / secret key) authentication over TLS 1.2+.
+compliance_posture:
+  named_certifications: []
+  claims:
+    - Built to meet banking and IRS requirements with ongoing monitoring (Trust & Safety page).
+    - End-to-end encryption of data and transactions (Trust & Safety page).
+  note: >-
+    Chariot's Trust & Safety page describes a banking/IRS-aligned compliance program and encryption
+    but publishes no named third-party certifications (SOC 2 / ISO 27001 / PCI DSS) on public pages,
+    so no Compliance pointer is emitted (would require a published, named certification).

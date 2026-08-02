@@ -1,0 +1,27 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.givechariot.com/changelog + https://github.com/chariot-giving/chariot-openapi/tree/main/specs
+scheme: date-based-versions
+current_version: v2026-04-01
+changelog_url: https://docs.givechariot.com/changelog
+note: >-
+  Chariot maintains a dated changelog on the docs site and ships each breaking API version as a
+  separate dated OpenAPI in the chariot-openapi spec repo. The entries below are the published
+  version train (the changelog page renders the per-date detail).
+entries:
+  - version: v2026-04-01
+    date: '2026-04-01'
+    breaking: true
+    highlights: Current default API version; largest spec (368KB) — expanded disbursements, inbound transfers, financial accounts, verification requests, and event subscriptions.
+  - version: v2026-01-15
+    date: '2026-01-15'
+    breaking: true
+    highlights: Previous supported version.
+  - version: '2025-02-24'
+    date: '2025-02-24'
+    breaking: true
+    highlights: Earlier dated release.
+  - version: '2023-01-01'
+    date: '2023-01-01'
+    breaking: true
+    highlights: Initial published dated version.

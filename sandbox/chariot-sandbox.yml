@@ -1,0 +1,40 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.givechariot.com/api + openapi/chariot-openapi-original.yml
+environments:
+  sandbox:
+    base_url: https://sandboxapi.givechariot.com
+    fdx_base_url: https://devapi.givechariot.com/fdx/v6
+    description: Test data only; all activity is simulated. Obtain sandbox credentials from the dashboard.
+  production:
+    base_url: https://api.givechariot.com
+    fdx_base_url: https://api.givechariot.com/fdx/v6
+    description: Live environment; all activity is real money movement.
+credentials:
+  scheme: http-bearer
+  test_key_prefix: sk_test_
+  test_key_example: REDACTED_STRIPE_KEY
+  note: The sk_test_ example is the placeholder shown in Chariot's authentication docs — not a live credential.
+simulation_endpoints:
+  description: >-
+    Sandbox exposes simulation operations to drive asynchronous money-movement state machines
+    to terminal states, so integrators can test success and failure paths without real settlement.
+  operations:
+    - operationId: onboardOrganization
+      path: POST /v1/simulations/organizations/onboard/{id}
+      effect: Simulate onboarding a nonprofit organization.
+    - operationId: simulateDisbursementCompletion
+      path: POST /v1/simulations/disbursements/{id}/complete
+    - operationId: simulateDisbursementFailure
+      path: POST /v1/simulations/disbursements/{id}/fail
+    - operationId: simulateGrantCompletion
+      path: POST /v1/simulations/grants/{id}/complete
+    - operationId: simulateGrantCancellation
+      path: POST /v1/simulations/grants/{id}/cancel
+    - operationId: simulateInboundTransferCompletion
+      path: POST /v1/simulations/inbound_transfers/{id}/complete
+    - operationId: simulateInboundTransferFailure
+      path: POST /v1/simulations/inbound_transfers/{id}/fail
+notes: >-
+  No published magic test card numbers or fixed test identifiers were found; sandbox testing is
+  driven by the simulation endpoints against objects the integrator creates. Never invent test values.

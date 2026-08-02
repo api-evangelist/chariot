@@ -1,0 +1,407 @@
+{
+  "info": {
+    "_postman_id": "b1680536-2153-4df0-8ee7-87c7f8c36017",
+    "name": "Chariot FDX Accounts Contact API",
+    "description": "Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.\n\nContact Support:\n Name: Chariot Development Team\n Email: developers@givechariot.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:19:22.000Z",
+    "updatedAt": "2026-07-28T01:19:23.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-b1680536-2153-4df0-8ee7-87c7f8c36017"
+  },
+  "item": [
+    {
+      "name": "accounts",
+      "item": [
+        {
+          "name": "{id}",
+          "item": [
+            {
+              "name": "contact",
+              "item": [
+                {
+                  "name": "Get account contact",
+                  "id": "9587ff54-5d23-4a8a-a755-d3bdcca27bfd",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/accounts/:id/contact",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "accounts",
+                        ":id",
+                        "contact"
+                      ],
+                      "variable": [
+                        {
+                          "id": "2d350d94-7463-4b48-85a8-583d10979700",
+                          "key": "id",
+                          "value": "<uuid>",
+                          "description": "(Required) Unique identifier for the account"
+                        }
+                      ]
+                    },
+                    "description": "Get contact information associated with an account, including holders, emails, addresses, and phone numbers."
+                  },
+                  "response": [
+                    {
+                      "id": "b76215e1-b622-4ca4-936d-5a2a97699bb4",
+                      "name": "Account contact information",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/accounts/:id/contact",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "accounts",
+                            ":id",
+                            "contact"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"holders\": [\n    {\n      \"name\": {\n        \"first\": \"<string>\",\n        \"middle\": \"<string>\",\n        \"last\": \"<string>\",\n        \"suffix\": \"<string>\",\n        \"prefix\": \"<string>\",\n        \"company\": \"<string>\"\n      },\n      \"relationship\": \"BUSINESS\",\n      \"type\": \"BUSINESS\",\n      \"businessCustomer\": {\n        \"name\": \"<string>\",\n        \"registeredId\": \"<string>\"\n      },\n      \"emails\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"addresses\": [\n        {\n          \"line1\": \"<string>\",\n          \"city\": \"<string>\",\n          \"region\": \"<string>\",\n          \"postalCode\": \"<string>\",\n          \"country\": \"<string>\",\n          \"line2\": \"<string>\",\n          \"line3\": \"<string>\"\n        },\n        {\n          \"line1\": \"<string>\",\n          \"city\": \"<string>\",\n          \"region\": \"<string>\",\n          \"postalCode\": \"<string>\",\n          \"country\": \"<string>\",\n          \"line2\": \"<string>\",\n          \"line3\": \"<string>\"\n        }\n      ],\n      \"telephones\": [\n        {\n          \"type\": \"BUSINESS\",\n          \"number\": \"<string>\",\n          \"country\": \"<string>\"\n        },\n        {\n          \"type\": \"CELL\",\n          \"number\": \"<string>\",\n          \"country\": \"<string>\"\n        }\n      ]\n    },\n    {\n      \"name\": {\n        \"first\": \"<string>\",\n        \"middle\": \"<string>\",\n        \"last\": \"<string>\",\n        \"suffix\": \"<string>\",\n        \"prefix\": \"<string>\",\n        \"company\": \"<string>\"\n      },\n      \"relationship\": \"PRIMARY\",\n      \"type\": \"CONSUMER\",\n      \"businessCustomer\": {\n        \"name\": \"<string>\",\n        \"registeredId\": \"<string>\"\n      },\n      \"emails\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"addresses\": [\n        {\n          \"line1\": \"<string>\",\n          \"city\": \"<string>\",\n          \"region\": \"<string>\",\n          \"postalCode\": \"<string>\",\n          \"country\": \"<string>\",\n          \"line2\": \"<string>\",\n          \"line3\": \"<string>\"\n        },\n        {\n          \"line1\": \"<string>\",\n          \"city\": \"<string>\",\n          \"region\": \"<string>\",\n          \"postalCode\": \"<string>\",\n          \"country\": \"<string>\",\n          \"line2\": \"<string>\",\n          \"line3\": \"<string>\"\n        }\n      ],\n      \"telephones\": [\n        {\n          \"type\": \"FAX\",\n          \"number\": \"<string>\",\n          \"country\": \"<string>\"\n        },\n        {\n          \"type\": \"HOME\",\n          \"number\": \"<string>\",\n          \"country\": \"<string>\"\n        }\n      ]\n    }\n  ],\n  \"emails\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"addresses\": [\n    {\n      \"line1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"region\": \"<string>\",\n      \"postalCode\": \"<string>\",\n      \"country\": \"<string>\",\n      \"line2\": \"<string>\",\n      \"line3\": \"<string>\"\n    },\n    {\n      \"line1\": \"<string>\",\n      \"city\": \"<string>\",\n      \"region\": \"<string>\",\n      \"postalCode\": \"<string>\",\n      \"country\": \"<string>\",\n      \"line2\": \"<string>\",\n      \"line3\": \"<string>\"\n    }\n  ],\n  \"telephones\": [\n    {\n      \"type\": \"CELL\",\n      \"number\": \"<string>\",\n      \"country\": \"<string>\"\n    },\n    {\n      \"type\": \"FAX\",\n      \"number\": \"<string>\",\n      \"country\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T01:19:23.000Z",
+                      "updatedAt": "2026-07-28T01:19:23.000Z",
+                      "uid": "35240-b76215e1-b622-4ca4-936d-5a2a97699bb4"
+                    },
+                    {
+                      "id": "7f28d3dd-b3d9-4dec-8b53-7785e046dd86",
+                      "name": "Missing or invalid OAuth 2.0 Bearer token",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/accounts/:id/contact",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "accounts",
+                            ":id",
+                            "contact"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:23.000Z",
+                      "updatedAt": "2026-07-28T01:19:23.000Z",
+                      "uid": "35240-7f28d3dd-b3d9-4dec-8b53-7785e046dd86"
+                    },
+                    {
+                      "id": "d980ed16-389c-44ba-b6a5-658a79d12dc1",
+                      "name": "Insufficient permissions or IP not whitelisted",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/accounts/:id/contact",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "accounts",
+                            ":id",
+                            "contact"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:23.000Z",
+                      "updatedAt": "2026-07-28T01:19:23.000Z",
+                      "uid": "35240-d980ed16-389c-44ba-b6a5-658a79d12dc1"
+                    },
+                    {
+                      "id": "be1c101e-351f-43dc-8712-ecb563c53fe7",
+                      "name": "Resource not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/accounts/:id/contact",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "accounts",
+                            ":id",
+                            "contact"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:23.000Z",
+                      "updatedAt": "2026-07-28T01:19:23.000Z",
+                      "uid": "35240-be1c101e-351f-43dc-8712-ecb563c53fe7"
+                    },
+                    {
+                      "id": "3c3aaa78-c4fb-40eb-ba47-66bb64235c19",
+                      "name": "A precondition for the request was not met",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/accounts/:id/contact",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "accounts",
+                            ":id",
+                            "contact"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Precondition Failed",
+                      "code": 412,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:23.000Z",
+                      "updatedAt": "2026-07-28T01:19:23.000Z",
+                      "uid": "35240-3c3aaa78-c4fb-40eb-ba47-66bb64235c19"
+                    },
+                    {
+                      "id": "374c2446-325d-440d-a183-7a4872e8ba85",
+                      "name": "Unexpected server error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/accounts/:id/contact",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "accounts",
+                            ":id",
+                            "contact"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:23.000Z",
+                      "updatedAt": "2026-07-28T01:19:23.000Z",
+                      "uid": "35240-374c2446-325d-440d-a183-7a4872e8ba85"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:19:23.000Z",
+                  "updatedAt": "2026-07-28T01:19:23.000Z",
+                  "uid": "35240-9587ff54-5d23-4a8a-a755-d3bdcca27bfd"
+                }
+              ],
+              "id": "9760c6e7-4fd2-48d4-bc56-e9868b91cc5e",
+              "createdAt": "2026-07-28T01:19:23.000Z",
+              "updatedAt": "2026-07-28T01:19:23.000Z",
+              "uid": "35240-9760c6e7-4fd2-48d4-bc56-e9868b91cc5e"
+            }
+          ],
+          "id": "b752857d-52d7-45d4-a069-6f5e0b7dc860",
+          "createdAt": "2026-07-28T01:19:23.000Z",
+          "updatedAt": "2026-07-28T01:19:23.000Z",
+          "uid": "35240-b752857d-52d7-45d4-a069-6f5e0b7dc860"
+        }
+      ],
+      "id": "b993db87-f270-4644-9bc1-5c03a230115f",
+      "createdAt": "2026-07-28T01:19:23.000Z",
+      "updatedAt": "2026-07-28T01:19:23.000Z",
+      "uid": "35240-b993db87-f270-4644-9bc1-5c03a230115f"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read:bank_accounts sync:connected_accounts",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.givechariot.com/auth/oauth/token",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://dashboard.givechariot.com/oauth/authorize",
+        "type": "string"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.givechariot.com/fdx/v6"
+    }
+  ]
+}

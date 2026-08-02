@@ -1,0 +1,30 @@
+generated: '2026-07-18'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: api.givechariot.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Feb  8 23:59:59 2027 GMT
+  hsts: null
+- host: devapi.givechariot.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Feb  8 23:59:59 2027 GMT
+  hsts: null
+- host: sandboxapi.givechariot.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Feb  8 23:59:59 2027 GMT
+  hsts: null
+domains:
+- domain: givechariot.com
+  dnssec: false
+  caa:
+  - 0 issue "letsencrypt.org"
+  - 0 issue "pki.goog"
+  - 0 issue "sectigo.com"
+  - 0 issue "amazon.com"
+  spf: true
+  dmarc: true
+  dmarc_policy: reject

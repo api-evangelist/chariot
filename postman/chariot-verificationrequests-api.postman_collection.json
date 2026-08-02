@@ -1,0 +1,1239 @@
+{
+  "info": {
+    "_postman_id": "e7675b8a-adc5-4cfb-9144-b8b236e440e3",
+    "name": "Chariot FDX Accounts verificationRequests API",
+    "description": "Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.\n\nContact Support:\n Name: Chariot Development Team\n Email: developers@givechariot.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:20:11.000Z",
+    "updatedAt": "2026-07-28T01:20:11.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-e7675b8a-adc5-4cfb-9144-b8b236e440e3"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "verification_requests",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "Get a verification request",
+                  "id": "8a2e6c68-6499-4548-84c7-7a71cbbd2fce",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/verification_requests/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "verification_requests",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "id": "956a8972-82e7-4061-9ee8-5d7c89f783db",
+                          "key": "id",
+                          "value": "<string>",
+                          "description": "(Required) The unique identifier of the verification request"
+                        }
+                      ]
+                    },
+                    "description": "Get a specific verification request by its unique identifier.\n"
+                  },
+                  "response": [
+                    {
+                      "id": "a13b7e4f-009f-4980-a0e6-e9e859240634",
+                      "name": "The verification request",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/verification_requests/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "verification_requests",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"ein\": \"<string>\",\n  \"organization_name\": \"<string>\",\n  \"organization_id\": \"<string>\",\n  \"status\": \"needs_review\",\n  \"website\": \"<string>\",\n  \"recommended_mailing_address\": {\n    \"line1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"zip_code\": \"<string>\",\n    \"line2\": \"<string>\"\n  },\n  \"verified_at\": \"<dateTime>\",\n  \"failed_at\": \"<dateTime>\",\n  \"created_at\": \"<dateTime>\",\n  \"updated_at\": \"<dateTime>\"\n}",
+                      "createdAt": "2026-07-28T01:20:11.000Z",
+                      "updatedAt": "2026-07-28T01:20:11.000Z",
+                      "uid": "35240-a13b7e4f-009f-4980-a0e6-e9e859240634"
+                    },
+                    {
+                      "id": "84f2d7d4-8bdf-4bd2-a93d-e7413f9d69cc",
+                      "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/verification_requests/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "verification_requests",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:11.000Z",
+                      "updatedAt": "2026-07-28T01:20:11.000Z",
+                      "uid": "35240-84f2d7d4-8bdf-4bd2-a93d-e7413f9d69cc"
+                    },
+                    {
+                      "id": "20a307f5-c675-4844-8a5e-a00c8193693b",
+                      "name": "Access denied",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/verification_requests/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "verification_requests",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:11.000Z",
+                      "updatedAt": "2026-07-28T01:20:11.000Z",
+                      "uid": "35240-20a307f5-c675-4844-8a5e-a00c8193693b"
+                    },
+                    {
+                      "id": "f6cab680-c2f4-40ca-90ff-b70dbe16966e",
+                      "name": "Resource Not Found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/verification_requests/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "verification_requests",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:11.000Z",
+                      "updatedAt": "2026-07-28T01:20:11.000Z",
+                      "uid": "35240-f6cab680-c2f4-40ca-90ff-b70dbe16966e"
+                    },
+                    {
+                      "id": "c8214b7f-6222-4127-bb88-33eb6d6b4c0a",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/verification_requests/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "verification_requests",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:20:11.000Z",
+                      "updatedAt": "2026-07-28T01:20:11.000Z",
+                      "uid": "35240-c8214b7f-6222-4127-bb88-33eb6d6b4c0a"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:20:11.000Z",
+                  "updatedAt": "2026-07-28T01:20:11.000Z",
+                  "uid": "35240-8a2e6c68-6499-4548-84c7-7a71cbbd2fce"
+                }
+              ],
+              "id": "e36e6d0d-181c-42dc-ae76-9b050154a603",
+              "createdAt": "2026-07-28T01:20:11.000Z",
+              "updatedAt": "2026-07-28T01:20:11.000Z",
+              "uid": "35240-e36e6d0d-181c-42dc-ae76-9b050154a603"
+            },
+            {
+              "name": "Create a verification request",
+              "id": "189152ba-a430-41e0-8a17-561166b9fbd6",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ein\": \"<string>\",\n  \"organization_name\": \"<string>\",\n  \"recommended_mailing_address\": {\n    \"line1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"zip_code\": \"<string>\",\n    \"line2\": \"<string>\"\n  },\n  \"website\": \"<string>\",\n  \"contact_email\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/v1/verification_requests",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "verification_requests"
+                  ]
+                },
+                "description": "Request verification of an unlisted organization. If the organization cannot be found through Chariot's search,\nyou can submit a verification request so that Chariot's compliance team can review and verify the organization.\n"
+              },
+              "response": [
+                {
+                  "id": "49166c14-25b1-4180-9069-dc7899070eaa",
+                  "name": "The verification request was created",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"ein\": \"<string>\",\n  \"organization_name\": \"<string>\",\n  \"recommended_mailing_address\": {\n    \"line1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"zip_code\": \"<string>\",\n    \"line2\": \"<string>\"\n  },\n  \"website\": \"<string>\",\n  \"contact_email\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/verification_requests",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "verification_requests"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "Location",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"<string>\",\n  \"ein\": \"<string>\",\n  \"organization_name\": \"<string>\",\n  \"organization_id\": \"<string>\",\n  \"status\": \"needs_review\",\n  \"website\": \"<string>\",\n  \"recommended_mailing_address\": {\n    \"line1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"zip_code\": \"<string>\",\n    \"line2\": \"<string>\"\n  },\n  \"verified_at\": \"<dateTime>\",\n  \"failed_at\": \"<dateTime>\",\n  \"created_at\": \"<dateTime>\",\n  \"updated_at\": \"<dateTime>\"\n}",
+                  "createdAt": "2026-07-28T01:20:11.000Z",
+                  "updatedAt": "2026-07-28T01:20:11.000Z",
+                  "uid": "35240-49166c14-25b1-4180-9069-dc7899070eaa"
+                },
+                {
+                  "id": "c4fc184d-9eb0-4d9d-a574-3e19d11b9042",
+                  "name": "The request is invalid or contains invalid parameters",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"ein\": \"<string>\",\n  \"organization_name\": \"<string>\",\n  \"recommended_mailing_address\": {\n    \"line1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"zip_code\": \"<string>\",\n    \"line2\": \"<string>\"\n  },\n  \"website\": \"<string>\",\n  \"contact_email\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/verification_requests",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "verification_requests"
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:11.000Z",
+                  "updatedAt": "2026-07-28T01:20:11.000Z",
+                  "uid": "35240-c4fc184d-9eb0-4d9d-a574-3e19d11b9042"
+                },
+                {
+                  "id": "e3887aad-4589-4bdd-9205-1f9efdb53a84",
+                  "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"ein\": \"<string>\",\n  \"organization_name\": \"<string>\",\n  \"recommended_mailing_address\": {\n    \"line1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"zip_code\": \"<string>\",\n    \"line2\": \"<string>\"\n  },\n  \"website\": \"<string>\",\n  \"contact_email\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/verification_requests",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "verification_requests"
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:11.000Z",
+                  "updatedAt": "2026-07-28T01:20:11.000Z",
+                  "uid": "35240-e3887aad-4589-4bdd-9205-1f9efdb53a84"
+                },
+                {
+                  "id": "f0321e42-ec18-4401-a0b4-5ea3c90b6db0",
+                  "name": "Access denied",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"ein\": \"<string>\",\n  \"organization_name\": \"<string>\",\n  \"recommended_mailing_address\": {\n    \"line1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"zip_code\": \"<string>\",\n    \"line2\": \"<string>\"\n  },\n  \"website\": \"<string>\",\n  \"contact_email\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/verification_requests",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "verification_requests"
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:11.000Z",
+                  "updatedAt": "2026-07-28T01:20:11.000Z",
+                  "uid": "35240-f0321e42-ec18-4401-a0b4-5ea3c90b6db0"
+                },
+                {
+                  "id": "59b0f6bd-da56-4182-87b5-7ce3f7d3e69c",
+                  "name": "Resource Conflicts",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"ein\": \"<string>\",\n  \"organization_name\": \"<string>\",\n  \"recommended_mailing_address\": {\n    \"line1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"zip_code\": \"<string>\",\n    \"line2\": \"<string>\"\n  },\n  \"website\": \"<string>\",\n  \"contact_email\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/verification_requests",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "verification_requests"
+                      ]
+                    }
+                  },
+                  "status": "Conflict",
+                  "code": 409,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:11.000Z",
+                  "updatedAt": "2026-07-28T01:20:11.000Z",
+                  "uid": "35240-59b0f6bd-da56-4182-87b5-7ce3f7d3e69c"
+                },
+                {
+                  "id": "ec7d5b09-c90a-4f40-9a11-126fb6f1bd6e",
+                  "name": "Precondition Failed",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"ein\": \"<string>\",\n  \"organization_name\": \"<string>\",\n  \"recommended_mailing_address\": {\n    \"line1\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"zip_code\": \"<string>\",\n    \"line2\": \"<string>\"\n  },\n  \"website\": \"<string>\",\n  \"contact_email\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/verification_requests",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "verification_requests"
+                      ]
+                    }
+                  },
+                  "status": "Precondition Failed",
+                  "code": 412,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:11.000Z",
+                  "updatedAt": "2026-07-28T01:20:11.000Z",
+                  "uid": "35240-ec7d5b09-c90a-4f40-9a11-126fb6f1bd6e"
+                }
+              ],
+              "createdAt": "2026-07-28T01:20:11.000Z",
+              "updatedAt": "2026-07-28T01:20:11.000Z",
+              "uid": "35240-189152ba-a430-41e0-8a17-561166b9fbd6"
+            },
+            {
+              "name": "List verification requests",
+              "id": "58829a42-d50b-455b-bbf5-d6c3f7fe3769",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/verification_requests?ein=<string>&page_limit=<integer>&page_token=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "verification_requests"
+                  ],
+                  "query": [
+                    {
+                      "description": "Filter by EIN. If provided, only returns verification requests matching this EIN.",
+                      "key": "ein",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                      "key": "page_limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "description": "A token to use to retrieve the next page of results.",
+                      "key": "page_token",
+                      "value": "<string>"
+                    }
+                  ]
+                },
+                "description": "Returns a paginated list of all verification requests for the authenticated grantmaker.\n"
+              },
+              "response": [
+                {
+                  "id": "47ab418b-f86b-49af-9459-e58b68d5c5b8",
+                  "name": "The response for VerificationRequests.list",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/verification_requests?ein=<string>&page_limit=<integer>&page_token=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "verification_requests"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by EIN. If provided, only returns verification requests matching this EIN.",
+                          "key": "ein",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "page_limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "A token to use to retrieve the next page of results.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"results\": [\n    {\n      \"id\": \"<string>\",\n      \"ein\": \"<string>\",\n      \"organization_name\": \"<string>\",\n      \"organization_id\": \"<string>\",\n      \"status\": \"needs_review\",\n      \"website\": \"<string>\",\n      \"recommended_mailing_address\": {\n        \"line1\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"zip_code\": \"<string>\",\n        \"line2\": \"<string>\"\n      },\n      \"verified_at\": \"<dateTime>\",\n      \"failed_at\": \"<dateTime>\",\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"ein\": \"<string>\",\n      \"organization_name\": \"<string>\",\n      \"organization_id\": \"<string>\",\n      \"status\": \"needs_review\",\n      \"website\": \"<string>\",\n      \"recommended_mailing_address\": {\n        \"line1\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"zip_code\": \"<string>\",\n        \"line2\": \"<string>\"\n      },\n      \"verified_at\": \"<dateTime>\",\n      \"failed_at\": \"<dateTime>\",\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\"\n    }\n  ],\n  \"next_page_token\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:11.000Z",
+                  "updatedAt": "2026-07-28T01:20:11.000Z",
+                  "uid": "35240-47ab418b-f86b-49af-9459-e58b68d5c5b8"
+                },
+                {
+                  "id": "1a09094a-b1e0-4ed2-94de-4489c9055049",
+                  "name": "The request is invalid or contains invalid parameters",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/verification_requests?ein=<string>&page_limit=<integer>&page_token=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "verification_requests"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by EIN. If provided, only returns verification requests matching this EIN.",
+                          "key": "ein",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "page_limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "A token to use to retrieve the next page of results.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:11.000Z",
+                  "updatedAt": "2026-07-28T01:20:11.000Z",
+                  "uid": "35240-1a09094a-b1e0-4ed2-94de-4489c9055049"
+                },
+                {
+                  "id": "55589b39-0e53-4bfd-a6c6-fef94ecd5599",
+                  "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/verification_requests?ein=<string>&page_limit=<integer>&page_token=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "verification_requests"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by EIN. If provided, only returns verification requests matching this EIN.",
+                          "key": "ein",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "page_limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "A token to use to retrieve the next page of results.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:11.000Z",
+                  "updatedAt": "2026-07-28T01:20:11.000Z",
+                  "uid": "35240-55589b39-0e53-4bfd-a6c6-fef94ecd5599"
+                },
+                {
+                  "id": "08c2a5d3-3b4a-4ead-bd09-308307c474a5",
+                  "name": "Access denied",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/verification_requests?ein=<string>&page_limit=<integer>&page_token=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "verification_requests"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by EIN. If provided, only returns verification requests matching this EIN.",
+                          "key": "ein",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "page_limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "A token to use to retrieve the next page of results.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:11.000Z",
+                  "updatedAt": "2026-07-28T01:20:11.000Z",
+                  "uid": "35240-08c2a5d3-3b4a-4ead-bd09-308307c474a5"
+                },
+                {
+                  "id": "34a1d29e-5cf3-4eb9-b2a4-9277032387b6",
+                  "name": "Internal Server Error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/verification_requests?ein=<string>&page_limit=<integer>&page_token=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "verification_requests"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by EIN. If provided, only returns verification requests matching this EIN.",
+                          "key": "ein",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "page_limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "A token to use to retrieve the next page of results.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:20:11.000Z",
+                  "updatedAt": "2026-07-28T01:20:11.000Z",
+                  "uid": "35240-34a1d29e-5cf3-4eb9-b2a4-9277032387b6"
+                }
+              ],
+              "createdAt": "2026-07-28T01:20:11.000Z",
+              "updatedAt": "2026-07-28T01:20:11.000Z",
+              "uid": "35240-58829a42-d50b-455b-bbf5-d6c3f7fe3769"
+            }
+          ],
+          "id": "f85ddb83-95e5-41d1-acdc-98eab24a9a48",
+          "createdAt": "2026-07-28T01:20:11.000Z",
+          "updatedAt": "2026-07-28T01:20:11.000Z",
+          "uid": "35240-f85ddb83-95e5-41d1-acdc-98eab24a9a48"
+        }
+      ],
+      "id": "1e7531de-7f2e-41ac-b161-e1e023b6884b",
+      "createdAt": "2026-07-28T01:20:11.000Z",
+      "updatedAt": "2026-07-28T01:20:11.000Z",
+      "uid": "35240-1e7531de-7f2e-41ac-b161-e1e023b6884b"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read:bank_accounts sync:connected_accounts",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.givechariot.com/auth/oauth/token",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://dashboard.givechariot.com/oauth/authorize",
+        "type": "string"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.givechariot.com/fdx/v6"
+    }
+  ]
+}

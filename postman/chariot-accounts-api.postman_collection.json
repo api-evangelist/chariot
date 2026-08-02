@@ -1,0 +1,656 @@
+{
+  "info": {
+    "_postman_id": "6de4d089-c3d9-4e73-bd01-2ff0f9de8d36",
+    "name": "Chariot FDX Accounts API",
+    "description": "Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.\n\nContact Support:\n Name: Chariot Development Team\n Email: developers@givechariot.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:19:04.000Z",
+    "updatedAt": "2026-07-28T01:19:04.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-6de4d089-c3d9-4e73-bd01-2ff0f9de8d36"
+  },
+  "item": [
+    {
+      "name": "accounts",
+      "item": [
+        {
+          "name": "{id}",
+          "item": [
+            {
+              "name": "Get account",
+              "id": "42d579d4-8789-4283-8cbb-7bd10182b456",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/accounts/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "accounts",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "id": "1c7c4e9b-61af-43a0-91ea-d388dbe3a09c",
+                      "key": "id",
+                      "value": "<uuid>",
+                      "description": "(Required) Unique identifier for the account"
+                    }
+                  ]
+                },
+                "description": "Get account balances, liabilities, and other detailed account information for a single deposit account."
+              },
+              "response": [
+                {
+                  "id": "cbecd522-e723-47dc-bed2-3a4165d3fa16",
+                  "name": "The deposit account details including balances",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/accounts/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "accounts",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"accountCategory\": \"DEPOSIT_ACCOUNT\",\n  \"accountId\": \"<string>\",\n  \"accountNumber\": \"<string>\",\n  \"accountNumberDisplay\": \"<string>\",\n  \"accountOpenDate\": \"<date>\",\n  \"accountType\": \"CHECKING\",\n  \"availableBalance\": \"<double>\",\n  \"balanceType\": \"ASSET\",\n  \"currency\": {\n    \"currencyCode\": \"<string>\"\n  },\n  \"currentBalance\": \"<double>\",\n  \"productName\": \"<string>\",\n  \"routingTransitNumber\": \"<string>\",\n  \"status\": \"NEGATIVECURRENTBALANCE\",\n  \"nickName\": \"<string>\",\n  \"nickname\": \"<string>\",\n  \"description\": \"<string>\",\n  \"accountCloseDate\": \"<date>\",\n  \"balanceAsOf\": \"<dateTime>\",\n  \"lineOfBusiness\": \"<string>\",\n  \"interestRate\": \"<double>\",\n  \"transferIn\": \"<boolean>\",\n  \"transferOut\": \"<boolean>\"\n}",
+                  "createdAt": "2026-07-28T01:19:04.000Z",
+                  "updatedAt": "2026-07-28T01:19:04.000Z",
+                  "uid": "35240-cbecd522-e723-47dc-bed2-3a4165d3fa16"
+                },
+                {
+                  "id": "4df9f690-92ad-4585-8a07-417a09084580",
+                  "name": "Missing or invalid OAuth 2.0 Bearer token",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/accounts/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "accounts",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:04.000Z",
+                  "updatedAt": "2026-07-28T01:19:04.000Z",
+                  "uid": "35240-4df9f690-92ad-4585-8a07-417a09084580"
+                },
+                {
+                  "id": "89614b8d-c7c6-4af4-8fa8-470418fb158a",
+                  "name": "Insufficient permissions or IP not whitelisted",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/accounts/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "accounts",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:04.000Z",
+                  "updatedAt": "2026-07-28T01:19:04.000Z",
+                  "uid": "35240-89614b8d-c7c6-4af4-8fa8-470418fb158a"
+                },
+                {
+                  "id": "688de74e-f4f9-45e5-b22c-b3e5d08a3fed",
+                  "name": "Resource not found",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/accounts/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "accounts",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:04.000Z",
+                  "updatedAt": "2026-07-28T01:19:04.000Z",
+                  "uid": "35240-688de74e-f4f9-45e5-b22c-b3e5d08a3fed"
+                },
+                {
+                  "id": "8e11f16d-a99e-4e1f-950d-75b8c58123dc",
+                  "name": "Unexpected server error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/accounts/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "accounts",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:04.000Z",
+                  "updatedAt": "2026-07-28T01:19:04.000Z",
+                  "uid": "35240-8e11f16d-a99e-4e1f-950d-75b8c58123dc"
+                }
+              ],
+              "createdAt": "2026-07-28T01:19:04.000Z",
+              "updatedAt": "2026-07-28T01:19:04.000Z",
+              "uid": "35240-42d579d4-8789-4283-8cbb-7bd10182b456"
+            }
+          ],
+          "id": "52a1f9f5-62fd-4e11-b3cc-8f28169123b9",
+          "createdAt": "2026-07-28T01:19:04.000Z",
+          "updatedAt": "2026-07-28T01:19:04.000Z",
+          "uid": "35240-52a1f9f5-62fd-4e11-b3cc-8f28169123b9"
+        },
+        {
+          "name": "List accounts",
+          "id": "1cbcdaf0-d6e9-4cfd-be44-7a1d0c6dcecf",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts?limit=10&pageKey=<uuid>",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts"
+              ],
+              "query": [
+                {
+                  "description": "Number of results per page. Clamped to the range 10\u2013100.",
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response.",
+                  "key": "pageKey",
+                  "value": "<uuid>"
+                }
+              ]
+            },
+            "description": "Search and retrieve customer deposit accounts."
+          },
+          "response": [
+            {
+              "id": "0451c5b4-0c32-4781-be62-3c48fc965c3e",
+              "name": "A paginated list of deposit accounts",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: oauth2",
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/accounts?limit=10&pageKey=<uuid>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "accounts"
+                  ],
+                  "query": [
+                    {
+                      "description": "Number of results per page. Clamped to the range 10\u2013100.",
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response.",
+                      "key": "pageKey",
+                      "value": "<uuid>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"accounts\": [\n    {\n      \"accountCategory\": \"DEPOSIT_ACCOUNT\",\n      \"accountType\": \"CHECKING\",\n      \"accountId\": \"<string>\",\n      \"accountNumber\": \"<string>\",\n      \"accountNumberDisplay\": \"<string>\",\n      \"productName\": \"<string>\",\n      \"currency\": {\n        \"currencyCode\": \"<string>\"\n      },\n      \"status\": \"PENDINGOPEN\",\n      \"accountOpenDate\": \"<date>\",\n      \"nickName\": \"<string>\",\n      \"nickname\": \"<string>\",\n      \"description\": \"<string>\",\n      \"accountCloseDate\": \"<date>\"\n    },\n    {\n      \"accountCategory\": \"DEPOSIT_ACCOUNT\",\n      \"accountType\": \"CHECKING\",\n      \"accountId\": \"<string>\",\n      \"accountNumber\": \"<string>\",\n      \"accountNumberDisplay\": \"<string>\",\n      \"productName\": \"<string>\",\n      \"currency\": {\n        \"currencyCode\": \"<string>\"\n      },\n      \"status\": \"PENDINGOPEN\",\n      \"accountOpenDate\": \"<date>\",\n      \"nickName\": \"<string>\",\n      \"nickname\": \"<string>\",\n      \"description\": \"<string>\",\n      \"accountCloseDate\": \"<date>\"\n    }\n  ],\n  \"organizationId\": \"<uuid>\",\n  \"page\": {\n    \"nextPageKey\": \"<string>\",\n    \"totalElements\": \"<integer>\"\n  }\n}",
+              "createdAt": "2026-07-28T01:19:04.000Z",
+              "updatedAt": "2026-07-28T01:19:04.000Z",
+              "uid": "35240-0451c5b4-0c32-4781-be62-3c48fc965c3e"
+            },
+            {
+              "id": "996b15be-dc6c-474f-af4d-73c4b8827d0e",
+              "name": "Invalid request parameters",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: oauth2",
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/accounts?limit=10&pageKey=<uuid>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "accounts"
+                  ],
+                  "query": [
+                    {
+                      "description": "Number of results per page. Clamped to the range 10\u2013100.",
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response.",
+                      "key": "pageKey",
+                      "value": "<uuid>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:19:04.000Z",
+              "updatedAt": "2026-07-28T01:19:04.000Z",
+              "uid": "35240-996b15be-dc6c-474f-af4d-73c4b8827d0e"
+            },
+            {
+              "id": "2e99b9bd-4ca3-4fcf-9a31-f726ca370678",
+              "name": "Missing or invalid OAuth 2.0 Bearer token",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: oauth2",
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/accounts?limit=10&pageKey=<uuid>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "accounts"
+                  ],
+                  "query": [
+                    {
+                      "description": "Number of results per page. Clamped to the range 10\u2013100.",
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response.",
+                      "key": "pageKey",
+                      "value": "<uuid>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:19:04.000Z",
+              "updatedAt": "2026-07-28T01:19:04.000Z",
+              "uid": "35240-2e99b9bd-4ca3-4fcf-9a31-f726ca370678"
+            },
+            {
+              "id": "8e86da61-78e5-42b3-b8ce-a3ebac3e6d74",
+              "name": "Insufficient permissions or IP not whitelisted",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: oauth2",
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/accounts?limit=10&pageKey=<uuid>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "accounts"
+                  ],
+                  "query": [
+                    {
+                      "description": "Number of results per page. Clamped to the range 10\u2013100.",
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response.",
+                      "key": "pageKey",
+                      "value": "<uuid>"
+                    }
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:19:04.000Z",
+              "updatedAt": "2026-07-28T01:19:04.000Z",
+              "uid": "35240-8e86da61-78e5-42b3-b8ce-a3ebac3e6d74"
+            },
+            {
+              "id": "a8f471c0-2d34-41af-a9ab-c7d60adfb2b6",
+              "name": "Unexpected server error",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: oauth2",
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/accounts?limit=10&pageKey=<uuid>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "accounts"
+                  ],
+                  "query": [
+                    {
+                      "description": "Number of results per page. Clamped to the range 10\u2013100.",
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response.",
+                      "key": "pageKey",
+                      "value": "<uuid>"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\",\n  \"instance\": \"<string>\"\n}",
+              "createdAt": "2026-07-28T01:19:04.000Z",
+              "updatedAt": "2026-07-28T01:19:04.000Z",
+              "uid": "35240-a8f471c0-2d34-41af-a9ab-c7d60adfb2b6"
+            }
+          ],
+          "createdAt": "2026-07-28T01:19:04.000Z",
+          "updatedAt": "2026-07-28T01:19:04.000Z",
+          "uid": "35240-1cbcdaf0-d6e9-4cfd-be44-7a1d0c6dcecf"
+        }
+      ],
+      "id": "186b57e6-2a5c-4f7e-ae55-55d6add33ac6",
+      "createdAt": "2026-07-28T01:19:04.000Z",
+      "updatedAt": "2026-07-28T01:19:04.000Z",
+      "uid": "35240-186b57e6-2a5c-4f7e-ae55-55d6add33ac6"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read:bank_accounts sync:connected_accounts",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.givechariot.com/auth/oauth/token",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://dashboard.givechariot.com/oauth/authorize",
+        "type": "string"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.givechariot.com/fdx/v6"
+    }
+  ]
+}

@@ -1,0 +1,906 @@
+{
+  "info": {
+    "_postman_id": "a737799d-ccd2-4059-8976-d7fa49f306de",
+    "name": "Chariot FDX Accounts deposits API",
+    "description": "Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.\n\nContact Support:\n Name: Chariot Development Team\n Email: developers@givechariot.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T01:19:25.000Z",
+    "updatedAt": "2026-07-28T01:19:25.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-a737799d-ccd2-4059-8976-d7fa49f306de"
+  },
+  "item": [
+    {
+      "name": "v1",
+      "item": [
+        {
+          "name": "deposits",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "Get a Deposit",
+                  "id": "1ff5c728-817e-4e32-b10e-f1a7b8f534e6",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/deposits/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "deposits",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "id": "ac8d51ef-dbdc-4ef6-8e5f-8d4fc37a479c",
+                          "key": "id",
+                          "value": "<string>",
+                          "description": "(Required) The unique identifier for the deposit"
+                        }
+                      ]
+                    },
+                    "description": "Get a deposit by its unique identifier."
+                  },
+                  "response": [
+                    {
+                      "id": "acfb11a4-40f9-4607-9b67-45c6e427362f",
+                      "name": "The deposit was retrieved",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/deposits/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "deposits",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"id\": \"<string>\",\n  \"payment_source_id\": \"<string>\",\n  \"status\": \"failed\",\n  \"transfer\": {\n    \"amount\": \"<long>\",\n    \"currency\": \"<string>\",\n    \"financial_account_id\": \"<string>\",\n    \"description\": \"<string>\",\n    \"inbound_account_transfer\": {\n      \"created_at\": \"<dateTime>\"\n    },\n    \"inbound_ach_transfer\": {\n      \"standard_entry_class_code\": \"<string>\",\n      \"company_entry_description\": \"<string>\",\n      \"originator_routing_number\": \"<string>\",\n      \"originator_company_name\": \"<string>\",\n      \"trace_number\": \"<string>\",\n      \"effective_date\": \"<dateTime>\",\n      \"status\": \"pending\"\n    },\n    \"check_deposit\": {\n      \"auxiliary_on_us\": \"<string>\",\n      \"routing_number\": \"<string>\",\n      \"submitted_at\": \"<dateTime>\",\n      \"status\": \"rejected\"\n    }\n  },\n  \"created_at\": \"<dateTime>\",\n  \"updated_at\": \"<dateTime>\",\n  \"settled_at\": \"<dateTime>\",\n  \"returned_at\": \"<dateTime>\",\n  \"properties\": [\n    {\n      \"property_id\": \"<string>\",\n      \"value\": {\n        \"type\": \"enum\",\n        \"text_value\": \"<string>\",\n        \"enum_value_id\": \"<string>\",\n        \"user_value_id\": \"<string>\",\n        \"boolean_value\": \"<boolean>\",\n        \"date_value\": \"<dateTime>\",\n        \"empty\": \"<boolean>\"\n      }\n    },\n    {\n      \"property_id\": \"<string>\",\n      \"value\": {\n        \"type\": \"enum\",\n        \"text_value\": \"<string>\",\n        \"enum_value_id\": \"<string>\",\n        \"user_value_id\": \"<string>\",\n        \"boolean_value\": \"<boolean>\",\n        \"date_value\": \"<dateTime>\",\n        \"empty\": \"<boolean>\"\n      }\n    }\n  ],\n  \"bank_created_at\": \"<dateTime>\"\n}",
+                      "createdAt": "2026-07-28T01:19:25.000Z",
+                      "updatedAt": "2026-07-28T01:19:25.000Z",
+                      "uid": "35240-acfb11a4-40f9-4607-9b67-45c6e427362f"
+                    },
+                    {
+                      "id": "51ebf5ac-3926-41dc-8318-31cc3f836c54",
+                      "name": "The request is invalid or contains invalid parameters",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/deposits/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "deposits",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:25.000Z",
+                      "updatedAt": "2026-07-28T01:19:25.000Z",
+                      "uid": "35240-51ebf5ac-3926-41dc-8318-31cc3f836c54"
+                    },
+                    {
+                      "id": "16efc746-5632-44a8-8b86-bad082af1ab5",
+                      "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/deposits/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "deposits",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:25.000Z",
+                      "updatedAt": "2026-07-28T01:19:25.000Z",
+                      "uid": "35240-16efc746-5632-44a8-8b86-bad082af1ab5"
+                    },
+                    {
+                      "id": "4e86aaee-60ed-41af-81ad-c8425bb87b75",
+                      "name": "Access denied",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/deposits/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "deposits",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:25.000Z",
+                      "updatedAt": "2026-07-28T01:19:25.000Z",
+                      "uid": "35240-4e86aaee-60ed-41af-81ad-c8425bb87b75"
+                    },
+                    {
+                      "id": "8a9c4005-55fb-452c-b78a-a4e98ff39440",
+                      "name": "Resource Not Found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/deposits/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "deposits",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:25.000Z",
+                      "updatedAt": "2026-07-28T01:19:25.000Z",
+                      "uid": "35240-8a9c4005-55fb-452c-b78a-a4e98ff39440"
+                    },
+                    {
+                      "id": "de792424-51cc-42d3-a6af-31e96c1e3b27",
+                      "name": "Internal Server Error",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/problem+json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: oauth2",
+                            "key": "Authorization",
+                            "value": "<token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/deposits/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "deposits",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/problem+json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "X-Request-Id",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T01:19:25.000Z",
+                      "updatedAt": "2026-07-28T01:19:25.000Z",
+                      "uid": "35240-de792424-51cc-42d3-a6af-31e96c1e3b27"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T01:19:25.000Z",
+                  "updatedAt": "2026-07-28T01:19:25.000Z",
+                  "uid": "35240-1ff5c728-817e-4e32-b10e-f1a7b8f534e6"
+                }
+              ],
+              "id": "a5df1267-ef83-46b9-bc18-c2b92ad55bd6",
+              "createdAt": "2026-07-28T01:19:25.000Z",
+              "updatedAt": "2026-07-28T01:19:25.000Z",
+              "uid": "35240-a5df1267-ef83-46b9-bc18-c2b92ad55bd6"
+            },
+            {
+              "name": "List Deposits",
+              "id": "96b448ae-2aca-4254-8991-76ba667bcaf9",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/v1/deposits?limit=<integer>&page_token=<string>&payment_source_id=<string>&settled_at.after=<dateTime>&settled_at.before=<dateTime>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "v1",
+                    "deposits"
+                  ],
+                  "query": [
+                    {
+                      "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                      "key": "page_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "The unique identifier for the payment sources to filter deposits by. Comma separated list of payment source IDs.",
+                      "key": "payment_source_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Return deposits with a settled date and time after the given date and time.",
+                      "key": "settled_at.after",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "description": "Return deposits with a settled date and time before the given date and time.",
+                      "key": "settled_at.before",
+                      "value": "<dateTime>"
+                    }
+                  ]
+                },
+                "description": "List deposits for your account."
+              },
+              "response": [
+                {
+                  "id": "d8cc9aad-e03d-4b26-9c60-26f96823abfb",
+                  "name": "The response for Deposits.list",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/deposits?limit=<integer>&page_token=<string>&payment_source_id=<string>&settled_at.after=<dateTime>&settled_at.before=<dateTime>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "deposits"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The unique identifier for the payment sources to filter deposits by. Comma separated list of payment source IDs.",
+                          "key": "payment_source_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Return deposits with a settled date and time after the given date and time.",
+                          "key": "settled_at.after",
+                          "value": "<dateTime>"
+                        },
+                        {
+                          "description": "Return deposits with a settled date and time before the given date and time.",
+                          "key": "settled_at.before",
+                          "value": "<dateTime>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"results\": [\n    {\n      \"id\": \"<string>\",\n      \"payment_source_id\": \"<string>\",\n      \"status\": \"pending\",\n      \"transfer\": {\n        \"amount\": \"<long>\",\n        \"currency\": \"<string>\",\n        \"financial_account_id\": \"<string>\",\n        \"description\": \"<string>\",\n        \"inbound_account_transfer\": {\n          \"created_at\": \"<dateTime>\"\n        },\n        \"inbound_ach_transfer\": {\n          \"standard_entry_class_code\": \"<string>\",\n          \"company_entry_description\": \"<string>\",\n          \"originator_routing_number\": \"<string>\",\n          \"originator_company_name\": \"<string>\",\n          \"trace_number\": \"<string>\",\n          \"effective_date\": \"<dateTime>\",\n          \"status\": \"accepted\"\n        },\n        \"check_deposit\": {\n          \"auxiliary_on_us\": \"<string>\",\n          \"routing_number\": \"<string>\",\n          \"submitted_at\": \"<dateTime>\",\n          \"status\": \"returned\"\n        }\n      },\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"settled_at\": \"<dateTime>\",\n      \"returned_at\": \"<dateTime>\",\n      \"properties\": [\n        {\n          \"property_id\": \"<string>\",\n          \"value\": {\n            \"type\": \"user\",\n            \"text_value\": \"<string>\",\n            \"enum_value_id\": \"<string>\",\n            \"user_value_id\": \"<string>\",\n            \"boolean_value\": \"<boolean>\",\n            \"date_value\": \"<dateTime>\",\n            \"empty\": \"<boolean>\"\n          }\n        },\n        {\n          \"property_id\": \"<string>\",\n          \"value\": {\n            \"type\": \"text\",\n            \"text_value\": \"<string>\",\n            \"enum_value_id\": \"<string>\",\n            \"user_value_id\": \"<string>\",\n            \"boolean_value\": \"<boolean>\",\n            \"date_value\": \"<dateTime>\",\n            \"empty\": \"<boolean>\"\n          }\n        }\n      ],\n      \"bank_created_at\": \"<dateTime>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"payment_source_id\": \"<string>\",\n      \"status\": \"complete\",\n      \"transfer\": {\n        \"amount\": \"<long>\",\n        \"currency\": \"<string>\",\n        \"financial_account_id\": \"<string>\",\n        \"description\": \"<string>\",\n        \"inbound_account_transfer\": {\n          \"created_at\": \"<dateTime>\"\n        },\n        \"inbound_ach_transfer\": {\n          \"standard_entry_class_code\": \"<string>\",\n          \"company_entry_description\": \"<string>\",\n          \"originator_routing_number\": \"<string>\",\n          \"originator_company_name\": \"<string>\",\n          \"trace_number\": \"<string>\",\n          \"effective_date\": \"<dateTime>\",\n          \"status\": \"accepted\"\n        },\n        \"check_deposit\": {\n          \"auxiliary_on_us\": \"<string>\",\n          \"routing_number\": \"<string>\",\n          \"submitted_at\": \"<dateTime>\",\n          \"status\": \"pending\"\n        }\n      },\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"settled_at\": \"<dateTime>\",\n      \"returned_at\": \"<dateTime>\",\n      \"properties\": [\n        {\n          \"property_id\": \"<string>\",\n          \"value\": {\n            \"type\": \"text\",\n            \"text_value\": \"<string>\",\n            \"enum_value_id\": \"<string>\",\n            \"user_value_id\": \"<string>\",\n            \"boolean_value\": \"<boolean>\",\n            \"date_value\": \"<dateTime>\",\n            \"empty\": \"<boolean>\"\n          }\n        },\n        {\n          \"property_id\": \"<string>\",\n          \"value\": {\n            \"type\": \"text\",\n            \"text_value\": \"<string>\",\n            \"enum_value_id\": \"<string>\",\n            \"user_value_id\": \"<string>\",\n            \"boolean_value\": \"<boolean>\",\n            \"date_value\": \"<dateTime>\",\n            \"empty\": \"<boolean>\"\n          }\n        }\n      ],\n      \"bank_created_at\": \"<dateTime>\"\n    }\n  ],\n  \"next_page_token\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:25.000Z",
+                  "updatedAt": "2026-07-28T01:19:25.000Z",
+                  "uid": "35240-d8cc9aad-e03d-4b26-9c60-26f96823abfb"
+                },
+                {
+                  "id": "cd8416a6-7696-43dc-a8bb-0fc56440c28e",
+                  "name": "The request is invalid or contains invalid parameters",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/deposits?limit=<integer>&page_token=<string>&payment_source_id=<string>&settled_at.after=<dateTime>&settled_at.before=<dateTime>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "deposits"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The unique identifier for the payment sources to filter deposits by. Comma separated list of payment source IDs.",
+                          "key": "payment_source_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Return deposits with a settled date and time after the given date and time.",
+                          "key": "settled_at.after",
+                          "value": "<dateTime>"
+                        },
+                        {
+                          "description": "Return deposits with a settled date and time before the given date and time.",
+                          "key": "settled_at.before",
+                          "value": "<dateTime>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:25.000Z",
+                  "updatedAt": "2026-07-28T01:19:25.000Z",
+                  "uid": "35240-cd8416a6-7696-43dc-a8bb-0fc56440c28e"
+                },
+                {
+                  "id": "525c0c0b-d2ef-4f1a-b6fc-4dff3fa36df5",
+                  "name": "Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/deposits?limit=<integer>&page_token=<string>&payment_source_id=<string>&settled_at.after=<dateTime>&settled_at.before=<dateTime>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "deposits"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The unique identifier for the payment sources to filter deposits by. Comma separated list of payment source IDs.",
+                          "key": "payment_source_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Return deposits with a settled date and time after the given date and time.",
+                          "key": "settled_at.after",
+                          "value": "<dateTime>"
+                        },
+                        {
+                          "description": "Return deposits with a settled date and time before the given date and time.",
+                          "key": "settled_at.before",
+                          "value": "<dateTime>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:25.000Z",
+                  "updatedAt": "2026-07-28T01:19:25.000Z",
+                  "uid": "35240-525c0c0b-d2ef-4f1a-b6fc-4dff3fa36df5"
+                },
+                {
+                  "id": "98abcbbd-6d55-477e-af19-1209ef6e2258",
+                  "name": "Access denied",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/deposits?limit=<integer>&page_token=<string>&payment_source_id=<string>&settled_at.after=<dateTime>&settled_at.before=<dateTime>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "deposits"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The unique identifier for the payment sources to filter deposits by. Comma separated list of payment source IDs.",
+                          "key": "payment_source_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Return deposits with a settled date and time after the given date and time.",
+                          "key": "settled_at.after",
+                          "value": "<dateTime>"
+                        },
+                        {
+                          "description": "Return deposits with a settled date and time before the given date and time.",
+                          "key": "settled_at.before",
+                          "value": "<dateTime>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:25.000Z",
+                  "updatedAt": "2026-07-28T01:19:25.000Z",
+                  "uid": "35240-98abcbbd-6d55-477e-af19-1209ef6e2258"
+                },
+                {
+                  "id": "01840bbc-933e-450a-94f1-1ca070f6f5ea",
+                  "name": "Internal Server Error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/problem+json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: oauth2",
+                        "key": "Authorization",
+                        "value": "<token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/deposits?limit=<integer>&page_token=<string>&payment_source_id=<string>&settled_at.after=<dateTime>&settled_at.before=<dateTime>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "deposits"
+                      ],
+                      "query": [
+                        {
+                          "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects.",
+                          "key": "limit",
+                          "value": "<integer>"
+                        },
+                        {
+                          "description": "The cursor to use for pagination. If not set, the first page of results will be returned.",
+                          "key": "page_token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The unique identifier for the payment sources to filter deposits by. Comma separated list of payment source IDs.",
+                          "key": "payment_source_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Return deposits with a settled date and time after the given date and time.",
+                          "key": "settled_at.after",
+                          "value": "<dateTime>"
+                        },
+                        {
+                          "description": "Return deposits with a settled date and time before the given date and time.",
+                          "key": "settled_at.before",
+                          "value": "<dateTime>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/problem+json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "X-Request-Id",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"type\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<integer>\",\n  \"detail\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T01:19:25.000Z",
+                  "updatedAt": "2026-07-28T01:19:25.000Z",
+                  "uid": "35240-01840bbc-933e-450a-94f1-1ca070f6f5ea"
+                }
+              ],
+              "createdAt": "2026-07-28T01:19:25.000Z",
+              "updatedAt": "2026-07-28T01:19:25.000Z",
+              "uid": "35240-96b448ae-2aca-4254-8991-76ba667bcaf9"
+            }
+          ],
+          "id": "867f4bf8-591f-44e6-8ed5-960e654d7372",
+          "createdAt": "2026-07-28T01:19:25.000Z",
+          "updatedAt": "2026-07-28T01:19:25.000Z",
+          "uid": "35240-867f4bf8-591f-44e6-8ed5-960e654d7372"
+        }
+      ],
+      "id": "195ea274-a257-4d25-bb1e-b234f8f4cc7c",
+      "createdAt": "2026-07-28T01:19:25.000Z",
+      "updatedAt": "2026-07-28T01:19:25.000Z",
+      "uid": "35240-195ea274-a257-4d25-bb1e-b234f8f4cc7c"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read:bank_accounts sync:connected_accounts",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.givechariot.com/auth/oauth/token",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://dashboard.givechariot.com/oauth/authorize",
+        "type": "string"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.givechariot.com/fdx/v6"
+    }
+  ]
+}

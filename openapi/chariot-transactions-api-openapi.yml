@@ -1,0 +1,346 @@
+openapi: 3.0.0
+info:
+  title: Chariot FDX Accounts Transactions API
+  version: '6.0'
+  description: Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.
+  contact:
+    name: Chariot Development Team
+    url: https://givechariot.com/contact
+    email: developers@givechariot.com
+servers:
+- url: https://api.givechariot.com/fdx/v6
+  description: Production
+- url: https://devapi.givechariot.com/fdx/v6
+  description: Staging
+security:
+- oauth2: []
+tags:
+- name: Transactions
+  description: Account transaction history
+paths:
+  /accounts/{id}/transactions:
+    get:
+      summary: List account transactions
+      description: Get a paginated list of transactions for an account. When specifying a date range, both startTime and endTime must be provided together. Defaults to the last 7 days if no date range is specified. Data is available for up to 24 months from the current date.
+      operationId: listAccountTransactions
+      tags:
+      - Transactions
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/PageKey'
+      - $ref: '#/components/parameters/StartTime'
+      - $ref: '#/components/parameters/EndTime'
+      responses:
+        '200':
+          description: A paginated list of transactions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListTransactionsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Unauthorized:
+      description: Missing or invalid OAuth 2.0 Bearer token
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    NotFound:
+      description: Resource not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Forbidden:
+      description: Insufficient permissions or IP not whitelisted
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    InternalServerError:
+      description: Unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+  schemas:
+    DepositTransaction:
+      type: object
+      description: A deposit account transaction.
+      required:
+      - accountCategory
+      - accountId
+      - transactionId
+      - transactionTimestamp
+      - description
+      - debitCreditMemo
+      - status
+      - amount
+      properties:
+        accountCategory:
+          $ref: '#/components/schemas/AccountCategory'
+        accountId:
+          type: string
+          description: The account this transaction belongs to
+        transactionId:
+          type: string
+          description: Unique identifier for the transaction
+        transactionTimestamp:
+          type: string
+          format: date-time
+          description: Timestamp when the transaction occurred
+        postedTimestamp:
+          type: string
+          format: date-time
+          description: Timestamp when the transaction was posted
+        description:
+          type: string
+          description: Description of the transaction
+        memo:
+          type: string
+          description: Additional memo text
+        debitCreditMemo:
+          $ref: '#/components/schemas/TransactionDirection'
+        category:
+          type: string
+          description: Transaction category
+        subCategory:
+          type: string
+          description: Transaction sub-category
+        status:
+          $ref: '#/components/schemas/TransactionStatus'
+        amount:
+          type: number
+          format: double
+          description: Transaction amount
+        lineItem:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItem'
+        reward:
+          $ref: '#/components/schemas/TransactionReward'
+        reference:
+          type: string
+          description: Reference identifier for the transaction
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
+        fiAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/FiAttribute'
+        transactionType:
+          $ref: '#/components/schemas/DepositTransactionType'
+        payee:
+          type: string
+          description: Payee name
+        checkNumber:
+          type: integer
+          description: Check number if applicable
+    Page:
+      type: object
+      description: Pagination metadata for list responses.
+      properties:
+        nextPageKey:
+          type: string
+          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
+        totalElements:
+          type: integer
+          description: Total number of elements across all pages
+    TransactionStatus:
+      type: string
+      description: Status of the transaction
+      enum:
+      - PENDING
+      - POSTED
+      - AUTHORIZATION
+      - MEMO
+    AccountCategory:
+      type: string
+      description: Category of account
+      enum:
+      - DEPOSIT_ACCOUNT
+    Link:
+      type: object
+      description: A hyperlink reference.
+      required:
+      - href
+      properties:
+        href:
+          type: string
+          description: URI of the linked resource
+    TransactionReward:
+      type: object
+      description: Reward information associated with a transaction.
+      properties:
+        categoryId:
+          type: string
+        accrued:
+          type: number
+          format: double
+        adjusted:
+          type: number
+          format: double
+    FiAttribute:
+      type: object
+      description: A financial institution-specific attribute.
+      required:
+      - name
+      - value
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+    DepositTransactionType:
+      type: string
+      description: Type of deposit transaction
+      enum:
+      - ADJUSTMENT
+      - ATMDEPOSIT
+      - ATMWITHDRAWAL
+      - BILLPAYMENT
+      - CHECK
+      - DEPOSIT
+      - DIRECTDEPOSIT
+      - DIVIDEND
+      - FEE
+      - INTEREST
+      - POSCREDIT
+      - POSDEBIT
+      - PREAUTHORIZEDDEPOSIT
+      - PREAUTHORIZEDWITHDRAWAL
+      - TRANSFER
+      - WITHDRAWAL
+    ListTransactionsResponse:
+      type: object
+      description: Paginated list of transactions.
+      required:
+      - transactions
+      properties:
+        page:
+          $ref: '#/components/schemas/Page'
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepositTransaction'
+    LineItem:
+      type: object
+      description: A line item within a transaction.
+      properties:
+        description:
+          type: string
+        amount:
+          type: number
+          format: double
+        checkNumber:
+          type: integer
+        memo:
+          type: string
+        reference:
+          type: string
+    TransactionDirection:
+      type: string
+      description: Whether the transaction is a debit or credit
+      enum:
+      - DEBIT
+      - CREDIT
+    ProblemDetails:
+      type: object
+      description: Error response following RFC 7807 Problem Details for HTTP APIs.
+      required:
+      - type
+      - title
+      - status
+      properties:
+        type:
+          type: string
+          description: A URI reference that identifies the problem type
+          example: about:blank
+        title:
+          type: string
+          description: A short human-readable summary of the problem type
+          example: Bad Request
+        status:
+          type: integer
+          description: The HTTP status code
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem
+          example: The startTime parameter must be before endTime
+        instance:
+          type: string
+          description: A URI reference that identifies the specific occurrence of the problem
+  parameters:
+    PageKey:
+      name: pageKey
+      in: query
+      required: false
+      description: Cursor token for pagination. Pass the `nextPageKey` value from a previous response.
+      schema:
+        type: string
+        format: uuid
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Number of results per page. Clamped to the range 10–100.
+      schema:
+        type: integer
+        minimum: 10
+        maximum: 100
+        default: 10
+    EndTime:
+      name: endTime
+      in: query
+      required: false
+      description: 'End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.'
+      schema:
+        type: string
+        format: date
+    AccountId:
+      name: id
+      in: path
+      required: true
+      description: Unique identifier for the account
+      schema:
+        type: string
+        format: uuid
+    StartTime:
+      name: startTime
+      in: query
+      required: false
+      description: 'Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.'
+      schema:
+        type: string
+        format: date
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 Bearer token. A client may hold both scopes, but each FDX authorization must contain exactly one — they are mutually exclusive per authorization. An authorization containing both will be rejected. See the Authentication page for token exchange details.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://dashboard.givechariot.com/oauth/authorize
+          tokenUrl: https://api.givechariot.com/auth/oauth/token
+          scopes:
+            read:bank_accounts: Read access to bank account data
+            sync:connected_accounts: Sync access to connected account data
