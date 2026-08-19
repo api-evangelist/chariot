@@ -1,0 +1,80 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chariot FDX Accounts Giving Pools API",
+    "version": "6.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://dashboard.givechariot.com/oauth/authorize",
+      "accessTokenUrl": "https://api.givechariot.com/auth/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Giving Pools",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Giving Pools",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/giving_pools",
+            "params": [
+              {
+                "name": "donor_account_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter Giving Pools by the ID of the associated [Donor Account](/api/donor-accounts)."
+              },
+              {
+                "name": "page_limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of results to return. Defaults to 10, max is 100."
+              },
+              {
+                "name": "page_token",
+                "value": "",
+                "type": "query",
+                "description": "A token to retrieve the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of Giving Pools accessible to the authenticated DAF account.\n\nGiving Pools represent individual named giving pools within a donor's DAF account (e.g. \"Smith Family Fund\").\nA [Donor Account](/api/donor-accounts) may be associated with multiple Giving Pools."
+        },
+        {
+          "info": {
+            "name": "Get Giving Pool",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/giving_pools/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "0bf40881-8ee2-47fb-98ca-f58c7999aa34",
+                "type": "path",
+                "description": "The unique ID of the Giving Pool."
+              }
+            ]
+          },
+          "docs": "Retrieve a Giving Pool with the given ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

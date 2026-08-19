@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   title: Chariot FDX Accounts Grants API
   version: '6.0'
@@ -271,6 +271,36 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
     Grant:
       type: object
       description: A Grant represents a successfully initiated grant request with a Donor Advised Fund. Grants are created when a person interacts with an instance of Chariot Connect and successfully submits a grant and completes the workflow. There can be many grants associated with a Connect object and therefore a nonprofit.
@@ -403,6 +433,51 @@ components:
           example: direct
         address:
           $ref: '#/components/schemas/GrantAddress'
+    ContributionFeeDetail:
+      type: object
+      required:
+      - name
+      - amount
+      properties:
+        name:
+          type: string
+          description: 'The name of the party charging the fee. This is an informational field.
+
+            If you need to differentiate between fees charged by different parties, you should use the `feeType` field.
+
+            '
+          example: Chariot
+        amount:
+          type: number
+          format: integer
+          description: The fee contribution amount expressed in units of cents
+          example: 1500
+        feeType:
+          type: string
+          description: "This indicates the source of a fee contribution.\n  * chariot: Chariot's processing fee\n  * daf: The DAF's processing fee\n  * fundraising_application: The fundraising application's processing fee\n"
+          example: chariot
+          enum:
+          - chariot
+          - daf
+          - fundraising_application
+    GrantAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+          description: 'Address line 1 (e.g. street, PO Box, or company name). Maximum length: 255 characters.'
+        line2:
+          type: string
+          description: 'Address line 2 (e.g. apartment, suite, unit, or building). Maximum length: 255 characters.'
+        city:
+          type: string
+          description: 'City, district, suburb, town, or village.. Maximum length: 255 characters.'
+        state:
+          type: string
+          description: 'State, county, province, or region. Maximum length: 255 characters.'
+        postalCode:
+          type: string
+          description: 'ZIP or postal code. Maximum length: 255 characters.'
     GrantStatus:
       type: object
       required:
@@ -435,123 +510,9 @@ components:
           type: string
           description: The user comment for the update
           example: The grant has been received by the nonprofit
-    GrantAddress:
-      type: object
-      properties:
-        line1:
-          type: string
-          description: 'Address line 1 (e.g. street, PO Box, or company name). Maximum length: 255 characters.'
-        line2:
-          type: string
-          description: 'Address line 2 (e.g. apartment, suite, unit, or building). Maximum length: 255 characters.'
-        city:
-          type: string
-          description: 'City, district, suburb, town, or village.. Maximum length: 255 characters.'
-        state:
-          type: string
-          description: 'State, county, province, or region. Maximum length: 255 characters.'
-        postalCode:
-          type: string
-          description: 'ZIP or postal code. Maximum length: 255 characters.'
-    ProblemDetails:
-      type: object
-      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
-      required:
-      - type
-      - title
-      - status
-      - detail
-      properties:
-        type:
-          type: string
-          description: A URI reference identifying the problem type.
-          example: about:blank
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-          example: API Error
-        status:
-          type: integer
-          description: The HTTP status code for this error.
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence.
-          example: The request is invalid or contains invalid parameters.
-      example:
-        type: about:blank
-        title: API Error
-        status: 400
-        detail: The request is invalid or contains invalid parameters.
-    ContributionFeeDetail:
-      type: object
-      required:
-      - name
-      - amount
-      properties:
-        name:
-          type: string
-          description: 'The name of the party charging the fee. This is an informational field.
-
-            If you need to differentiate between fees charged by different parties, you should use the `feeType` field.
-
-            '
-          example: Chariot
-        amount:
-          type: number
-          format: integer
-          description: The fee contribution amount expressed in units of cents
-          example: 1500
-        feeType:
-          type: string
-          description: "This indicates the source of a fee contribution.\n  * chariot: Chariot's processing fee\n  * daf: The DAF's processing fee\n  * fundraising_application: The fundraising application's processing fee\n"
-          example: chariot
-          enum:
-          - chariot
-          - daf
-          - fundraising_application
-  examples:
-    GrantOutput:
-      summary: Simple grant output
-      value:
-        id: 1e60800e-849b-43d1-870e-57afc8d75473
-        workflowSessionId: cfe09e64-6a74-4dab-a565-361185a6f248
-        fundId: daf-id
-        createdAt: '2021-08-10 15:00:00.000'
-        updatedAt: '2021-08-11 15:34:00.000'
-        amount: 15000
-        status: Initiated
   responses:
-    ListGrantsResponse:
-      description: The response for Grants.list
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              results:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Grant'
-              nextPageToken:
-                type: string
-                nullable: true
-                description: A cursor token to use to retrieve the next page of results by making another API call to the same endpoint with the same parameters (only changing the pageToken). If specified, then more results exist on the server that were not returned, otherwise no more results exist on the server.
-          example:
-            results:
-            - id: 1e60800e-849b-43d1-870e-57afc8d75473
-              workflowSessionId: cfe09e64-6a74-4dab-a565-361185a6f248
-              fundId: daf-id
-              createdAt: '2021-08-10 15:00:00.000'
-              updatedAt: '2021-08-11 15:34:00.000'
-              amount: 15000
-              status: Initiated
-            nextPageToken: c3f685f2-2dda-4956-815b-39867a5e5638
-    GoneError:
-      description: Resource Gone or Expired
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
       headers:
         X-Request-Id:
           $ref: '#/components/headers/X-Request-Id'
@@ -560,14 +521,14 @@ components:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
           examples:
-            Gone:
+            Unauthorized:
               value:
                 type: about:blank
                 title: API Error
-                status: 410
-                detail: The resource is no longer available.
-    BadRequestError:
-      description: The request is invalid or contains invalid parameters
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    NotFoundError:
+      description: Resource Not Found
       headers:
         X-Request-Id:
           $ref: '#/components/headers/X-Request-Id'
@@ -576,12 +537,28 @@ components:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
           examples:
-            BadRequest:
+            NotFound:
               value:
                 type: about:blank
                 title: API Error
-                status: 400
-                detail: The request is invalid or contains invalid parameters.
+                status: 404
+                detail: The requested resource was not found.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
     ConflictError:
       description: Resource Conflicts
       headers:
@@ -614,8 +591,37 @@ components:
                 title: API Error
                 status: 403
                 detail: You do not have permission to access this resource.
-    AuthenticationError:
-      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+    ListGrantsResponse:
+      description: The response for Grants.list
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Grant'
+              nextPageToken:
+                type:
+                - string
+                - 'null'
+                description: A cursor token to use to retrieve the next page of results by making another API call to the same endpoint with the same parameters (only changing the pageToken). If specified, then more results exist on the server that were not returned, otherwise no more results exist on the server.
+          example:
+            results:
+            - id: 1e60800e-849b-43d1-870e-57afc8d75473
+              workflowSessionId: cfe09e64-6a74-4dab-a565-361185a6f248
+              fundId: daf-id
+              createdAt: '2021-08-10 15:00:00.000'
+              updatedAt: '2021-08-11 15:34:00.000'
+              amount: 15000
+              status: Initiated
+            nextPageToken: c3f685f2-2dda-4956-815b-39867a5e5638
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
       headers:
         X-Request-Id:
           $ref: '#/components/headers/X-Request-Id'
@@ -624,14 +630,14 @@ components:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
           examples:
-            Unauthorized:
+            BadRequest:
               value:
                 type: about:blank
                 title: API Error
-                status: 401
-                detail: Authentication credentials were missing or invalid.
-    InternalServerError:
-      description: Internal Server Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    GoneError:
+      description: Resource Gone or Expired
       headers:
         X-Request-Id:
           $ref: '#/components/headers/X-Request-Id'
@@ -640,33 +646,23 @@ components:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
           examples:
-            InternalServerError:
+            Gone:
               value:
                 type: about:blank
                 title: API Error
-                status: 500
-                detail: The server encountered an error processing your request.
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
-  headers:
-    X-Request-Id:
-      description: The unique identifier for the request
-      schema:
-        type: string
+                status: 410
+                detail: The resource is no longer available.
+  examples:
+    GrantOutput:
+      summary: Simple grant output
+      value:
+        id: 1e60800e-849b-43d1-870e-57afc8d75473
+        workflowSessionId: cfe09e64-6a74-4dab-a565-361185a6f248
+        fundId: daf-id
+        createdAt: '2021-08-10 15:00:00.000'
+        updatedAt: '2021-08-11 15:34:00.000'
+        amount: 15000
+        status: Initiated
   requestBodies:
     GrantCaptureRequest:
       description: 'The request to create and submit a grant. This is useful to capture a grant intent associated with DAFpay workflow session.
@@ -735,6 +731,11 @@ components:
                   Note that including a custom designation may cause the grant approval process to take longer.
 
                   Maximum length: 100 characters.'
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
   securitySchemes:
     oauth2:
       type: oauth2

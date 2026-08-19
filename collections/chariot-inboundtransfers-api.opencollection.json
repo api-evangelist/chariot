@@ -1,0 +1,152 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chariot FDX Accounts Inbound Transfers API",
+    "version": "6.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://dashboard.givechariot.com/oauth/authorize",
+      "accessTokenUrl": "https://api.givechariot.com/auth/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "inboundTransfers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Inbound Transfers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/inbound_transfers",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to use for pagination. If not set, the first page of results will be returned."
+              }
+            ]
+          },
+          "docs": "List inbound transfers for your account."
+        },
+        {
+          "info": {
+            "name": "Create an Inbound transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/inbound_transfers",
+            "headers": [
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create an inbound transfer to fund your financial account\nfrom an externally linked bank account.\nIn Production, this requires that an external bank account has been setup\nand verified for your account through the Chariot Dashboard."
+        },
+        {
+          "info": {
+            "name": "Get an Inbound Transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/inbound_transfers/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "inbound_transfer_01j8rs605a4gctmbm58d87mvsj",
+                "type": "path",
+                "description": "The unique identifier for the inbound transfer"
+              }
+            ]
+          },
+          "docs": "Get an inbound transfer by its unique identifier."
+        },
+        {
+          "info": {
+            "name": "Cancel an Inbound Transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/inbound_transfers/:id/cancel",
+            "params": [
+              {
+                "name": "id",
+                "value": "inbound_transfer_01j8rs605a4gctmbm58d87mvsj",
+                "type": "path",
+                "description": "The unique identifier for the inbound transfer"
+              }
+            ]
+          },
+          "docs": "Cancel an inbound transfer.\nReturns the Inbound Transfer object if the cancelation succeeded.\nReturns a 412 Precondition Failed if the Inbound Transfer has already been canceled or cannot be canceled."
+        },
+        {
+          "info": {
+            "name": "Sandbox: Fail an Inbound Transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/simulations/inbound_transfers/:id/fail",
+            "params": [
+              {
+                "name": "id",
+                "value": "inbound_transfer_01j8rs605a4gctmbm58d87mvsj",
+                "type": "path",
+                "description": "The unique identifier for the inbound transfer"
+              }
+            ]
+          },
+          "docs": "Simulate an inbound transfer failure.\n\n<Note title=\"Sandbox Only\" icon=\"fa-light fa-atom-simple\">\nThis API is only available in the sandbox environment.\n</Note>"
+        },
+        {
+          "info": {
+            "name": "Sandbox: Complete an Inbound Transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/simulations/inbound_transfers/:id/complete",
+            "params": [
+              {
+                "name": "id",
+                "value": "inbound_transfer_01j8rs605a4gctmbm58d87mvsj",
+                "type": "path",
+                "description": "The unique identifier for the inbound transfer"
+              }
+            ]
+          },
+          "docs": "Simulate an inbound transfer completion.\n\n<Note title=\"Sandbox Only\" icon=\"fa-light fa-atom-simple\">\nThis API is only available in the sandbox environment.\n</Note>"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

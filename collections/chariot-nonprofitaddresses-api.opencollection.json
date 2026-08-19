@@ -1,0 +1,45 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chariot FDX Accounts Nonprofit Addresses API",
+    "version": "6.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://dashboard.givechariot.com/oauth/authorize",
+      "accessTokenUrl": "https://api.givechariot.com/auth/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "nonprofitAddresses",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Nonprofit Addresses",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/nonprofit_addresses",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit mailing addresses for one or more nonprofits. Uploaded\naddresses are used as suggestions for where to send disbursements."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

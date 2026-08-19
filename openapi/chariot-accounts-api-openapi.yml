@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   title: Chariot FDX Accounts API
   version: '6.0'
@@ -68,87 +68,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  parameters:
-    Limit:
-      name: limit
-      in: query
-      required: false
-      description: Number of results per page. Clamped to the range 10–100.
-      schema:
-        type: integer
-        minimum: 10
-        maximum: 100
-        default: 10
-    AccountId:
-      name: id
-      in: path
-      required: true
-      description: Unique identifier for the account
-      schema:
-        type: string
-        format: uuid
-    PageKey:
-      name: pageKey
-      in: query
-      required: false
-      description: Cursor token for pagination. Pass the `nextPageKey` value from a previous response.
-      schema:
-        type: string
-        format: uuid
   schemas:
-    ListAccountsResponse:
-      type: object
-      description: Paginated list of deposit accounts.
-      required:
-      - accounts
-      properties:
-        organizationId:
-          type: string
-          format: uuid
-          description: The organization that owns the accounts. Equivalent to the customerId returned by GET /customers/current.
-        page:
-          $ref: '#/components/schemas/Page'
-        accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/DepositAccount'
-    Currency:
-      type: object
-      description: Currency information.
-      required:
-      - currencyCode
-      properties:
-        currencyCode:
-          type: string
-          description: ISO 4217 currency code
-          example: USD
-    Page:
-      type: object
-      description: Pagination metadata for list responses.
-      properties:
-        nextPageKey:
-          type: string
-          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
-        totalElements:
-          type: integer
-          description: Total number of elements across all pages
-    AccountCategory:
-      type: string
-      description: Category of account
-      enum:
-      - DEPOSIT_ACCOUNT
-    AccountStatus:
-      type: string
-      description: Status of the account
-      enum:
-      - OPEN
-      - CLOSED
-      - DELINQUENT
-      - NEGATIVECURRENTBALANCE
-      - PAID
-      - PENDINGCLOSE
-      - PENDINGOPEN
-      - RESTRICTED
     ProblemDetails:
       type: object
       description: Error response following RFC 7807 Problem Details for HTTP APIs.
@@ -181,6 +101,22 @@ components:
       description: Type of deposit account
       enum:
       - CHECKING
+    ListAccountsResponse:
+      type: object
+      description: Paginated list of deposit accounts.
+      required:
+      - accounts
+      properties:
+        organizationId:
+          type: string
+          format: uuid
+          description: The organization that owns the accounts. Equivalent to the customerId returned by GET /customers/current.
+        page:
+          $ref: '#/components/schemas/Page'
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepositAccount'
     DepositAccount:
       type: object
       description: A deposit (bank) account.
@@ -237,6 +173,26 @@ components:
       description: Type of balance
       enum:
       - ASSET
+    Currency:
+      type: object
+      description: Currency information.
+      required:
+      - currencyCode
+      properties:
+        currencyCode:
+          type: string
+          description: ISO 4217 currency code
+          example: USD
+    Page:
+      type: object
+      description: Pagination metadata for list responses.
+      properties:
+        nextPageKey:
+          type: string
+          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
+        totalElements:
+          type: integer
+          description: Total number of elements across all pages
     DepositAccountDetails:
       description: Detailed deposit account information including balances.
       allOf:
@@ -278,21 +234,53 @@ components:
           transferOut:
             type: boolean
             description: Whether the account supports outgoing transfers
+    AccountCategory:
+      type: string
+      description: Category of account
+      enum:
+      - DEPOSIT_ACCOUNT
+    AccountStatus:
+      type: string
+      description: Status of the account
+      enum:
+      - OPEN
+      - CLOSED
+      - DELINQUENT
+      - NEGATIVECURRENTBALANCE
+      - PAID
+      - PENDINGCLOSE
+      - PENDINGOPEN
+      - RESTRICTED
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Number of results per page. Clamped to the range 10–100.
+      schema:
+        type: integer
+        minimum: 10
+        maximum: 100
+        default: 10
+    PageKey:
+      name: pageKey
+      in: query
+      required: false
+      description: Cursor token for pagination. Pass the `nextPageKey` value from a previous response.
+      schema:
+        type: string
+        format: uuid
+    AccountId:
+      name: id
+      in: path
+      required: true
+      description: Unique identifier for the account
+      schema:
+        type: string
+        format: uuid
   responses:
     Forbidden:
       description: Insufficient permissions or IP not whitelisted
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    Unauthorized:
-      description: Missing or invalid OAuth 2.0 Bearer token
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    InternalServerError:
-      description: Unexpected server error
       content:
         application/problem+json:
           schema:
@@ -305,6 +293,18 @@ components:
             $ref: '#/components/schemas/ProblemDetails'
     BadRequest:
       description: Invalid request parameters
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    InternalServerError:
+      description: Unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Unauthorized:
+      description: Missing or invalid OAuth 2.0 Bearer token
       content:
         application/problem+json:
           schema:

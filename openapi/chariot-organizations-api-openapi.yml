@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   title: Chariot FDX Accounts Organizations API
   version: '6.0'
@@ -178,114 +178,37 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    BadRequestError:
-      description: The request is invalid or contains invalid parameters
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            BadRequest:
-              value:
-                type: about:blank
-                title: API Error
-                status: 400
-                detail: The request is invalid or contains invalid parameters.
-    ForbiddenError:
-      description: Access denied
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Forbidden:
-              value:
-                type: about:blank
-                title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
-    SearchOrganizationsResponse:
-      description: The response for Organizations.search
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              results:
-                type: array
-                items:
-                  $ref: '#/components/schemas/OrganizationSummary'
-    InternalServerError:
-      description: Internal Server Error
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            InternalServerError:
-              value:
-                type: about:blank
-                title: API Error
-                status: 500
-                detail: The server encountered an error processing your request.
-    AuthenticationError:
-      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Unauthorized:
-              value:
-                type: about:blank
-                title: API Error
-                status: 401
-                detail: Authentication credentials were missing or invalid.
   schemas:
-    SandboxSettlement:
-      type: string
-      description: 'The electronic rail on which disbursements to an onboarded sandbox
-
-        organization settle. `SANDBOX_SETTLEMENT_ACCOUNT_TRANSFER` settles as an
-
-        in-network transfer between accounts on the same bank. `SANDBOX_SETTLEMENT_ACH`
-
-        settles via ACH across banks.'
-      enum:
-      - SANDBOX_SETTLEMENT_ACCOUNT_TRANSFER
-      - SANDBOX_SETTLEMENT_ACH
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
     Person:
       type: object
       description: A person is an individual who is an officer of a nonprofit.
@@ -299,31 +222,6 @@ components:
           type: string
           description: The title or role of the person with respect to the nonprofit entity
           example: Executive Director
-    NonprofitClassification:
-      type: object
-      description: A classification of the nonprofit entity as defined by the IRS.
-      properties:
-        group_exemption_number:
-          type: string
-          description: This is a four-digit internal IRS number assigned to central/parent entity holding group exemption letters.
-        subsection_code:
-          $ref: '#/components/schemas/TaxExemptCode'
-        filing_requirement_code:
-          $ref: '#/components/schemas/TaxExemptCode'
-        foundation_code:
-          $ref: '#/components/schemas/TaxExemptCode'
-        affiliation_code:
-          $ref: '#/components/schemas/TaxExemptCode'
-        organization_code:
-          $ref: '#/components/schemas/TaxExemptCode'
-        exempt_status_code:
-          $ref: '#/components/schemas/TaxExemptCode'
-        deductibility_code:
-          $ref: '#/components/schemas/TaxExemptCode'
-        ntee_code:
-          $ref: '#/components/schemas/NteeCode'
-        naics_code:
-          $ref: '#/components/schemas/NaicsCode'
     ComplianceRequirement:
       type: object
       description: A compliance requirement is a requirement that a nonprofit entity must meet in order to be eligible for Chariot services.
@@ -340,138 +238,6 @@ components:
           format: date-time
           description: The date and time when the compliance requirement was last found
           example: '2020-01-31T23:00:00Z'
-    NonprofitCompliance:
-      type: object
-      description: 'An object that contains legal information about the nonprofit entity and its tax-exemption status.
-
-        This information is used to comply with regulations and ensure the legitimacy of the nonprofit for purposes of donations and disbursements.'
-      properties:
-        daf_eligible:
-          type: boolean
-          description: Whether the entity is eligible to receive donations from a Donor Advised Fund
-          example: true
-        irs_pub_78:
-          $ref: '#/components/schemas/ComplianceRequirement'
-        ofac:
-          $ref: '#/components/schemas/ComplianceRequirement'
-        foundation_code:
-          $ref: '#/components/schemas/ComplianceRequirement'
-        california_attorney_general_registry:
-          $ref: '#/components/schemas/ComplianceRequirement'
-        california_franchise_tax_board:
-          $ref: '#/components/schemas/ComplianceRequirement'
-    Incorporation:
-      type: object
-      description: Incorporation and IRS determination information for the nonprofit entity.
-      properties:
-        formation_year:
-          type: string
-          format: integer
-          description: The year the organization was incorporated or formed.
-          example: '2005'
-        state:
-          type: string
-          description: The U.S. state where the organization is legally domiciled.
-          example: AZ
-        ruling_date:
-          type: string
-          description: 'The month and year on the IRS ruling or determination letter recognizing the organization''s exempt status.
-
-            Formatted as an ISO 8601 year-month string.'
-          example: 2020-07
-    OrganizationSummary:
-      type: object
-      description: A summary of an organization.
-      required:
-      - id
-      - ein
-      - name
-      properties:
-        id:
-          type: string
-          description: The unique identifier for the organization.
-          example: org_01jpjenf5q6cawy43yxfcrxhct
-        ein:
-          type: string
-          description: The Employer Identification Number (EIN) or TaxID for the nonprofit entity.
-          example: '123456789'
-        name:
-          type: string
-          description: The name of the organization.
-          example: American Red Cross
-        daf_eligible:
-          type: boolean
-          description: Whether the organization is eligible to receive donations from a Donor Advised Fund.
-          example: true
-        city:
-          type: string
-          description: The city of the organization.
-          example: New York
-        state:
-          type: string
-          description: The state of the organization.
-          example: NY
-    NteeCode:
-      type: object
-      description: A code that is used to classify the nonprofit entity as defined by the IRS.
-      required:
-      - code
-      - description
-      properties:
-        code:
-          type: string
-          description: The code of the NTEE code
-          example: A
-        description:
-          type: string
-          description: The description of the NTEE code
-          example: Animal Welfare
-        parent_code:
-          type: string
-          description: The parent code of the NTEE code
-          example: A
-        parent_description:
-          type: string
-          description: The description of the parent NTEE code
-          example: Animal Welfare
-    Brand:
-      type: object
-      description: Fair use brand assets that are associated with an organization and can be used for identification and informational purposes.
-      properties:
-        icon_url:
-          type: string
-          description: The URL of the organization's icon
-        logo_url:
-          type: string
-          description: The URL of the organization's logo
-    NaicsCode:
-      type: object
-      description: A code that is used to classify the nonprofit entity as defined by the NAICS.
-      properties:
-        naics2:
-          type: string
-          description: The code of the NAICS code
-          example: '31'
-        naics2_description:
-          type: string
-          description: The description of the NAICS code
-          example: Manufacturing
-        naics4:
-          type: string
-          description: The code of the NAICS code
-          example: '3112'
-        naics4_description:
-          type: string
-          description: The description of the NAICS code
-          example: Grain and Oilseed Milling
-        naics6:
-          type: string
-          description: The code of the NAICS code
-          example: '311221'
-        naics6_description:
-          type: string
-          description: The description of the NAICS code
-          example: Wet Corn Milling and Starch Manufacturing
     Address:
       type: object
       required:
@@ -504,36 +270,95 @@ components:
           type: string
           description: State, county, province, or region
           example: NY
-    ProblemDetails:
+    NteeCode:
       type: object
-      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      description: A code that is used to classify the nonprofit entity as defined by the IRS.
       required:
-      - type
-      - title
-      - status
-      - detail
+      - code
+      - description
       properties:
-        type:
+        code:
           type: string
-          description: A URI reference identifying the problem type.
-          example: about:blank
-        title:
+          description: The code of the NTEE code
+          example: A
+        description:
           type: string
-          description: A short, human-readable summary of the problem type.
-          example: API Error
-        status:
-          type: integer
-          description: The HTTP status code for this error.
-          example: 400
-        detail:
+          description: The description of the NTEE code
+          example: Animal Welfare
+        parent_code:
           type: string
-          description: A human-readable explanation specific to this occurrence.
-          example: The request is invalid or contains invalid parameters.
-      example:
-        type: about:blank
-        title: API Error
-        status: 400
-        detail: The request is invalid or contains invalid parameters.
+          description: The parent code of the NTEE code
+          example: A
+        parent_description:
+          type: string
+          description: The description of the parent NTEE code
+          example: Animal Welfare
+    WebDomain:
+      type: object
+      description: 'A web domain is a unique identifier for a website or web application that is associated with an organization.
+
+        Domains are important identity constructs that underpin the web and online interactions.
+
+        The domain can be used as an identifier and its validity can be asserted via DNS.'
+      required:
+      - domain
+      properties:
+        domain:
+          type: string
+          description: The DNS domain name
+          example: redcross.org
+    OrganizationSummary:
+      type: object
+      description: A summary of an organization.
+      required:
+      - id
+      - ein
+      - name
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the organization.
+          example: org_01jpjenf5q6cawy43yxfcrxhct
+        ein:
+          type: string
+          description: The Employer Identification Number (EIN) or TaxID for the nonprofit entity.
+          example: '123456789'
+        name:
+          type: string
+          description: The name of the organization.
+          example: American Red Cross
+        daf_eligible:
+          type: boolean
+          description: Whether the organization is eligible to receive donations from a Donor Advised Fund.
+          example: true
+        city:
+          type: string
+          description: The city of the organization.
+          example: New York
+        state:
+          type: string
+          description: The state of the organization.
+          example: NY
+    NonprofitCompliance:
+      type: object
+      description: 'An object that contains legal information about the nonprofit entity and its tax-exemption status.
+
+        This information is used to comply with regulations and ensure the legitimacy of the nonprofit for purposes of donations and disbursements.'
+      properties:
+        daf_eligible:
+          type: boolean
+          description: Whether the entity is eligible to receive donations from a Donor Advised Fund
+          example: true
+        irs_pub_78:
+          $ref: '#/components/schemas/ComplianceRequirement'
+        ofac:
+          $ref: '#/components/schemas/ComplianceRequirement'
+        foundation_code:
+          $ref: '#/components/schemas/ComplianceRequirement'
+        california_attorney_general_registry:
+          $ref: '#/components/schemas/ComplianceRequirement'
+        california_franchise_tax_board:
+          $ref: '#/components/schemas/ComplianceRequirement'
     Organization:
       type: object
       description: 'An `Organization` represents an operating nonprofit or an operating sub-organization of a parent or sponsoring nonprofit.
@@ -600,20 +425,90 @@ components:
             this nonprofit and is verified by the Chariot team.'
         incorporation:
           $ref: '#/components/schemas/Incorporation'
-    WebDomain:
+    NonprofitClassification:
       type: object
-      description: 'A web domain is a unique identifier for a website or web application that is associated with an organization.
-
-        Domains are important identity constructs that underpin the web and online interactions.
-
-        The domain can be used as an identifier and its validity can be asserted via DNS.'
-      required:
-      - domain
+      description: A classification of the nonprofit entity as defined by the IRS.
       properties:
-        domain:
+        group_exemption_number:
           type: string
-          description: The DNS domain name
-          example: redcross.org
+          description: This is a four-digit internal IRS number assigned to central/parent entity holding group exemption letters.
+        subsection_code:
+          $ref: '#/components/schemas/TaxExemptCode'
+        filing_requirement_code:
+          $ref: '#/components/schemas/TaxExemptCode'
+        foundation_code:
+          $ref: '#/components/schemas/TaxExemptCode'
+        affiliation_code:
+          $ref: '#/components/schemas/TaxExemptCode'
+        organization_code:
+          $ref: '#/components/schemas/TaxExemptCode'
+        exempt_status_code:
+          $ref: '#/components/schemas/TaxExemptCode'
+        deductibility_code:
+          $ref: '#/components/schemas/TaxExemptCode'
+        ntee_code:
+          $ref: '#/components/schemas/NteeCode'
+        naics_code:
+          $ref: '#/components/schemas/NaicsCode'
+    SandboxSettlement:
+      type: string
+      description: 'The electronic rail on which disbursements to an onboarded sandbox
+
+        organization settle. `SANDBOX_SETTLEMENT_ACCOUNT_TRANSFER` settles as an
+
+        in-network transfer between accounts on the same bank. `SANDBOX_SETTLEMENT_ACH`
+
+        settles via ACH across banks.'
+      enum:
+      - SANDBOX_SETTLEMENT_ACCOUNT_TRANSFER
+      - SANDBOX_SETTLEMENT_ACH
+    NaicsCode:
+      type: object
+      description: A code that is used to classify the nonprofit entity as defined by the NAICS.
+      properties:
+        naics2:
+          type: string
+          description: The code of the NAICS code
+          example: '31'
+        naics2_description:
+          type: string
+          description: The description of the NAICS code
+          example: Manufacturing
+        naics4:
+          type: string
+          description: The code of the NAICS code
+          example: '3112'
+        naics4_description:
+          type: string
+          description: The description of the NAICS code
+          example: Grain and Oilseed Milling
+        naics6:
+          type: string
+          description: The code of the NAICS code
+          example: '311221'
+        naics6_description:
+          type: string
+          description: The description of the NAICS code
+          example: Wet Corn Milling and Starch Manufacturing
+    Incorporation:
+      type: object
+      description: Incorporation and IRS determination information for the nonprofit entity.
+      properties:
+        formation_year:
+          type: string
+          format: integer
+          description: The year the organization was incorporated or formed.
+          example: '2005'
+        state:
+          type: string
+          description: The U.S. state where the organization is legally domiciled.
+          example: AZ
+        ruling_date:
+          type: string
+          description: 'The month and year on the IRS ruling or determination letter recognizing the organization''s exempt status.
+
+            Formatted as an ISO 8601 year-month string.'
+          example: 2020-07
     TaxExemptCode:
       type: object
       description: A tax exempt code is a code that is used to classify the tax-exempt status of a nonprofit entity.
@@ -633,6 +528,111 @@ components:
           type: string
           description: The description of the tax exempt code
           example: Unconditional Exemption
+    Brand:
+      type: object
+      description: Fair use brand assets that are associated with an organization and can be used for identification and informational purposes.
+      properties:
+        icon_url:
+          type: string
+          description: The URL of the organization's icon
+        logo_url:
+          type: string
+          description: The URL of the organization's logo
+  responses:
+    SearchOrganizationsResponse:
+      description: The response for Organizations.search
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganizationSummary'
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
   headers:
     X-Request-Id:
       description: The unique identifier for the request

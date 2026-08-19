@@ -1,0 +1,95 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chariot FDX Accounts Recurring Grants API",
+    "version": "6.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://dashboard.givechariot.com/oauth/authorize",
+      "accessTokenUrl": "https://api.givechariot.com/auth/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "recurring_grants",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Recurring Grants",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/recurring_grants",
+            "params": [
+              {
+                "name": "connect_id",
+                "value": "REDACTED_LOB_KEY",
+                "type": "query",
+                "description": "the `id` of the Connect object. This can be used to filter the recurring grants by a specific Connect if you have more than one."
+              },
+              {
+                "name": "pageLimit",
+                "value": "",
+                "type": "query",
+                "description": "the number of results to return; defaults to 10, max is 100"
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls and the value of this field should be from the nextPageToken in the previous response."
+              }
+            ]
+          },
+          "docs": "Returns a list of all recurring grants for a given Connect. This API allows for paginating over many results."
+        },
+        {
+          "info": {
+            "name": "Create Recurring Grant",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/recurring_grants",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create and submit a new recurring grant. This should be used to capture a recurring grant intent from an authorized DAFpay workflow session and submit the recurring grant request to the DAF sponsor.\n\n<Warning>\nError handling:\n- The recurring grant must be captured within 15 minutes of authorization otherwise the request will return status `410 Gone`.\n- A recurring grant can only be captured once from any given workflow session so any duplicate requests will return status `409 Conflict`.\n- The am"
+        },
+        {
+          "info": {
+            "name": "Get Recurring Grant",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/recurring_grants/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "10229488-08d2-4629-b70c-a2f4f4d25344",
+                "type": "path",
+                "description": "The unique id of the recurring grant.\nThe format should be a v4 UUID according to RFC 4122."
+              }
+            ]
+          },
+          "docs": "Retrieve a recurring grant with a given ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

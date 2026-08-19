@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   title: Chariot FDX Accounts Statements API
   version: '6.0'
@@ -87,80 +87,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    BadRequest:
-      description: Invalid request parameters
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    Forbidden:
-      description: Insufficient permissions or IP not whitelisted
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    Unauthorized:
-      description: Missing or invalid OAuth 2.0 Bearer token
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    NotAcceptable:
-      description: The requested media type in the Accept header is not supported
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    NotFound:
-      description: Resource not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    InternalServerError:
-      description: Unexpected server error
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
   schemas:
-    Link:
-      type: object
-      description: A hyperlink reference.
-      required:
-      - href
-      properties:
-        href:
-          type: string
-          description: URI of the linked resource
-    DocumentStatus:
-      type: string
-      description: Status of a document
-      enum:
-      - AVAILABLE
-    Page:
-      type: object
-      description: Pagination metadata for list responses.
-      properties:
-        nextPageKey:
-          type: string
-          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
-        totalElements:
-          type: integer
-          description: Total number of elements across all pages
-    ListStatementsResponse:
-      type: object
-      description: Paginated list of statements.
-      required:
-      - statements
-      properties:
-        page:
-          $ref: '#/components/schemas/Page'
-        statements:
-          type: array
-          items:
-            $ref: '#/components/schemas/Statement'
     ProblemDetails:
       type: object
       description: Error response following RFC 7807 Problem Details for HTTP APIs.
@@ -188,6 +115,27 @@ components:
         instance:
           type: string
           description: A URI reference that identifies the specific occurrence of the problem
+    ListStatementsResponse:
+      type: object
+      description: Paginated list of statements.
+      required:
+      - statements
+      properties:
+        page:
+          $ref: '#/components/schemas/Page'
+        statements:
+          type: array
+          items:
+            $ref: '#/components/schemas/Statement'
+    Link:
+      type: object
+      description: A hyperlink reference.
+      required:
+      - href
+      properties:
+        href:
+          type: string
+          description: URI of the linked resource
     Statement:
       type: object
       description: A bank account statement.
@@ -217,6 +165,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Link'
+    DocumentStatus:
+      type: string
+      description: Status of a document
+      enum:
+      - AVAILABLE
+    Page:
+      type: object
+      description: Pagination metadata for list responses.
+      properties:
+        nextPageKey:
+          type: string
+          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
+        totalElements:
+          type: integer
+          description: Total number of elements across all pages
   parameters:
     Limit:
       name: limit
@@ -228,6 +191,14 @@ components:
         minimum: 10
         maximum: 100
         default: 10
+    AccountId:
+      name: id
+      in: path
+      required: true
+      description: Unique identifier for the account
+      schema:
+        type: string
+        format: uuid
     PageKey:
       name: pageKey
       in: query
@@ -236,19 +207,19 @@ components:
       schema:
         type: string
         format: uuid
+    StartTime:
+      name: startTime
+      in: query
+      required: false
+      description: 'Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.'
+      schema:
+        type: string
+        format: date
     StatementId:
       name: statementId
       in: path
       required: true
       description: Unique identifier for the statement
-      schema:
-        type: string
-        format: uuid
-    AccountId:
-      name: id
-      in: path
-      required: true
-      description: Unique identifier for the account
       schema:
         type: string
         format: uuid
@@ -260,14 +231,43 @@ components:
       schema:
         type: string
         format: date
-    StartTime:
-      name: startTime
-      in: query
-      required: false
-      description: 'Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.'
-      schema:
-        type: string
-        format: date
+  responses:
+    Forbidden:
+      description: Insufficient permissions or IP not whitelisted
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    NotFound:
+      description: Resource not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    InternalServerError:
+      description: Unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Unauthorized:
+      description: Missing or invalid OAuth 2.0 Bearer token
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    NotAcceptable:
+      description: The requested media type in the Accept header is not supported
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
   securitySchemes:
     oauth2:
       type: oauth2

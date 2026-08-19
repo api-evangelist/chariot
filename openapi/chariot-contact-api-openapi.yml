@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   title: Chariot FDX Accounts Contact API
   version: '6.0'
@@ -45,118 +45,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    PreconditionFailed:
-      description: A precondition for the request was not met
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    Forbidden:
-      description: Insufficient permissions or IP not whitelisted
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    Unauthorized:
-      description: Missing or invalid OAuth 2.0 Bearer token
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    InternalServerError:
-      description: Unexpected server error
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    NotFound:
-      description: Resource not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-  parameters:
-    AccountId:
-      name: id
-      in: path
-      required: true
-      description: Unique identifier for the account
-      schema:
-        type: string
-        format: uuid
   schemas:
-    AccountPhone:
-      type: object
-      description: A phone number.
-      required:
-      - type
-      - number
-      properties:
-        type:
-          $ref: '#/components/schemas/PhoneNumberType'
-        country:
-          type: string
-          description: Country calling code (e.g., "+1")
-        number:
-          type: string
-          description: Phone number
-    AccountHolderType:
-      type: string
-      description: Type of account holder
-      enum:
-      - BUSINESS
-      - CONSUMER
-    PhoneNumberType:
-      type: string
-      description: Type of phone number
-      enum:
-      - HOME
-      - BUSINESS
-      - CELL
-      - FAX
-    AccountAddress:
-      type: object
-      description: A postal address.
-      required:
-      - line1
-      - city
-      - region
-      - postalCode
-      - country
-      properties:
-        line1:
-          type: string
-        line2:
-          type: string
-        line3:
-          type: string
-        city:
-          type: string
-        region:
-          type: string
-          description: State or region code
-        postalCode:
-          type: string
-        country:
-          type: string
-          description: ISO 3166-1 alpha-2 country code
-    PersonName:
-      type: object
-      description: A person's name.
-      properties:
-        first:
-          type: string
-        middle:
-          type: string
-        last:
-          type: string
-        suffix:
-          type: string
-        prefix:
-          type: string
-        company:
-          type: string
     ProblemDetails:
       type: object
       description: Error response following RFC 7807 Problem Details for HTTP APIs.
@@ -184,6 +73,25 @@ components:
         instance:
           type: string
           description: A URI reference that identifies the specific occurrence of the problem
+    BusinessCustomer:
+      type: object
+      description: Business customer information.
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: Legal business name
+        registeredId:
+          type: string
+          description: Registered identifier (e.g., EIN)
+    CustomerRelationship:
+      type: string
+      description: Relationship of the holder to the account
+      enum:
+      - AUTHORIZED_USER
+      - BUSINESS
+      - PRIMARY
     GetAccountContactResponse:
       type: object
       description: Contact information associated with an account.
@@ -204,6 +112,46 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AccountPhone'
+    PhoneNumberType:
+      type: string
+      description: Type of phone number
+      enum:
+      - HOME
+      - BUSINESS
+      - CELL
+      - FAX
+    AccountHolderType:
+      type: string
+      description: Type of account holder
+      enum:
+      - BUSINESS
+      - CONSUMER
+    AccountAddress:
+      type: object
+      description: A postal address.
+      required:
+      - line1
+      - city
+      - region
+      - postalCode
+      - country
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        line3:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+          description: State or region code
+        postalCode:
+          type: string
+        country:
+          type: string
+          description: ISO 3166-1 alpha-2 country code
     AccountHolder:
       type: object
       description: An account holder with their contact details.
@@ -232,25 +180,77 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AccountPhone'
-    CustomerRelationship:
-      type: string
-      description: Relationship of the holder to the account
-      enum:
-      - AUTHORIZED_USER
-      - BUSINESS
-      - PRIMARY
-    BusinessCustomer:
+    AccountPhone:
       type: object
-      description: Business customer information.
+      description: A phone number.
       required:
-      - name
+      - type
+      - number
       properties:
-        name:
+        type:
+          $ref: '#/components/schemas/PhoneNumberType'
+        country:
           type: string
-          description: Legal business name
-        registeredId:
+          description: Country calling code (e.g., "+1")
+        number:
           type: string
-          description: Registered identifier (e.g., EIN)
+          description: Phone number
+    PersonName:
+      type: object
+      description: A person's name.
+      properties:
+        first:
+          type: string
+        middle:
+          type: string
+        last:
+          type: string
+        suffix:
+          type: string
+        prefix:
+          type: string
+        company:
+          type: string
+  responses:
+    Forbidden:
+      description: Insufficient permissions or IP not whitelisted
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    PreconditionFailed:
+      description: A precondition for the request was not met
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    NotFound:
+      description: Resource not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    InternalServerError:
+      description: Unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Unauthorized:
+      description: Missing or invalid OAuth 2.0 Bearer token
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+  parameters:
+    AccountId:
+      name: id
+      in: path
+      required: true
+      description: Unique identifier for the account
+      schema:
+        type: string
+        format: uuid
   securitySchemes:
     oauth2:
       type: oauth2

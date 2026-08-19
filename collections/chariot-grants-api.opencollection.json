@@ -1,0 +1,139 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chariot FDX Accounts Grants API",
+    "version": "6.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://dashboard.givechariot.com/oauth/authorize",
+      "accessTokenUrl": "https://api.givechariot.com/auth/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Grants",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Grants",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/grants",
+            "params": [
+              {
+                "name": "connect_id",
+                "value": "REDACTED_LOB_KEY",
+                "type": "query",
+                "description": "the `id` of the Connect object. This can be used to filter the grants by a specific Connect if you have more than one."
+              },
+              {
+                "name": "donor_account_id",
+                "value": "donor_account_01jpjenf5q6cawy43yxfcrxhct",
+                "type": "query",
+                "description": "Filter grants by a specific [Donor Account](/api/donor-accounts). Use this to retrieve all Grant Requests associated with a given donor."
+              },
+              {
+                "name": "pageLimit",
+                "value": "",
+                "type": "query",
+                "description": "the number of results to return; defaults to 10, max is 100"
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls and the value of this field should be from the nextPageToken in the previous response."
+              }
+            ]
+          },
+          "docs": "Returns a list of all grants for a given Connect. This API allows for paginating over many results.\n\nDAF providers can use `donor_account_id` to filter Grant Requests associated with a specific [Donor Account](/api/donor-accounts)."
+        },
+        {
+          "info": {
+            "name": "Create Grant",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/grants",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create and submit a new grant. This should be used to capture a grant intent from an authorized DAFpay workflow session and submit the grant request to the DAF sponsor.\nOn initial creation of the grant, this request will return a 201 Created status. On subsequent requests, the request will return status 200 OK.\n\n<Warning>\nError handling:\n- The grant must be captured within 15 minutes of authorization otherwise the request will return status `410 Gone`.\n- If this request is submitted while this g"
+        },
+        {
+          "info": {
+            "name": "Get Grant",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/grants/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "10229488-08d2-4629-b70c-a2f4f4d25344",
+                "type": "path",
+                "description": "The unique id of the grant.\nThe format should be a v4 UUID according to RFC 4122."
+              }
+            ]
+          },
+          "docs": "Retrieve a grant with the given ID."
+        },
+        {
+          "info": {
+            "name": "Sandbox: Complete a grant",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/simulations/grants/:id/complete",
+            "params": [
+              {
+                "name": "id",
+                "value": "10229488-08d2-4629-b70c-a2f4f4d25344",
+                "type": "path",
+                "description": "The unique identifier for the grant."
+              }
+            ]
+          },
+          "docs": "Simulates the DAF sponsor completing a grant. Transitions the grant status to `completed`.\n\n<Note title=\"Sandbox Only\" icon=\"fa-light fa-atom-simple\">\nThis API is only available in the sandbox environment.\n</Note>\n"
+        },
+        {
+          "info": {
+            "name": "Sandbox: Cancel a grant",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/simulations/grants/:id/cancel",
+            "params": [
+              {
+                "name": "id",
+                "value": "10229488-08d2-4629-b70c-a2f4f4d25344",
+                "type": "path",
+                "description": "The unique identifier for the grant."
+              }
+            ]
+          },
+          "docs": "Simulates the DAF sponsor canceling the grant. Transitions the grant status to `canceled`.\n\n<Note title=\"Sandbox Only\" icon=\"fa-light fa-atom-simple\">\nThis API is only available in the sandbox environment.\n</Note>\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

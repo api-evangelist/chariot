@@ -1,0 +1,143 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chariot FDX Accounts Authorization Tokens API",
+    "version": "6.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://dashboard.givechariot.com/oauth/authorize",
+      "accessTokenUrl": "https://api.givechariot.com/auth/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authorization Tokens",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Authorization Tokens",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/donor_accounts/:id/authorization_tokens",
+            "params": [
+              {
+                "name": "id",
+                "value": "donor_account_01jpjenf5q6cawy43yxfcrxhct",
+                "type": "path",
+                "description": "The unique id of the Donor Account"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter tokens by status."
+              },
+              {
+                "name": "page_limit",
+                "value": "",
+                "type": "query",
+                "description": "the number of results to return; defaults to 10, max is 100"
+              },
+              {
+                "name": "page_token",
+                "value": "",
+                "type": "query",
+                "description": "A cursor for paginating; pass the value from `next_page_token` of the previous response."
+              }
+            ]
+          },
+          "docs": "List Authorization Tokens for a Donor Account.\nToken codes are never returned by this endpoint — only the metadata is returned."
+        },
+        {
+          "info": {
+            "name": "Create Authorization Token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/donor_accounts/:id/authorization_tokens",
+            "params": [
+              {
+                "name": "id",
+                "value": "donor_account_01jpjenf5q6cawy43yxfcrxhct",
+                "type": "path",
+                "description": "The unique id of the Donor Account"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a single-use Authorization Token bound to a Donor Account.\n\nAuthorization Tokens are the binding credential used to verify a donor's identity between DAFpay and the DAF.\nThey are used in two distinct flows:\n\n- **DAF-Initiated Setup**: The DAF creates a Donor Account and then creates an Authorization Token. The DAF surfaces the token's `code` to the donor via their portal. The donor enters the `code` into DAFpay during profile setup, automatically approving the Donor Account.\n- **Donor-Ini"
+        },
+        {
+          "info": {
+            "name": "Get Authorization Token",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/authorization_tokens/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "auth_token_01jpjenf5q6cawy43yxfcrxhct",
+                "type": "path",
+                "description": "The unique id of the Authorization Token"
+              }
+            ]
+          },
+          "docs": "Retrieve an Authorization Token with the given ID.\nThe token's `code` is never returned — only the metadata is returned."
+        },
+        {
+          "info": {
+            "name": "Revoke Authorization Token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/authorization_tokens/:id/revoke",
+            "params": [
+              {
+                "name": "id",
+                "value": "auth_token_01jpjenf5q6cawy43yxfcrxhct",
+                "type": "path",
+                "description": "The unique id of the Authorization Token"
+              }
+            ]
+          },
+          "docs": "Revoke an unverified Authorization Token. Once revoked, the `code` can no longer be verified.\nTokens that have already been verified or expired cannot be revoked and will return status `412 Precondition Failed`."
+        },
+        {
+          "info": {
+            "name": "Verify Authorization Token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/authorization_tokens/verify",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Verify an Authorization Token by its `code` value.\n\nThis endpoint is used by DAFs in the **Donor-Initiated Verification** flow: when a donor presents the `code` they received from DAFpay (via email after submitting a Grant Request), the DAF calls this endpoint with the `code` to confirm the donor's identity.\n\nOn success:\n- The Authorization Token transitions to `verified`.\n- The linked Donor Account is automatically transitioned to `approved` if it is currently `pending`.\n- The full Donor Accoun"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

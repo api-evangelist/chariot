@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   title: Chariot FDX Accounts Customers API
   version: '6.0'
@@ -63,26 +63,46 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  parameters:
-    AccountId:
-      name: id
-      in: path
-      required: true
-      description: Unique identifier for the account
-      schema:
-        type: string
-        format: uuid
   schemas:
-    Page:
+    ProblemDetails:
       type: object
-      description: Pagination metadata for list responses.
+      description: Error response following RFC 7807 Problem Details for HTTP APIs.
+      required:
+      - type
+      - title
+      - status
       properties:
-        nextPageKey:
+        type:
           type: string
-          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
-        totalElements:
+          description: A URI reference that identifies the problem type
+          example: about:blank
+        title:
+          type: string
+          description: A short human-readable summary of the problem type
+          example: Bad Request
+        status:
           type: integer
-          description: Total number of elements across all pages
+          description: The HTTP status code
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem
+          example: The startTime parameter must be before endTime
+        instance:
+          type: string
+          description: A URI reference that identifies the specific occurrence of the problem
+    BusinessCustomer:
+      type: object
+      description: Business customer information.
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: Legal business name
+        registeredId:
+          type: string
+          description: Registered identifier (e.g., EIN)
     CustomerListResponse:
       type: object
       description: Paginated list of customers.
@@ -119,6 +139,22 @@ components:
             $ref: '#/components/schemas/AccountAddress'
         businessCustomer:
           $ref: '#/components/schemas/BusinessCustomer'
+    Page:
+      type: object
+      description: Pagination metadata for list responses.
+      properties:
+        nextPageKey:
+          type: string
+          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
+        totalElements:
+          type: integer
+          description: Total number of elements across all pages
+    CustomerType:
+      type: string
+      description: Type of customer
+      enum:
+      - BUSINESS
+      - INDIVIDUAL
     AccountAddress:
       type: object
       description: A postal address.
@@ -161,66 +197,9 @@ components:
           type: string
         company:
           type: string
-    ProblemDetails:
-      type: object
-      description: Error response following RFC 7807 Problem Details for HTTP APIs.
-      required:
-      - type
-      - title
-      - status
-      properties:
-        type:
-          type: string
-          description: A URI reference that identifies the problem type
-          example: about:blank
-        title:
-          type: string
-          description: A short human-readable summary of the problem type
-          example: Bad Request
-        status:
-          type: integer
-          description: The HTTP status code
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem
-          example: The startTime parameter must be before endTime
-        instance:
-          type: string
-          description: A URI reference that identifies the specific occurrence of the problem
-    CustomerType:
-      type: string
-      description: Type of customer
-      enum:
-      - BUSINESS
-      - INDIVIDUAL
-    BusinessCustomer:
-      type: object
-      description: Business customer information.
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          description: Legal business name
-        registeredId:
-          type: string
-          description: Registered identifier (e.g., EIN)
   responses:
     Forbidden:
       description: Insufficient permissions or IP not whitelisted
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    Unauthorized:
-      description: Missing or invalid OAuth 2.0 Bearer token
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    InternalServerError:
-      description: Unexpected server error
       content:
         application/problem+json:
           schema:
@@ -231,6 +210,27 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
+    InternalServerError:
+      description: Unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Unauthorized:
+      description: Missing or invalid OAuth 2.0 Bearer token
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+  parameters:
+    AccountId:
+      name: id
+      in: path
+      required: true
+      description: Unique identifier for the account
+      schema:
+        type: string
+        format: uuid
   securitySchemes:
     oauth2:
       type: oauth2

@@ -1,0 +1,64 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chariot FDX Accounts Connects API",
+    "version": "6.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://dashboard.givechariot.com/oauth/authorize",
+      "accessTokenUrl": "https://api.givechariot.com/auth/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Connects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create Connect",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/connects",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Get an existing connect or create a new connect for an existing nonprofit organization.\n\nThe returned Connect can be used to integrate the client-side Chariot Connect component using the `id` property (CID) and also query for data generated from the Chariot Connect instance using the connect_id query parameter in any of the List Grants API endpoints.\n\n<Note>\nOnly one Connect object can be created per organization.\nIf one already exists, this will return a `200 OK` status with the existing object"
+        },
+        {
+          "info": {
+            "name": "Get Connect",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/connects/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "live_xJd0lUrvpDkzeGBWZbuI2wbvEdM",
+                "type": "path",
+                "description": "the unique id of the connect"
+              }
+            ]
+          },
+          "docs": "Retrieve a connect with the given ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,98 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chariot FDX Accounts Statements API",
+    "version": "6.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://dashboard.givechariot.com/oauth/authorize",
+      "accessTokenUrl": "https://api.givechariot.com/auth/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Statements",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List account statements",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/accounts/:id/statements",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the account"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page. Clamped to the range 10–100."
+              },
+              {
+                "name": "pageKey",
+                "value": "",
+                "type": "query",
+                "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response."
+              },
+              {
+                "name": "startTime",
+                "value": "",
+                "type": "query",
+                "description": "Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely."
+              },
+              {
+                "name": "endTime",
+                "value": "",
+                "type": "query",
+                "description": "End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely."
+              }
+            ]
+          },
+          "docs": "Get a paginated list of statements for an account. When specifying a date range, both startTime and endTime must be provided together. Defaults to the last 7 days if no date range is specified. Data is available for up to 24 months from the current date."
+        },
+        {
+          "info": {
+            "name": "Get account statement",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/accounts/:id/statements/:statementId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the account"
+              },
+              {
+                "name": "statementId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the statement"
+              }
+            ]
+          },
+          "docs": "Retrieve a statement document. Use the Accept header to specify the desired format. Supported formats are PDF (default), CSV, and BAI2."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

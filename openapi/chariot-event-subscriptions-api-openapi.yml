@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   title: Chariot FDX Accounts Event Subscriptions API
   version: '6.0'
@@ -149,80 +149,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  requestBodies:
-    UpdateEventSubscriptionRequest:
-      description: The request body for creating an event subscription
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              status:
-                type: string
-                description: "The status of the event subscription:\n  * active: The event subscription is active and events will be delivered\n  * disabled: The event subscription is temporarily disabled and events will not be delivered\n  * deleted: The event subscription is permanently deleted and events will not be delivered"
-                enum:
-                - active
-                - disabled
-                - deleted
-    CreateEventSubscriptionRequest:
-      description: The request body for creating an event subscription
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-            - url
-            - category
-            properties:
-              url:
-                type: string
-                description: The webhook url where we'll send notifications.
-                example: https://example.com/webhook
-              category:
-                $ref: '#/components/schemas/EventCategory'
-              signing_secret:
-                type: string
-                description: 'The key that will be used to sign webhooks.
-
-                  If no value is passed, a random string will be used as default.
-
-                  This is necessary to verify that the webhook is coming from Chariot.
-
-                  While this parameter is optional, it is highly recommended to pass a value
-
-                  for the secret and implement webhook signature verification.'
   schemas:
-    EventCategory:
-      type: string
-      description: 'The category of the event. This is useful for filtering events.
-
-
-        Event names follow the pattern `{resource}.{event_type}` where `event_type` is either `created` or `updated`. Status transitions (for example, a Donor Account moving to `approved` or `rejected`) are emitted as `{resource}.updated` events — fetch the object to read its current status.
-
-        '
-      enum:
-      - grant.created
-      - grant.updated
-      - unintegrated_grant.created
-      - unintegrated_grant.updated
-      - donor_account.created
-      - donor_account.updated
-      - authorization_token.created
-      - authorization_token.updated
-      - grant_request.created
-      - grant_request.updated
-      - disbursement.created
-      - disbursement.updated
-      - inbound_transfer.created
-      - inbound_transfer.updated
-      - donation.created
-      - donation.updated
-      - deposit.created
-      - deposit.updated
-      - verification_request.created
-      - verification_request.updated
     ProblemDetails:
       type: object
       description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
@@ -290,55 +217,36 @@ components:
       - disabled
       - deleted
       - requires_attention
+    EventCategory:
+      type: string
+      description: 'The category of the event. This is useful for filtering events.
+
+
+        Event names follow the pattern `{resource}.{event_type}` where `event_type` is either `created` or `updated`. Status transitions (for example, a Donor Account moving to `approved` or `rejected`) are emitted as `{resource}.updated` events — fetch the object to read its current status.
+
+        '
+      enum:
+      - grant.created
+      - grant.updated
+      - unintegrated_grant.created
+      - unintegrated_grant.updated
+      - donor_account.created
+      - donor_account.updated
+      - authorization_token.created
+      - authorization_token.updated
+      - grant_request.created
+      - grant_request.updated
+      - disbursement.created
+      - disbursement.updated
+      - inbound_transfer.created
+      - inbound_transfer.updated
+      - donation.created
+      - donation.updated
+      - deposit.created
+      - deposit.updated
+      - verification_request.created
+      - verification_request.updated
   responses:
-    BadRequestError:
-      description: The request is invalid or contains invalid parameters
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            BadRequest:
-              value:
-                type: about:blank
-                title: API Error
-                status: 400
-                detail: The request is invalid or contains invalid parameters.
-    ForbiddenError:
-      description: Access denied
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Forbidden:
-              value:
-                type: about:blank
-                title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
     AuthenticationError:
       description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
       headers:
@@ -355,6 +263,22 @@ components:
                 title: API Error
                 status: 401
                 detail: Authentication credentials were missing or invalid.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
     InternalServerError:
       description: Internal Server Error
       headers:
@@ -388,15 +312,91 @@ components:
               nextPageToken:
                 type: string
                 description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
   headers:
-    X-Request-Id:
-      description: The unique identifier for the request
-      schema:
-        type: string
     Location:
       description: The URI of the created object
       schema:
         type: string
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
+  requestBodies:
+    UpdateEventSubscriptionRequest:
+      description: The request body for creating an event subscription
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                description: "The status of the event subscription:\n  * active: The event subscription is active and events will be delivered\n  * disabled: The event subscription is temporarily disabled and events will not be delivered\n  * deleted: The event subscription is permanently deleted and events will not be delivered"
+                enum:
+                - active
+                - disabled
+                - deleted
+    CreateEventSubscriptionRequest:
+      description: The request body for creating an event subscription
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - url
+            - category
+            properties:
+              url:
+                type: string
+                description: The webhook url where we'll send notifications.
+                example: https://example.com/webhook
+              category:
+                $ref: '#/components/schemas/EventCategory'
+              signing_secret:
+                type: string
+                description: 'The key that will be used to sign webhooks.
+
+                  If no value is passed, a random string will be used as default.
+
+                  This is necessary to verify that the webhook is coming from Chariot.
+
+                  While this parameter is optional, it is highly recommended to pass a value
+
+                  for the secret and implement webhook signature verification.'
   securitySchemes:
     oauth2:
       type: oauth2

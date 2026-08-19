@@ -1,0 +1,74 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chariot FDX Accounts Programs API",
+    "version": "6.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://dashboard.givechariot.com/oauth/authorize",
+      "accessTokenUrl": "https://api.givechariot.com/auth/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Programs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Programs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/programs",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per page. The default (and maximum) is 100 objects."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor token for pagination. Use the next_page_token from the previous response to retrieve the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of all programs for your Chariot account."
+        },
+        {
+          "info": {
+            "name": "Get Program",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/programs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "program_01j8rs605a4gctmbm58d87mvsj",
+                "type": "path",
+                "description": "The unique identifier for the program"
+              }
+            ]
+          },
+          "docs": "Retrieves the program with the given ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

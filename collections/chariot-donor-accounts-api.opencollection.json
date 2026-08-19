@@ -1,0 +1,174 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chariot FDX Accounts Donor Accounts API",
+    "version": "6.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://dashboard.givechariot.com/oauth/authorize",
+      "accessTokenUrl": "https://api.givechariot.com/auth/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Donor Accounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Donor Accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/donor_accounts",
+            "params": [
+              {
+                "name": "giving_pool_id",
+                "value": "0bf40881-8ee2-47fb-98ca-f58c7999aa34",
+                "type": "query",
+                "description": "The `id` of a [Giving Pool](/api/giving-pools). When set, filters Donor Accounts to those that have this Giving Pool associated with them."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter Donor Accounts to only those with the specified status."
+              },
+              {
+                "name": "email",
+                "value": "warrenBuffet@example.com",
+                "type": "query",
+                "description": "Filter Donor Accounts by donor email. The match is case insensitive and exact."
+              },
+              {
+                "name": "external_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter Donor Accounts by `external_id` — the DAF's internal identifier for the Donor Account."
+              },
+              {
+                "name": "page_limit",
+                "value": "",
+                "type": "query",
+                "description": "the number of results to return; defaults to 10, max is 100"
+              },
+              {
+                "name": "page_token",
+                "value": "",
+                "type": "query",
+                "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls and the value of this field should be from the next_page_token in the previous response."
+              }
+            ]
+          },
+          "docs": "Returns a list of Donor Accounts for the authenticated DAF.\nThis endpoint supports cursor-based pagination as well as filtering by fund, status, and email."
+        },
+        {
+          "info": {
+            "name": "Create Donor Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/donor_accounts",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new Donor Account.\n\nThis endpoint is intended for DAF providers who want to set up a Donor Account on behalf of a donor before that donor uses DAFpay for the first time.\nSee the [DAF-Initiated Setup guide](/guides/dafpay/donor-accounts/daf-initiated-setup) for the most common use of this endpoint.\n\nOn creation, the Donor Account is placed in `pending` status. To make the account immediately usable for grant submissions, follow up with [Create Authorization Token](/api/donor-accounts/cre"
+        },
+        {
+          "info": {
+            "name": "Get Donor Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/donor_accounts/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "donor_account_01jpjenf5q6cawy43yxfcrxhct",
+                "type": "path",
+                "description": "The unique id of the Donor Account."
+              }
+            ]
+          },
+          "docs": "Retrieve a Donor Account with the given ID."
+        },
+        {
+          "info": {
+            "name": "Update Donor Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.givechariot.com/fdx/v6/v1/donor_accounts/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "donor_account_01jpjenf5q6cawy43yxfcrxhct",
+                "type": "path",
+                "description": "The unique id of the Donor Account"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update mutable properties on a Donor Account such as `external_id`, the nested `donor` fields, and `metadata`.\n\nThe Donor Account's status is managed automatically through the Authorization Token verification flow and cannot be changed directly via this endpoint."
+        },
+        {
+          "info": {
+            "name": "Disable Donor Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/donor_accounts/:id/disable",
+            "params": [
+              {
+                "name": "id",
+                "value": "donor_account_01jpjenf5q6cawy43yxfcrxhct",
+                "type": "path",
+                "description": "The unique id of the Donor Account."
+              }
+            ]
+          },
+          "docs": "Disable an approved Donor Account.\n\nA disabled Donor Account remains `approved` but cannot submit new Grant Requests. Existing Grant Requests already in flight are unaffected — disabling does not retroactively cancel or reject prior activity. Use this when a DAF needs to temporarily prevent a donor from initiating new grants (e.g. account under review, donor offboarding) without rejecting the underlying identity verification.\n\nThis endpoint is idempotent — calling it on an already-disabled accou"
+        },
+        {
+          "info": {
+            "name": "Enable Donor Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/donor_accounts/:id/enable",
+            "params": [
+              {
+                "name": "id",
+                "value": "donor_account_01jpjenf5q6cawy43yxfcrxhct",
+                "type": "path",
+                "description": "The unique id of the Donor Account."
+              }
+            ]
+          },
+          "docs": "Re-enable a previously disabled Donor Account. After this call, the Donor Account can submit new Grant Requests again.\n\nThis endpoint is idempotent — calling it on an account that is already enabled returns the Donor Account unchanged.\n\n<Warning>\n- The Donor Account must be in `approved` status. Calls on a `pending` or `rejected` account return status `409 Conflict`.\n</Warning>"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

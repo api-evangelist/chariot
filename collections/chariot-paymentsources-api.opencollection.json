@@ -1,0 +1,74 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chariot FDX Accounts Payment Sources API",
+    "version": "6.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://dashboard.givechariot.com/oauth/authorize",
+      "accessTokenUrl": "https://api.givechariot.com/auth/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "paymentSources",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Payment Sources",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/payment_sources",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects."
+              },
+              {
+                "name": "page_token",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to use for pagination. If not set, the first page of results will be returned."
+              }
+            ]
+          },
+          "docs": "List payment sources for your Chariot account.\n\nPayment Sources represent segregated addresses for incoming deposits.\nIn practice, this can be separate electronic bank addresses (account + routing numbers) or physical mailing addresses (lockboxes).\nPayment Sources make it easy to independently manage and consolidate incoming payments and donations from different sources\nwhich in turn makes reconciliation of money and data seamless.\nEvery Payment Source belongs to a specific Financial Account and"
+        },
+        {
+          "info": {
+            "name": "Get a Payment Source",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/payment_sources/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "payment_source_01j8rs605a4gctmbm58d87mvsj",
+                "type": "path",
+                "description": "The unique identifier for the payment source"
+              }
+            ]
+          },
+          "docs": "Get a payment source by its unique identifier.\n\nA Payment Source represents a segregated address for incoming deposits.\nIn practice, this can be separate electronic bank addresses (account + routing numbers) or physical mailing addresses (lockboxes).\nPayment Sources make it easy to independently manage and consolidate incoming payments and donations from different sources\nwhich in turn makes reconciliation of money and data seamless.\nEvery Payment Source belongs to a specific Financial Account a"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,134 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chariot FDX Accounts Properties API",
+    "version": "6.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://dashboard.givechariot.com/oauth/authorize",
+      "accessTokenUrl": "https://api.givechariot.com/auth/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "properties",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Properties",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/properties",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects."
+              },
+              {
+                "name": "page_token",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to use for pagination. If not set, the first page of results will be returned."
+              },
+              {
+                "name": "resource_type",
+                "value": "",
+                "type": "query",
+                "description": "The type of the resource that the properties are associated with."
+              }
+            ]
+          },
+          "docs": "List properties for your account."
+        },
+        {
+          "info": {
+            "name": "Get a Property",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/properties/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "prop_01j8rs605a4gctmbm58d87mvsj",
+                "type": "path",
+                "description": "The unique identifier for the property"
+              }
+            ]
+          },
+          "docs": "Get a property by its unique identifier."
+        },
+        {
+          "info": {
+            "name": "List Property Options",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/properties/:id/options",
+            "params": [
+              {
+                "name": "id",
+                "value": "prop_01j8rs605a4gctmbm58d87mvsj",
+                "type": "path",
+                "description": "The unique identifier for the property"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects."
+              },
+              {
+                "name": "page_token",
+                "value": "",
+                "type": "query",
+                "description": "The cursor to use for pagination. If not set, the first page of results will be returned."
+              }
+            ]
+          },
+          "docs": "List all options for an enum or user property."
+        },
+        {
+          "info": {
+            "name": "Assign a Property",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/properties/:id/assign",
+            "params": [
+              {
+                "name": "id",
+                "value": "prop_01j8rs605a4gctmbm58d87mvsj",
+                "type": "path",
+                "description": "The unique identifier for the property"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Appends a Property to one or more Donations or Deposits.\nA maximum of 100 resources can be assigned to a property at a time.\nThe resource identifiers must be of the same resource_type as the Property, otherwise a 400 Bad Request error will be returned."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

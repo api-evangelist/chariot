@@ -1,0 +1,95 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chariot FDX Accounts Verification Requests API",
+    "version": "6.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://dashboard.givechariot.com/oauth/authorize",
+      "accessTokenUrl": "https://api.givechariot.com/auth/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "verificationRequests",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List verification requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/verification_requests",
+            "params": [
+              {
+                "name": "ein",
+                "value": "",
+                "type": "query",
+                "description": "Filter by EIN. If provided, only returns verification requests matching this EIN."
+              },
+              {
+                "name": "page_limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects."
+              },
+              {
+                "name": "page_token",
+                "value": "",
+                "type": "query",
+                "description": "A token to use to retrieve the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of all verification requests for the authenticated grantmaker.\n"
+        },
+        {
+          "info": {
+            "name": "Create a verification request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/verification_requests",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Request verification of an unlisted organization. If the organization cannot be found through Chariot's search,\nyou can submit a verification request so that Chariot's compliance team can review and verify the organization.\n"
+        },
+        {
+          "info": {
+            "name": "Get a verification request",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/verification_requests/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the verification request"
+              }
+            ]
+          },
+          "docs": "Get a specific verification request by its unique identifier.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

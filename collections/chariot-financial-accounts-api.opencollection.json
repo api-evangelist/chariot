@@ -1,0 +1,79 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chariot FDX Accounts Financial Accounts API",
+    "version": "6.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://dashboard.givechariot.com/oauth/authorize",
+      "accessTokenUrl": "https://api.givechariot.com/auth/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "financial_accounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List financial accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/financial_accounts"
+          },
+          "docs": "Returns a list of financial accounts.\n"
+        },
+        {
+          "info": {
+            "name": "Get a financial account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/financial_accounts/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "account_01jpjenf5q6cawy43yxfcrxhct",
+                "type": "path",
+                "description": "The unique identifier for the financial account"
+              }
+            ]
+          },
+          "docs": "Get a financial account by its unique identifier.\n"
+        },
+        {
+          "info": {
+            "name": "Get a financial account balance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/financial_accounts/:id/balance",
+            "params": [
+              {
+                "name": "id",
+                "value": "account_01jpjenf5q6cawy43yxfcrxhct",
+                "type": "path",
+                "description": "The unique identifier for the financial account"
+              }
+            ]
+          },
+          "docs": "Get a financial account balance by its unique identifier.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

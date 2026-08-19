@@ -1,0 +1,242 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chariot FDX Accounts Disbursements API",
+    "version": "6.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://dashboard.givechariot.com/oauth/authorize",
+      "accessTokenUrl": "https://api.givechariot.com/auth/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "disbursements",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List disbursements",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/disbursements",
+            "params": [
+              {
+                "name": "organization_id",
+                "value": "org_01jpjenf5q6cawy43yxfcrxhct",
+                "type": "query",
+                "description": "The unique identifier for the organization"
+              },
+              {
+                "name": "page_limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the size of the list that is returned. The default (and maximum) is 100 objects."
+              },
+              {
+                "name": "next_page_token",
+                "value": "",
+                "type": "query",
+                "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls and the value of this field should be from the nextPageToken in the previous response."
+              },
+              {
+                "name": "includes",
+                "value": "",
+                "type": "query",
+                "description": "A comma separated list of fields to include in the response.\nPossible values include:\n  - `organization`: Include the organization object in the response."
+              },
+              {
+                "name": "idempotency_key",
+                "value": "",
+                "type": "query",
+                "description": "Filter to the disbursement created with this exact `Idempotency-Key` header on `POST /v1/disbursements`. Useful for recovering the result of a create request when the response was lost (e.g. network timeout). Returns at most one disbursement. Disbursements created via `POST /v1/disbursements/bulk` cannot be looked up this way."
+              }
+            ]
+          },
+          "docs": "Returns a list of disbursements.\n"
+        },
+        {
+          "info": {
+            "name": "Create a disbursement",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/disbursements",
+            "headers": [
+              {
+                "name": "Idempotency-Key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a disbursement to send money to an organization.\n"
+        },
+        {
+          "info": {
+            "name": "Create multiple disbursements",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/disbursements/bulk",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create multiple disbursements in a single request.\nThis is useful for batch operations where you need to create many disbursements at once.\n\nAll disbursements in the request will be created together. If any disbursement fails validation,\nthe entire request will fail and no disbursements will be created.\n\n**Note:** Disbursements created through this endpoint cannot be looked up via `GET /v1/disbursements?idempotency_key=...`. The `idempotency_key` field on the returned disbursements will be `null"
+        },
+        {
+          "info": {
+            "name": "Get a disbursement",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/disbursements/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "disbursement_01jpjen1s23s29kkmnjsb6fzga",
+                "type": "path",
+                "description": "The unique identifier for the disbursement"
+              }
+            ]
+          },
+          "docs": "Get a disbursement by its unique identifier.\n"
+        },
+        {
+          "info": {
+            "name": "Approve a disbursement",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/disbursements/:id/approve",
+            "params": [
+              {
+                "name": "id",
+                "value": "disbursement_01jpjen1s23s29kkmnjsb6fzga",
+                "type": "path",
+                "description": "The unique identifier for the disbursement"
+              }
+            ]
+          },
+          "docs": "Approve a disbursement in a pending_approval state.\nIf the disbursement is in a different state, this will return a 400 error.\n"
+        },
+        {
+          "info": {
+            "name": "Approve multiple disbursements",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/disbursements/approve",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Approve multiple disbursements in a single request.\nThis is useful for batch approval operations.\n\nAll disbursements must be in the `pending_approval` state. If any disbursement\ncannot be approved, the entire request will fail and no disbursements will be approved.\n"
+        },
+        {
+          "info": {
+            "name": "Cancel a pending disbursement",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/disbursements/:id/cancel",
+            "params": [
+              {
+                "name": "id",
+                "value": "disbursement_01jpjen1s23s29kkmnjsb6fzga",
+                "type": "path",
+                "description": "The unique identifier for the disbursement"
+              }
+            ]
+          },
+          "docs": "Cancel a pending disbursement in a pending_approval state.\nIf the disbursement is in a different state, this will return a 400 error.\n"
+        },
+        {
+          "info": {
+            "name": "Stop payment for a disbursement",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/disbursements/:id/stop",
+            "params": [
+              {
+                "name": "id",
+                "value": "disbursement_01jpjen1s23s29kkmnjsb6fzga",
+                "type": "path",
+                "description": "The unique identifier for the disbursement"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Stop payment for a disbursement sent via check.\n\nThis prevents the recipient from depositing the check. If the check has already been deposited, the stop payment request will fail.\n\n**Requirements:**\n- Disbursement must be in `submitted` status\n- Disbursement must be sent via check\n- Check must not have already been deposited\n\nAfter successfully stopping payment, the disbursement status will be updated to `stopped`.\n"
+        },
+        {
+          "info": {
+            "name": "Sandbox: Complete a disbursement",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/simulations/disbursements/:id/complete",
+            "params": [
+              {
+                "name": "id",
+                "value": "disbursement_01jpjen1s23s29kkmnjsb6fzga",
+                "type": "path",
+                "description": "The unique identifier for the disbursement"
+              }
+            ]
+          },
+          "docs": "Simulates successful disbursement completion for testing purposes.\nThe disbursement must have a status of `submitted`.\n\nAfter calling this endpoint, the disbursement status will be updated to `completed`.\n\n<Note title=\"Sandbox Only\" icon=\"fa-light fa-atom-simple\">\nThis API is only available in the sandbox environment.\n</Note>\n"
+        },
+        {
+          "info": {
+            "name": "Sandbox: Fail a disbursement",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/simulations/disbursements/:id/fail",
+            "params": [
+              {
+                "name": "id",
+                "value": "disbursement_01jpjen1s23s29kkmnjsb6fzga",
+                "type": "path",
+                "description": "The unique identifier for the disbursement"
+              }
+            ]
+          },
+          "docs": "Simulates a payment failure or return for testing purposes.\nThe disbursement must have a status of `submitted`.\nThis only applies for disbursements sent via ACH or check.\n\n- **ACH disbursements**: Status becomes `failed` (payment was returned and cannot be retried)\n- **Check disbursements**: Status becomes `validating_organization` (check was returned). When this happens, Chariot will investigate why the check failed to reach the organization, update any required recipient information (such as m"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

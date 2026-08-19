@@ -1,0 +1,109 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chariot FDX Accounts Organizations API",
+    "version": "6.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://dashboard.givechariot.com/oauth/authorize",
+      "accessTokenUrl": "https://api.givechariot.com/auth/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Organizations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search organizations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/organizations/search",
+            "params": [
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "The query string to search for. If this is in the format of an EIN, the search will be limited exclusively to the organization with that EIN. Otherwise, this will be a fuzzy search on organization name."
+              },
+              {
+                "name": "ein",
+                "value": "",
+                "type": "query",
+                "description": "The Employer Identification Number (EIN) or TaxID for the nonprofit entity. This is deprecated in favor of the `q` parameter."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "The name of the organization. This is deprecated in favor of the `q` parameter."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Limit the size of the list that is returned. The default (and maximum) is 20 objects."
+              }
+            ]
+          },
+          "docs": "Search for organizations by name or EIN.\nThis endpoint exists to support a typeahead search or quick lookup by nonprofit EIN or name.\nThe Get Organization API should be used to retrieve detailed information about an organization."
+        },
+        {
+          "info": {
+            "name": "Get organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/organizations/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "org_1LaXpKGUcADgqoEMl0Cx0Ygg",
+                "type": "path",
+                "description": "The unique identifier for the organization"
+              }
+            ]
+          },
+          "docs": "Retrieves the organization with the given ID."
+        },
+        {
+          "info": {
+            "name": "Sandbox: Onboard an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/simulations/organizations/onboard/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "org_1LaXpKGUcADgqoEMl0Cx0Ygg",
+                "type": "path",
+                "description": "The unique identifier for the organization to onboard."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a Chariot account for a sandbox recipient organization so that\ndisbursements to it settle electronically instead of via a mailed check.\n\nBy default a sandbox organization has no Chariot account, so disbursements\nto it are mailed as a physical check. Call this endpoint to provision an\naccount for the organization and choose which electronic rail its\ndisbursements should settle on.\n\nThe `settlement` is fixed on the first successful call. Onboarding the same\norganization again with a differ"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

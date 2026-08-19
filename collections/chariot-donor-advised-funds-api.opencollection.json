@@ -1,0 +1,86 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chariot FDX Accounts Donor Advised Funds API",
+    "version": "6.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://dashboard.givechariot.com/oauth/authorize",
+      "accessTokenUrl": "https://api.givechariot.com/auth/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Donor Advised Funds",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Donor Advised Funds",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/dafs",
+            "params": [
+              {
+                "name": "supportedOnly",
+                "value": "",
+                "type": "query",
+                "description": "If set to true, filters DAFs to only those that have a direct integration with Chariot."
+              },
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "If included, filters DAFs to only those that contain the query. This parameter is case insensitive."
+              },
+              {
+                "name": "pageLimit",
+                "value": "",
+                "type": "query",
+                "description": "the number of results to return; defaults to 10, max is 100"
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "A token to use to retrieve the next page of results. This is useful for paginating over many pages of results. If set, all other arguments are expected to be kept the same as previous calls."
+              }
+            ]
+          },
+          "docs": "Returns a list of all Donor Advised Funds within Chariot's system. This API allows for paginating over many results.\n\n<Note>\nIf there are DAFs missing from the list, please contact support at support@givechariot.com.\n</Note>"
+        },
+        {
+          "info": {
+            "name": "Get Donor Advised Fund",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/dafs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "f9e28217-e0f7-4a54-9764-d664ffb10722",
+                "type": "path",
+                "description": "The unique id of the DAF.\nThe format should be a v4 UUID according to RFC 4122."
+              }
+            ]
+          },
+          "docs": "Retrieve a DAF with a given ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -6,18 +6,21 @@ server:
   name: chariot-docs
   transport: http
   url: https://docs.givechariot.com/_mcp/server
-  description: >-
-    Chariot publishes a hosted MCP server over its documentation surface (Fern/Mintlify-style docs MCP)
-    for AI clients such as Claude Code and Cursor. It exposes the Chariot docs and API reference as
-    MCP tools/resources for retrieval and search, alongside the llms.txt discovery surface.
+  description: Chariot publishes a hosted MCP server over its documentation surface (Fern/Mintlify-style
+    docs MCP) for AI clients such as Claude Code and Cursor. It exposes the Chariot docs and API reference
+    as MCP tools/resources for retrieval and search, alongside the llms.txt discovery surface.
 capabilities:
-  - docs_search
-  - api_reference_lookup
+- docs_search
+- api_reference_lookup
 discovery:
   llms_txt: https://docs.givechariot.com/llms.txt
   markdown_convention: append `.md` to any docs page URL for clean markdown
   section_index_convention: append `/llms.txt` to any section URL
-notes: >-
-  This is a documentation/knowledge MCP server (agent-facing docs retrieval), not a full
-  operations MCP that wraps the 78 REST operations. A candidate operations tool list could be
-  derived from openapi/chariot-openapi-original.yml if an execution MCP is desired.
+notes: This is a documentation/knowledge MCP server (agent-facing docs retrieval), not a full operations
+  MCP that wraps the 78 REST operations. A candidate operations tool list could be derived from openapi/chariot-openapi-original.yml
+  if an execution MCP is desired.
+deployment:
+  mode: remote
+  verified: searched
+  checked: '2026-08-12'
+  source: catalog MCP census

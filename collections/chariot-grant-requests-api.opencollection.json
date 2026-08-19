@@ -1,0 +1,126 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chariot FDX Accounts Grant Requests API",
+    "version": "6.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "authorization_code",
+      "authorizationUrl": "https://dashboard.givechariot.com/oauth/authorize",
+      "accessTokenUrl": "https://api.givechariot.com/auth/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Grant Requests",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Grant Requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/grant_requests",
+            "params": [
+              {
+                "name": "donor_account_id",
+                "value": "donor_account_01jpjenf5q6cawy43yxfcrxhct",
+                "type": "query",
+                "description": "Filter Grant Requests by the ID of the associated [Donor Account](/api/donor-accounts)."
+              },
+              {
+                "name": "page_limit",
+                "value": "",
+                "type": "query",
+                "description": "The number of results to return. Defaults to 10, max is 100."
+              },
+              {
+                "name": "page_token",
+                "value": "",
+                "type": "query",
+                "description": "A token to retrieve the next page of results."
+              }
+            ]
+          },
+          "docs": "Returns a list of Grant Requests accessible to the authenticated DAF account.\n\nUse `donor_account_id` to retrieve all Grant Requests associated with a specific donor."
+        },
+        {
+          "info": {
+            "name": "Get Grant Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.givechariot.com/fdx/v6/v1/grant_requests/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique ID of the Grant Request."
+              }
+            ]
+          },
+          "docs": "Retrieve a Grant Request with the given ID."
+        },
+        {
+          "info": {
+            "name": "Submit Grant Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/grant_requests/:id/submit",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique ID of the Grant Request."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Confirm that you have submitted the grant in your system.\n\nCalling this endpoint moves the Grant Request's status to `submitted` and emits a `grant_request.updated` webhook event.\n\n<Warning>\n- The Grant Request must be in `pending` status. If the linked [Donor Account](/api/donor-accounts) is not yet `approved`, the Grant Request will be in `awaiting_account_decision` and this request returns status `412 Precondition Failed`.\n- A Grant Request that is already `submitted` or `rejected` cannot be "
+        },
+        {
+          "info": {
+            "name": "Reject Grant Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.givechariot.com/fdx/v6/v1/grant_requests/:id/reject",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique ID of the Grant Request."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Indicate that you will not process this grant.\n\nCalling this endpoint moves the Grant Request's status to `rejected` and emits a `grant_request.updated` webhook event.\nThe Donor Account itself is unaffected; future Grant Requests from the same donor can still be processed.\n\n<Warning>\nA Grant Request that is already `submitted` or `rejected` cannot be updated. Subsequent calls return status `409 Conflict`.\n</Warning>"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,543 @@
+{
+  "item": [
+    {
+      "id": "68a07c79-0999-4fc9-97cb-c65a45d1bbd4",
+      "name": "Transactions",
+      "description": {
+        "content": "Account transaction history",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5162a5f1-446f-4f05-a0f3-34d525478e26",
+          "name": "List account transactions",
+          "request": {
+            "name": "List account transactions",
+            "description": {
+              "content": "Get a paginated list of transactions for an account. When specifying a date range, both startTime and endTime must be provided together. Defaults to the last 7 days if no date range is specified. Data is available for up to 24 months from the current date.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "accounts",
+                ":id",
+                "transactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Number of results per page. Clamped to the range 10–100."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageKey",
+                  "value": "<uuid>",
+                  "description": "Cursor token for pagination. Pass the `nextPageKey` value from a previous response."
+                },
+                {
+                  "disabled": false,
+                  "key": "startTime",
+                  "value": "<date>",
+                  "description": "Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely."
+                },
+                {
+                  "disabled": false,
+                  "key": "endTime",
+                  "value": "<date>",
+                  "description": "End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Unique identifier for the account"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cbe5e5b7-d99a-4858-99c8-acdc747bc4f8",
+              "name": "A paginated list of transactions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageKey",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "startTime",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "endTime",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the account"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"transactions\": [\n    {\n      \"accountCategory\": \"DEPOSIT_ACCOUNT\",\n      \"accountId\": \"string\",\n      \"transactionId\": \"string\",\n      \"transactionTimestamp\": \"2000-08-17T01:37:39.557Z\",\n      \"description\": \"string\",\n      \"debitCreditMemo\": \"CREDIT\",\n      \"status\": \"MEMO\",\n      \"amount\": 9197.14027162281,\n      \"postedTimestamp\": \"1970-08-13T19:36:31.662Z\",\n      \"memo\": \"string\",\n      \"category\": \"string\",\n      \"subCategory\": \"string\",\n      \"lineItem\": [\n        {\n          \"description\": \"string\",\n          \"amount\": 3469.2937089267652,\n          \"checkNumber\": 8830,\n          \"memo\": \"string\",\n          \"reference\": \"string\"\n        },\n        {\n          \"description\": \"string\",\n          \"amount\": 7774.679882634965,\n          \"checkNumber\": 9068,\n          \"memo\": \"string\",\n          \"reference\": \"string\"\n        }\n      ],\n      \"reward\": {\n        \"categoryId\": \"string\",\n        \"accrued\": 2106.912816815102,\n        \"adjusted\": 4454.977826477659\n      },\n      \"reference\": \"string\",\n      \"links\": [\n        {\n          \"href\": \"string\"\n        },\n        {\n          \"href\": \"string\"\n        }\n      ],\n      \"fiAttributes\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"transactionType\": \"ATMDEPOSIT\",\n      \"payee\": \"string\",\n      \"checkNumber\": 1651\n    },\n    {\n      \"accountCategory\": \"DEPOSIT_ACCOUNT\",\n      \"accountId\": \"string\",\n      \"transactionId\": \"string\",\n      \"transactionTimestamp\": \"1996-07-28T06:12:17.911Z\",\n      \"description\": \"string\",\n      \"debitCreditMemo\": \"DEBIT\",\n      \"status\": \"MEMO\",\n      \"amount\": 6572.713744027727,\n      \"postedTimestamp\": \"1992-10-08T19:12:33.828Z\",\n      \"memo\": \"string\",\n      \"category\": \"string\",\n      \"subCategory\": \"string\",\n      \"lineItem\": [\n        {\n          \"description\": \"string\",\n          \"amount\": 446.81476659338637,\n          \"checkNumber\": 9514,\n          \"memo\": \"string\",\n          \"reference\": \"string\"\n        },\n        {\n          \"description\": \"string\",\n          \"amount\": 5355.099036006861,\n          \"checkNumber\": 1207,\n          \"memo\": \"string\",\n          \"reference\": \"string\"\n        }\n      ],\n      \"reward\": {\n        \"categoryId\": \"string\",\n        \"accrued\": 8463.71343428276,\n        \"adjusted\": 545.3202555700432\n      },\n      \"reference\": \"string\",\n      \"links\": [\n        {\n          \"href\": \"string\"\n        },\n        {\n          \"href\": \"string\"\n        }\n      ],\n      \"fiAttributes\": [\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"value\": \"string\"\n        }\n      ],\n      \"transactionType\": \"DEPOSIT\",\n      \"payee\": \"string\",\n      \"checkNumber\": 275\n    }\n  ],\n  \"page\": {\n    \"nextPageKey\": \"string\",\n    \"totalElements\": 8347\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c94ef78a-4fb8-470f-a88e-34ae039073d4",
+              "name": "Invalid request parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageKey",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "startTime",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "endTime",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the account"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"The startTime parameter must be before endTime\",\n  \"instance\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b6a6e975-caa8-49a3-b6b5-852cea9a3247",
+              "name": "Missing or invalid OAuth 2.0 Bearer token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageKey",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "startTime",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "endTime",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the account"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"The startTime parameter must be before endTime\",\n  \"instance\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f8ef938a-600c-4080-a097-e3000ed0d8f7",
+              "name": "Insufficient permissions or IP not whitelisted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageKey",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "startTime",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "endTime",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the account"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"The startTime parameter must be before endTime\",\n  \"instance\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "073a51af-eac1-44c6-95df-6588956f841a",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageKey",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "startTime",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "endTime",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the account"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"The startTime parameter must be before endTime\",\n  \"instance\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "919d143b-60bb-4796-a201-f8133180a2a0",
+              "name": "Unexpected server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "accounts",
+                    ":id",
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    },
+                    {
+                      "key": "pageKey",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "startTime",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "endTime",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Unique identifier for the account"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/problem+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/problem+json"
+                }
+              ],
+              "body": "{\n  \"type\": \"about:blank\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"The startTime parameter must be before endTime\",\n  \"instance\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.givechariot.com/fdx/v6",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "read:bank_accounts sync:connected_accounts"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.givechariot.com/auth/oauth/token"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://dashboard.givechariot.com/oauth/authorize"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "fe37bc8d-4a37-43e5-9717-722801382d59",
+    "name": "Chariot FDX Accounts Transactions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.\n\nContact Support:\n Name: Chariot Development Team\n Email: developers@givechariot.com",
+      "type": "text/plain"
+    }
+  }
+}

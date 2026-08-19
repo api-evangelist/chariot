@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   title: Chariot FDX Accounts Transactions API
   version: '6.0'
@@ -49,38 +49,70 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    BadRequest:
-      description: Invalid request parameters
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    Unauthorized:
-      description: Missing or invalid OAuth 2.0 Bearer token
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    NotFound:
-      description: Resource not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    Forbidden:
-      description: Insufficient permissions or IP not whitelisted
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    InternalServerError:
-      description: Unexpected server error
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
   schemas:
+    ProblemDetails:
+      type: object
+      description: Error response following RFC 7807 Problem Details for HTTP APIs.
+      required:
+      - type
+      - title
+      - status
+      properties:
+        type:
+          type: string
+          description: A URI reference that identifies the problem type
+          example: about:blank
+        title:
+          type: string
+          description: A short human-readable summary of the problem type
+          example: Bad Request
+        status:
+          type: integer
+          description: The HTTP status code
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem
+          example: The startTime parameter must be before endTime
+        instance:
+          type: string
+          description: A URI reference that identifies the specific occurrence of the problem
+    Link:
+      type: object
+      description: A hyperlink reference.
+      required:
+      - href
+      properties:
+        href:
+          type: string
+          description: URI of the linked resource
+    LineItem:
+      type: object
+      description: A line item within a transaction.
+      properties:
+        description:
+          type: string
+        amount:
+          type: number
+          format: double
+        checkNumber:
+          type: integer
+        memo:
+          type: string
+        reference:
+          type: string
+    ListTransactionsResponse:
+      type: object
+      description: Paginated list of transactions.
+      required:
+      - transactions
+      properties:
+        page:
+          $ref: '#/components/schemas/Page'
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepositTransaction'
     DepositTransaction:
       type: object
       description: A deposit account transaction.
@@ -155,6 +187,45 @@ components:
         checkNumber:
           type: integer
           description: Check number if applicable
+    DepositTransactionType:
+      type: string
+      description: Type of deposit transaction
+      enum:
+      - ADJUSTMENT
+      - ATMDEPOSIT
+      - ATMWITHDRAWAL
+      - BILLPAYMENT
+      - CHECK
+      - DEPOSIT
+      - DIRECTDEPOSIT
+      - DIVIDEND
+      - FEE
+      - INTEREST
+      - POSCREDIT
+      - POSDEBIT
+      - PREAUTHORIZEDDEPOSIT
+      - PREAUTHORIZEDWITHDRAWAL
+      - TRANSFER
+      - WITHDRAWAL
+    TransactionDirection:
+      type: string
+      description: Whether the transaction is a debit or credit
+      enum:
+      - DEBIT
+      - CREDIT
+    AccountCategory:
+      type: string
+      description: Category of account
+      enum:
+      - DEPOSIT_ACCOUNT
+    TransactionStatus:
+      type: string
+      description: Status of the transaction
+      enum:
+      - PENDING
+      - POSTED
+      - AUTHORIZATION
+      - MEMO
     Page:
       type: object
       description: Pagination metadata for list responses.
@@ -165,28 +236,6 @@ components:
         totalElements:
           type: integer
           description: Total number of elements across all pages
-    TransactionStatus:
-      type: string
-      description: Status of the transaction
-      enum:
-      - PENDING
-      - POSTED
-      - AUTHORIZATION
-      - MEMO
-    AccountCategory:
-      type: string
-      description: Category of account
-      enum:
-      - DEPOSIT_ACCOUNT
-    Link:
-      type: object
-      description: A hyperlink reference.
-      required:
-      - href
-      properties:
-        href:
-          type: string
-          description: URI of the linked resource
     TransactionReward:
       type: object
       description: Reward information associated with a transaction.
@@ -210,95 +259,46 @@ components:
           type: string
         value:
           type: string
-    DepositTransactionType:
-      type: string
-      description: Type of deposit transaction
-      enum:
-      - ADJUSTMENT
-      - ATMDEPOSIT
-      - ATMWITHDRAWAL
-      - BILLPAYMENT
-      - CHECK
-      - DEPOSIT
-      - DIRECTDEPOSIT
-      - DIVIDEND
-      - FEE
-      - INTEREST
-      - POSCREDIT
-      - POSDEBIT
-      - PREAUTHORIZEDDEPOSIT
-      - PREAUTHORIZEDWITHDRAWAL
-      - TRANSFER
-      - WITHDRAWAL
-    ListTransactionsResponse:
-      type: object
-      description: Paginated list of transactions.
-      required:
-      - transactions
-      properties:
-        page:
-          $ref: '#/components/schemas/Page'
-        transactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/DepositTransaction'
-    LineItem:
-      type: object
-      description: A line item within a transaction.
-      properties:
-        description:
-          type: string
-        amount:
-          type: number
-          format: double
-        checkNumber:
-          type: integer
-        memo:
-          type: string
-        reference:
-          type: string
-    TransactionDirection:
-      type: string
-      description: Whether the transaction is a debit or credit
-      enum:
-      - DEBIT
-      - CREDIT
-    ProblemDetails:
-      type: object
-      description: Error response following RFC 7807 Problem Details for HTTP APIs.
-      required:
-      - type
-      - title
-      - status
-      properties:
-        type:
-          type: string
-          description: A URI reference that identifies the problem type
-          example: about:blank
-        title:
-          type: string
-          description: A short human-readable summary of the problem type
-          example: Bad Request
-        status:
-          type: integer
-          description: The HTTP status code
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem
-          example: The startTime parameter must be before endTime
-        instance:
-          type: string
-          description: A URI reference that identifies the specific occurrence of the problem
+  responses:
+    Forbidden:
+      description: Insufficient permissions or IP not whitelisted
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    NotFound:
+      description: Resource not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    InternalServerError:
+      description: Unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Unauthorized:
+      description: Missing or invalid OAuth 2.0 Bearer token
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
   parameters:
-    PageKey:
-      name: pageKey
+    EndTime:
+      name: endTime
       in: query
       required: false
-      description: Cursor token for pagination. Pass the `nextPageKey` value from a previous response.
+      description: 'End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.'
       schema:
         type: string
-        format: uuid
+        format: date
     Limit:
       name: limit
       in: query
@@ -309,19 +309,11 @@ components:
         minimum: 10
         maximum: 100
         default: 10
-    EndTime:
-      name: endTime
+    PageKey:
+      name: pageKey
       in: query
       required: false
-      description: 'End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.'
-      schema:
-        type: string
-        format: date
-    AccountId:
-      name: id
-      in: path
-      required: true
-      description: Unique identifier for the account
+      description: Cursor token for pagination. Pass the `nextPageKey` value from a previous response.
       schema:
         type: string
         format: uuid
@@ -333,6 +325,14 @@ components:
       schema:
         type: string
         format: date
+    AccountId:
+      name: id
+      in: path
+      required: true
+      description: Unique identifier for the account
+      schema:
+        type: string
+        format: uuid
   securitySchemes:
     oauth2:
       type: oauth2
