@@ -34,6 +34,19 @@ created: '2026-07-17'
 modified: '2026-07-18'
 tags:
 - Payments
+- Donor-Advised Funds
+- Charitable Giving
+- Non-Profit
+- Fintech
+- DAFpay
+- Grants
+- Disbursements
+- Open Banking
+- FDX
+- Webhook
+- Company
+tags_raw:
+- Payments
 - Donor Advised Funds
 - Charitable Giving
 - Nonprofit
@@ -52,6 +65,8 @@ apis:
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
   tags:
+  - Account
+  tags_raw:
   - Accounts
   properties:
   - type: OpenAPI
@@ -102,6 +117,8 @@ apis:
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
   tags:
+  - Deposits
+  tags_raw:
   - deposits
   properties:
   - type: OpenAPI
@@ -112,6 +129,8 @@ apis:
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
   tags:
+  - Disbursements
+  tags_raw:
   - disbursements
   properties:
   - type: OpenAPI
@@ -122,6 +141,8 @@ apis:
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
   tags:
+  - Donations
+  tags_raw:
   - donations
   properties:
   - type: OpenAPI
@@ -142,6 +163,8 @@ apis:
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
   tags:
+  - Donor-Advised Funds
+  tags_raw:
   - Donor Advised Funds
   properties:
   - type: OpenAPI
@@ -162,6 +185,8 @@ apis:
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
   tags:
+  - Event
+  tags_raw:
   - Events
   properties:
   - type: OpenAPI
@@ -171,7 +196,8 @@ apis:
   description: The financial_accounts API from Chariot — 3 operation(s) for financial_accounts.
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
-  tags:
+  tags: []
+  tags_raw:
   - financial_accounts
   properties:
   - type: OpenAPI
@@ -211,7 +237,8 @@ apis:
   description: The inboundTransfers API from Chariot — 5 operation(s) for inboundtransfers.
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
-  tags:
+  tags: []
+  tags_raw:
   - inboundTransfers
   properties:
   - type: OpenAPI
@@ -222,6 +249,8 @@ apis:
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
   tags:
+  - Mailbox
+  tags_raw:
   - mailbox
   properties:
   - type: OpenAPI
@@ -231,7 +260,8 @@ apis:
   description: The nonprofitAddresses API from Chariot — 1 operation(s) for nonprofitaddresses.
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
-  tags:
+  tags: []
+  tags_raw:
   - nonprofitAddresses
   properties:
   - type: OpenAPI
@@ -241,7 +271,8 @@ apis:
   description: The nonprofitContacts API from Chariot — 1 operation(s) for nonprofitcontacts.
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
-  tags:
+  tags: []
+  tags_raw:
   - nonprofitContacts
   properties:
   - type: OpenAPI
@@ -252,6 +283,8 @@ apis:
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
   tags:
+  - Organization
+  tags_raw:
   - Organizations
   properties:
   - type: OpenAPI
@@ -262,6 +295,8 @@ apis:
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
   tags:
+  - Payment Sources
+  tags_raw:
   - paymentSources
   properties:
   - type: OpenAPI
@@ -282,6 +317,8 @@ apis:
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
   tags:
+  - Properties
+  tags_raw:
   - properties
   properties:
   - type: OpenAPI
@@ -291,7 +328,8 @@ apis:
   description: The recurring_grants API from Chariot — 2 operation(s) for recurring_grants.
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
-  tags:
+  tags: []
+  tags_raw:
   - recurring_grants
   properties:
   - type: OpenAPI
@@ -312,6 +350,8 @@ apis:
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
   tags:
+  - Transaction
+  tags_raw:
   - Transactions
   properties:
   - type: OpenAPI
@@ -321,7 +361,8 @@ apis:
   description: The unintegrated_grants API from Chariot — 2 operation(s) for unintegrated_grants.
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
-  tags:
+  tags: []
+  tags_raw:
   - unintegrated_grants
   properties:
   - type: OpenAPI
@@ -332,6 +373,8 @@ apis:
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
   tags:
+  - Verification Requests
+  tags_raw:
   - verificationRequests
   properties:
   - type: OpenAPI
