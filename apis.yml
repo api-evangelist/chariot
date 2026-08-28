@@ -9,6 +9,18 @@ description: >-
   Financial Data Exchange (FDX) v6 open-banking API. Chariot is building financial infrastructure
   for the multi-hundred-billion-dollar donor-advised fund market, the fastest-growing segment of
   philanthropy.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: self-serve
