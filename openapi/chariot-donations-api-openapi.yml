@@ -1,19 +1,18 @@
 openapi: 3.2.0
 info:
-  title: Chariot FDX Accounts Donations API
-  version: '6.0'
-  description: Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.
+  title: Chariot Donations API
+  version: v1
+  description: The Chariot REST API. Please see https://docs.givechariot.com/api for more details.
   contact:
     name: Chariot Development Team
     url: https://givechariot.com/contact
     email: developers@givechariot.com
+  termsOfService: https://givechariot.com/legal-nonprofit
 servers:
-- url: https://api.givechariot.com/fdx/v6
+- url: https://sandboxapi.givechariot.com
+  description: Sandbox
+- url: https://api.givechariot.com
   description: Production
-- url: https://devapi.givechariot.com/fdx/v6
-  description: Staging
-security:
-- oauth2: []
 tags:
 - name: donations
 paths:
@@ -115,46 +114,64 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    ProblemDetails:
+    Donor:
       type: object
-      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
-      required:
-      - type
-      - title
-      - status
-      - detail
+      description: The donor information for the transaction
       properties:
-        type:
+        full_name:
           type: string
-          description: A URI reference identifying the problem type.
-          example: about:blank
-        title:
+          description: 'The full name of the donor. Maximum length: 255 characters.'
+          example: John Doe
+        first_name:
           type: string
-          description: A short, human-readable summary of the problem type.
-          example: API Error
-        status:
-          type: integer
-          description: The HTTP status code for this error.
-          example: 400
-        detail:
+          description: 'The first name of the donor. Maximum length: 255 characters.'
+          example: John
+        last_name:
           type: string
-          description: A human-readable explanation specific to this occurrence.
-          example: The request is invalid or contains invalid parameters.
-      example:
-        type: about:blank
-        title: API Error
-        status: 400
-        detail: The request is invalid or contains invalid parameters.
-    PropertyType:
-      type: string
-      description: The data type of a property.
-      enum:
-      - text
-      - enum
-      - user
-      - boolean
-      - date
-      example: text
+          description: 'The last name of the donor. Maximum length: 255 characters.'
+          example: Doe
+        email:
+          type: string
+          description: 'The email address of the donor. Maximum length: 255 characters.'
+          example: bob@me.com
+        phone:
+          type: string
+          description: 'The phone number of the donor. Maximum length: 20 characters.'
+          example: 415-555-1212
+        address:
+          $ref: '#/components/schemas/Address'
+    Address:
+      type: object
+      required:
+      - city
+      - country
+      - line1
+      - postal_code
+      - state
+      properties:
+        city:
+          type: string
+          description: 'City, district, suburb, town, or village. Maximum length: 255 characters.'
+          example: New York
+        country:
+          type: string
+          description: Two-letter country code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+          example: US
+        line1:
+          type: string
+          description: 'Address line 1 (e.g. street, PO Box, or company name). Maximum length: 255 characters.'
+          example: 123 Main St.
+        line2:
+          type: string
+          description: 'Address line 2 (e.g. apartment, suite, unit, or building). Maximum length: 255 characters.'
+        postal_code:
+          type: string
+          description: 'ZIP or postal code. Maximum length: 40 characters.'
+          example: '12345'
+        state:
+          type: string
+          description: State, county, province, or region
+          example: NY
     CorporateMatch:
       type: object
       description: A subhash containing information about the corporate match for the donation.
@@ -315,182 +332,6 @@ components:
           - RECEIVED_IN_CHARIOT
           - RECEIVED_OUTSIDE_CHARIOT
           - CANCELED
-    Address:
-      type: object
-      required:
-      - city
-      - country
-      - line1
-      - postal_code
-      - state
-      properties:
-        city:
-          type: string
-          description: 'City, district, suburb, town, or village. Maximum length: 255 characters.'
-          example: New York
-        country:
-          type: string
-          description: Two-letter country code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
-          example: US
-        line1:
-          type: string
-          description: 'Address line 1 (e.g. street, PO Box, or company name). Maximum length: 255 characters.'
-          example: 123 Main St.
-        line2:
-          type: string
-          description: 'Address line 2 (e.g. apartment, suite, unit, or building). Maximum length: 255 characters.'
-        postal_code:
-          type: string
-          description: 'ZIP or postal code. Maximum length: 40 characters.'
-          example: '12345'
-        state:
-          type: string
-          description: State, county, province, or region
-          example: NY
-    PropertyAssignment:
-      type: object
-      description: A property assignment is a key-value pair that is associated with a donation.
-      properties:
-        property_id:
-          type: string
-          description: The unique identifier for the property.
-          example: prop_01j8rs605a4gctmbm58d87mvsj
-        value:
-          $ref: '#/components/schemas/PropertyValue'
-    Platform:
-      type: object
-      description: A subhash containing information about the platform that facilitated the donation.
-      properties:
-        name:
-          type: string
-          description: The name of the platform.
-          example: PayPal Grant Payments
-        platform_grant_id:
-          type: string
-          description: The identifier for the grant within the platform's system.
-          example: 93492947-7894-4663-a944-f2469d0027ca
-        metadata:
-          type: object
-          description: Additional key value pairs that were passed to the platform during the donation initiation.
-          additionalProperties:
-            type: string
-        acceptance:
-          description: 'A subhash containing information about the acceptance of the grant from the platform.
-
-            This is only present if the platform requires grant acceptance before disbursing funds.'
-          allOf:
-          - $ref: '#/components/schemas/PlatformAcceptance'
-    DafGrant:
-      type: object
-      description: A subhash containing information grant details from a Donor-Advised Fund sponsor.
-      required:
-      - organization_name
-      properties:
-        organization_name:
-          type: string
-          description: The name of the Donor Advised Fund sponsor.
-          readOnly: true
-          example: Daffy Charitable Fund
-        donor_fund_name:
-          type: string
-          description: The name of the donor's fund at the Donor Advised Fund sponsor.
-          example: The Smith Family Fund
-        program_name:
-          type: string
-          description: The name of the program at the Donor Advised Fund sponsor.
-        sponsor_grant_id:
-          type: string
-          description: The identifier for the grant at the Donor Advised Fund sponsor.
-          example: 93492947-7894-4663-a944-f2469d0027ca
-    Artifact:
-      type: object
-      description: An artifact is a source file that was used to create the donation.
-      properties:
-        id:
-          type: string
-          readOnly: true
-          description: The unique identifier for the artifact.
-          example: artifact_01j8rs605a4gctmbm58d87mvsj
-        name:
-          type: string
-          description: The name of the artifact.
-          example: donation_receipt.pdf
-        file_id:
-          type: string
-          description: The unique identifier for the file that the artifact is associated with.
-          example: file_01j8rs605a4gctmbm58d87mvsj
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-          description: The date and time when the artifact was created.
-          example: '2020-01-31T23:59:59Z'
-    Donor:
-      type: object
-      description: The donor information for the transaction
-      properties:
-        full_name:
-          type: string
-          description: 'The full name of the donor. Maximum length: 255 characters.'
-          example: John Doe
-        first_name:
-          type: string
-          description: 'The first name of the donor. Maximum length: 255 characters.'
-          example: John
-        last_name:
-          type: string
-          description: 'The last name of the donor. Maximum length: 255 characters.'
-          example: Doe
-        email:
-          type: string
-          description: 'The email address of the donor. Maximum length: 255 characters.'
-          example: bob@me.com
-        phone:
-          type: string
-          description: 'The phone number of the donor. Maximum length: 20 characters.'
-          example: 415-555-1212
-        address:
-          $ref: '#/components/schemas/Address'
-    DonationAttribution:
-      type: object
-      description: A subhash containing information about how the donation is attributed.
-      properties:
-        primary_donor:
-          description: A subhash containing information about the primary donor of the donation.
-          allOf:
-          - $ref: '#/components/schemas/Donor'
-        joint_donor:
-          description: A subhash containing information about the joint donor of the donation.
-          allOf:
-          - $ref: '#/components/schemas/Donor'
-    PropertyValue:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          $ref: '#/components/schemas/PropertyType'
-        text_value:
-          type: string
-          description: The text value of the property.
-        enum_value_id:
-          type: string
-          description: The unique identifier for the enum value.
-        user_value_id:
-          type: string
-          description: The unique identifier for the user.
-        boolean_value:
-          type: boolean
-          description: The boolean value of the property.
-        date_value:
-          type: string
-          format: date-time
-          description: The date value of the property.
-        empty:
-          type: boolean
-          description: 'Whether the property value is empty.
-
-            Can use this to unset property values when assigning a property.'
     DonationSettlement:
       type: object
       description: 'If the payment for the donation was received by Chariot, this object will contain additional information
@@ -524,6 +365,84 @@ components:
 
             Expressed in RFC 3339 format.'
           example: '2020-01-31T23:59:59Z'
+    Platform:
+      type: object
+      description: A subhash containing information about the platform that facilitated the donation.
+      properties:
+        name:
+          type: string
+          description: The name of the platform.
+          example: PayPal Grant Payments
+        platform_grant_id:
+          type: string
+          description: The identifier for the grant within the platform's system.
+          example: 93492947-7894-4663-a944-f2469d0027ca
+        metadata:
+          type: object
+          description: Additional key value pairs that were passed to the platform during the donation initiation.
+          additionalProperties:
+            type: string
+        acceptance:
+          description: 'A subhash containing information about the acceptance of the grant from the platform.
+
+            This is only present if the platform requires grant acceptance before disbursing funds.'
+          allOf:
+          - $ref: '#/components/schemas/PlatformAcceptance'
+    Artifact:
+      type: object
+      description: An artifact is a source file that was used to create the donation.
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: The unique identifier for the artifact.
+          example: artifact_01j8rs605a4gctmbm58d87mvsj
+        name:
+          type: string
+          description: The name of the artifact.
+          example: donation_receipt.pdf
+        file_id:
+          type: string
+          description: The unique identifier for the file that the artifact is associated with.
+          example: file_01j8rs605a4gctmbm58d87mvsj
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date and time when the artifact was created.
+          example: '2020-01-31T23:59:59Z'
+    PropertyAssignment:
+      type: object
+      description: A property assignment is a key-value pair that is associated with a donation.
+      properties:
+        property_id:
+          type: string
+          description: The unique identifier for the property.
+          example: prop_01j8rs605a4gctmbm58d87mvsj
+        value:
+          $ref: '#/components/schemas/PropertyValue'
+    DafGrant:
+      type: object
+      description: A subhash containing information grant details from a Donor-Advised Fund sponsor.
+      required:
+      - organization_name
+      properties:
+        organization_name:
+          type: string
+          description: The name of the Donor Advised Fund sponsor.
+          readOnly: true
+          example: Daffy Charitable Fund
+        donor_fund_name:
+          type: string
+          description: The name of the donor's fund at the Donor Advised Fund sponsor.
+          example: The Smith Family Fund
+        program_name:
+          type: string
+          description: The name of the program at the Donor Advised Fund sponsor.
+        sponsor_grant_id:
+          type: string
+          description: The identifier for the grant at the Donor Advised Fund sponsor.
+          example: 93492947-7894-4663-a944-f2469d0027ca
     PlatformAcceptance:
       type: object
       description: A subhash containing information about the acceptance of the grant from the platform.
@@ -537,6 +456,86 @@ components:
           format: date-time
           description: The date and time when the acceptance of the grant will expire.
           example: '2020-01-31T23:59:59Z'
+    DonationAttribution:
+      type: object
+      description: A subhash containing information about how the donation is attributed.
+      properties:
+        primary_donor:
+          description: A subhash containing information about the primary donor of the donation.
+          allOf:
+          - $ref: '#/components/schemas/Donor'
+        joint_donor:
+          description: A subhash containing information about the joint donor of the donation.
+          allOf:
+          - $ref: '#/components/schemas/Donor'
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
+    PropertyValue:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          $ref: '#/components/schemas/PropertyType'
+        text_value:
+          type: string
+          description: The text value of the property.
+        enum_value_id:
+          type: string
+          description: The unique identifier for the enum value.
+        user_value_id:
+          type: string
+          description: The unique identifier for the user.
+        boolean_value:
+          type: boolean
+          description: The boolean value of the property.
+        date_value:
+          type: string
+          format: date-time
+          description: The date value of the property.
+        empty:
+          type: boolean
+          description: 'Whether the property value is empty.
+
+            Can use this to unset property values when assigning a property.'
+    PropertyType:
+      type: string
+      description: The data type of a property.
+      enum:
+      - text
+      - enum
+      - user
+      - boolean
+      - date
+      example: text
     DonationInitiation:
       type: object
       description: 'If the donation was initiated through a Chariot Connect instance (DAFpay), this object will contain additional information
@@ -591,23 +590,12 @@ components:
           enum:
           - ONE_TIME
           - MONTHLY
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
   responses:
-    AuthenticationError:
-      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Unauthorized:
-              value:
-                type: about:blank
-                title: API Error
-                status: 401
-                detail: Authentication credentials were missing or invalid.
     NotFoundError:
       description: Resource Not Found
       headers:
@@ -624,22 +612,6 @@ components:
                 title: API Error
                 status: 404
                 detail: The requested resource was not found.
-    InternalServerError:
-      description: Internal Server Error
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            InternalServerError:
-              value:
-                type: about:blank
-                title: API Error
-                status: 500
-                detail: The server encountered an error processing your request.
     BadRequestError:
       description: The request is invalid or contains invalid parameters
       headers:
@@ -656,6 +628,22 @@ components:
                 title: API Error
                 status: 400
                 detail: The request is invalid or contains invalid parameters.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
     ListDonationsResponse:
       description: The response for Donations.list
       headers:
@@ -673,8 +661,8 @@ components:
               next_page_token:
                 type: string
                 description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
-    ForbiddenError:
-      description: Access denied
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
       headers:
         X-Request-Id:
           $ref: '#/components/headers/X-Request-Id'
@@ -683,25 +671,29 @@ components:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
           examples:
-            Forbidden:
+            Unauthorized:
               value:
                 type: about:blank
                 title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
-  headers:
-    X-Request-Id:
-      description: The unique identifier for the request
-      schema:
-        type: string
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
   securitySchemes:
-    oauth2:
-      type: oauth2
-      description: OAuth 2.0 Bearer token. A client may hold both scopes, but each FDX authorization must contain exactly one — they are mutually exclusive per authorization. An authorization containing both will be rejected. See the Authentication page for token exchange details.
-      flows:
-        authorizationCode:
-          authorizationUrl: https://dashboard.givechariot.com/oauth/authorize
-          tokenUrl: https://api.givechariot.com/auth/oauth/token
-          scopes:
-            read:bank_accounts: Read access to bank account data
-            sync:connected_accounts: Sync access to connected account data
+    bearerAuth:
+      type: http
+      scheme: bearer

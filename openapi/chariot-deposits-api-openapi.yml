@@ -1,19 +1,18 @@
 openapi: 3.2.0
 info:
-  title: Chariot FDX Accounts Deposits API
-  version: '6.0'
-  description: Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.
+  title: Chariot Deposits API
+  version: v1
+  description: The Chariot REST API. Please see https://docs.givechariot.com/api for more details.
   contact:
     name: Chariot Development Team
     url: https://givechariot.com/contact
     email: developers@givechariot.com
+  termsOfService: https://givechariot.com/legal-nonprofit
 servers:
-- url: https://api.givechariot.com/fdx/v6
+- url: https://sandboxapi.givechariot.com
+  description: Sandbox
+- url: https://api.givechariot.com
   description: Production
-- url: https://devapi.givechariot.com/fdx/v6
-  description: Staging
-security:
-- oauth2: []
 tags:
 - name: deposits
 paths:
@@ -108,97 +107,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    ProblemDetails:
-      type: object
-      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
-      required:
-      - type
-      - title
-      - status
-      - detail
-      properties:
-        type:
-          type: string
-          description: A URI reference identifying the problem type.
-          example: about:blank
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-          example: API Error
-        status:
-          type: integer
-          description: The HTTP status code for this error.
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence.
-          example: The request is invalid or contains invalid parameters.
-      example:
-        type: about:blank
-        title: API Error
-        status: 400
-        detail: The request is invalid or contains invalid parameters.
-    PropertyType:
-      type: string
-      description: The data type of a property.
-      enum:
-      - text
-      - enum
-      - user
-      - boolean
-      - date
-      example: text
-    Transfer:
-      type: object
-      description: A subhash containing information about the transfer associated with the deposit.
-      required:
-      - amount
-      - currency
-      - financial_account_id
-      properties:
-        amount:
-          type: integer
-          format: int64
-          description: The amount of the transfer in minor currency units. For example, for dollars, this is cents.
-          example: 10000
-        currency:
-          type: string
-          description: The [ISO 4217 code](https://en.wikipedia.org/wiki/ISO_4217) for the transfer's currency.
-          example: USD
-        financial_account_id:
-          type: string
-          description: The unique identifier for the financial account that the transfer was made to.
-          example: fa_01j8rs605a4gctmbm58d87mvsj
-        description:
-          type: string
-          description: A description of the transfer.
-          example: Disbursement to nonprofit
-        inbound_account_transfer:
-          description: A subhash containing information about the inbound account transfer associated with the deposit.
-          allOf:
-          - $ref: '#/components/schemas/InboundAccountTransfer'
-        inbound_ach_transfer:
-          description: A subhash containing information about the inbound ACH transfer associated with the deposit.
-          allOf:
-          - $ref: '#/components/schemas/InboundAchTransfer'
-        check_deposit:
-          description: A subhash containing information about the check deposit associated with the deposit.
-          allOf:
-          - $ref: '#/components/schemas/CheckDeposit'
-    InboundAccountTransfer:
-      type: object
-      description: 'An instant transfer of funds between two financial accounts.
-
-        This is the preferred method of transferring funds for Grantmakers within Chariot''s Network.'
-      required:
-      - created_at
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          description: The date and time the account transfer was created
-          example: '2020-01-31T23:00:00Z'
-          readOnly: true
     InboundAchTransfer:
       type: object
       description: An ACH transfer initiated outside of Chariot to your financial account.
@@ -237,6 +145,68 @@ components:
           - declined
           - accepted
           - returned
+    PropertyValue:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          $ref: '#/components/schemas/PropertyType'
+        text_value:
+          type: string
+          description: The text value of the property.
+        enum_value_id:
+          type: string
+          description: The unique identifier for the enum value.
+        user_value_id:
+          type: string
+          description: The unique identifier for the user.
+        boolean_value:
+          type: boolean
+          description: The boolean value of the property.
+        date_value:
+          type: string
+          format: date-time
+          description: The date value of the property.
+        empty:
+          type: boolean
+          description: 'Whether the property value is empty.
+
+            Can use this to unset property values when assigning a property.'
+    PropertyType:
+      type: string
+      description: The data type of a property.
+      enum:
+      - text
+      - enum
+      - user
+      - boolean
+      - date
+      example: text
+    PropertyAssignment:
+      type: object
+      description: A property assignment is a key-value pair that is associated with a donation.
+      properties:
+        property_id:
+          type: string
+          description: The unique identifier for the property.
+          example: prop_01j8rs605a4gctmbm58d87mvsj
+        value:
+          $ref: '#/components/schemas/PropertyValue'
+    InboundAccountTransfer:
+      type: object
+      description: 'An instant transfer of funds between two financial accounts.
+
+        This is the preferred method of transferring funds for Grantmakers within Chariot''s Network.'
+      required:
+      - created_at
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time the account transfer was created
+          example: '2020-01-31T23:00:00Z'
+          readOnly: true
     CheckDeposit:
       type: object
       description: A check deposit represents a physical check that is deposited into a financial account.
@@ -267,16 +237,43 @@ components:
           - deposited
           - rejected
           - returned
-    PropertyAssignment:
+    Transfer:
       type: object
-      description: A property assignment is a key-value pair that is associated with a donation.
+      description: A subhash containing information about the transfer associated with the deposit.
+      required:
+      - amount
+      - currency
+      - financial_account_id
       properties:
-        property_id:
+        amount:
+          type: integer
+          format: int64
+          description: The amount of the transfer in minor currency units. For example, for dollars, this is cents.
+          example: 10000
+        currency:
           type: string
-          description: The unique identifier for the property.
-          example: prop_01j8rs605a4gctmbm58d87mvsj
-        value:
-          $ref: '#/components/schemas/PropertyValue'
+          description: The [ISO 4217 code](https://en.wikipedia.org/wiki/ISO_4217) for the transfer's currency.
+          example: USD
+        financial_account_id:
+          type: string
+          description: The unique identifier for the financial account that the transfer was made to.
+          example: fa_01j8rs605a4gctmbm58d87mvsj
+        description:
+          type: string
+          description: A description of the transfer.
+          example: Disbursement to nonprofit
+        inbound_account_transfer:
+          description: A subhash containing information about the inbound account transfer associated with the deposit.
+          allOf:
+          - $ref: '#/components/schemas/InboundAccountTransfer'
+        inbound_ach_transfer:
+          description: A subhash containing information about the inbound ACH transfer associated with the deposit.
+          allOf:
+          - $ref: '#/components/schemas/InboundAchTransfer'
+        check_deposit:
+          description: A subhash containing information about the check deposit associated with the deposit.
+          allOf:
+          - $ref: '#/components/schemas/CheckDeposit'
     Deposit:
       type: object
       description: A Deposit is a transfer of money for a charitable donation or a batch of donations.
@@ -339,35 +336,53 @@ components:
           format: date-time
           description: The date and time when the bank created the deposit.
           example: '2020-01-31T23:59:59Z'
-    PropertyValue:
+    ProblemDetails:
       type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
       required:
       - type
+      - title
+      - status
+      - detail
       properties:
         type:
-          $ref: '#/components/schemas/PropertyType'
-        text_value:
           type: string
-          description: The text value of the property.
-        enum_value_id:
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
           type: string
-          description: The unique identifier for the enum value.
-        user_value_id:
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
           type: string
-          description: The unique identifier for the user.
-        boolean_value:
-          type: boolean
-          description: The boolean value of the property.
-        date_value:
-          type: string
-          format: date-time
-          description: The date value of the property.
-        empty:
-          type: boolean
-          description: 'Whether the property value is empty.
-
-            Can use this to unset property values when assigning a property.'
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
   responses:
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
     ListDepositsResponse:
       description: The response for Deposits.list
       headers:
@@ -401,6 +416,22 @@ components:
                 title: API Error
                 status: 401
                 detail: Authentication credentials were missing or invalid.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
     InternalServerError:
       description: Internal Server Error
       headers:
@@ -433,51 +464,12 @@ components:
                 title: API Error
                 status: 404
                 detail: The requested resource was not found.
-    ForbiddenError:
-      description: Access denied
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Forbidden:
-              value:
-                type: about:blank
-                title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
-    BadRequestError:
-      description: The request is invalid or contains invalid parameters
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            BadRequest:
-              value:
-                type: about:blank
-                title: API Error
-                status: 400
-                detail: The request is invalid or contains invalid parameters.
   headers:
     X-Request-Id:
       description: The unique identifier for the request
       schema:
         type: string
   securitySchemes:
-    oauth2:
-      type: oauth2
-      description: OAuth 2.0 Bearer token. A client may hold both scopes, but each FDX authorization must contain exactly one — they are mutually exclusive per authorization. An authorization containing both will be rejected. See the Authentication page for token exchange details.
-      flows:
-        authorizationCode:
-          authorizationUrl: https://dashboard.givechariot.com/oauth/authorize
-          tokenUrl: https://api.givechariot.com/auth/oauth/token
-          scopes:
-            read:bank_accounts: Read access to bank account data
-            sync:connected_accounts: Sync access to connected account data
+    bearerAuth:
+      type: http
+      scheme: bearer

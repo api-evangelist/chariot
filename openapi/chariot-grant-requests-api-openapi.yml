@@ -1,19 +1,18 @@
 openapi: 3.2.0
 info:
-  title: Chariot FDX Accounts Grant Requests API
-  version: '6.0'
-  description: Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.
+  title: Chariot Grant Requests API
+  version: v1
+  description: The Chariot REST API. Please see https://docs.givechariot.com/api for more details.
   contact:
     name: Chariot Development Team
     url: https://givechariot.com/contact
     email: developers@givechariot.com
+  termsOfService: https://givechariot.com/legal-nonprofit
 servers:
-- url: https://api.givechariot.com/fdx/v6
+- url: https://sandboxapi.givechariot.com
+  description: Sandbox
+- url: https://api.givechariot.com
   description: Production
-- url: https://devapi.givechariot.com/fdx/v6
-  description: Staging
-security:
-- oauth2: []
 tags:
 - name: Grant Requests
 paths:
@@ -313,36 +312,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    ProblemDetails:
-      type: object
-      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
-      required:
-      - type
-      - title
-      - status
-      - detail
-      properties:
-        type:
-          type: string
-          description: A URI reference identifying the problem type.
-          example: about:blank
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-          example: API Error
-        status:
-          type: integer
-          description: The HTTP status code for this error.
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence.
-          example: The request is invalid or contains invalid parameters.
-      example:
-        type: about:blank
-        title: API Error
-        status: 400
-        detail: The request is invalid or contains invalid parameters.
     GrantRequestDonorContactAddress:
       type: object
       description: The donor's mailing address at the time of the Grant Request.
@@ -475,6 +444,36 @@ components:
           type: string
         address:
           $ref: '#/components/schemas/GrantRequestDonorContactAddress'
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
     GrantRequestFrequency:
       type: string
       enum:
@@ -484,6 +483,60 @@ components:
       - annual
       description: How often the donor intends this grant to recur. Only frequencies enabled in your DAF Provider settings will appear on Grant Requests.
   examples:
+    GrantRequestAwaitingAccountDecisionOutput:
+      summary: Grant Request waiting on Donor Account approval
+      value:
+        id: grant_req_01jpjenf5q6cawy43yxfcrxhct
+        donor_account_id: donor_account_01jpjenf5q6cawy43yxfcrxhct
+        giving_pool_id: null
+        status: awaiting_account_decision
+        ein: 53-0196605
+        nonprofit_name: American Red Cross
+        amount_cents: 10000
+        frequency: one_time
+        form_url: https://example.org/donate
+        purpose: null
+        note: null
+        donor_contact:
+          name: Warren Buffet
+          email: warrenBuffet@example.com
+          phone: '+12125550100'
+          address:
+            line1: 3555 Farnam Street
+            line2: null
+            city: Omaha
+            state: NE
+            zip: '68131'
+        rejection_reason: null
+        created_at: '2026-04-01T11:55:00Z'
+        updated_at: '2026-04-01T11:55:00Z'
+    GrantRequestRejectedOutput:
+      summary: Grant Request you have rejected
+      value:
+        id: grant_req_01jpjenf5q6cawy43yxfcrxhct
+        donor_account_id: donor_account_01jpjenf5q6cawy43yxfcrxhct
+        giving_pool_id: 0bf40881-8ee2-47fb-98ca-f58c7999aa34
+        status: rejected
+        ein: 53-0196605
+        nonprofit_name: American Red Cross
+        amount_cents: 10000
+        frequency: one_time
+        form_url: https://example.org/donate
+        purpose: Disaster relief
+        note: Thank you for your service.
+        donor_contact:
+          name: Warren Buffet
+          email: warrenBuffet@example.com
+          phone: '+12125550100'
+          address:
+            line1: 3555 Farnam Street
+            line2: null
+            city: Omaha
+            state: NE
+            zip: '68131'
+        rejection_reason: Grant amount exceeds donor's available balance.
+        created_at: '2026-04-03T14:22:00Z'
+        updated_at: '2026-04-04T09:15:00Z'
     GrantRequestSubmittedOutput:
       summary: Grant Request you have submitted in your system
       value:
@@ -538,109 +591,12 @@ components:
         rejection_reason: null
         created_at: '2026-04-03T14:22:00Z'
         updated_at: '2026-04-03T14:22:00Z'
-    GrantRequestRejectedOutput:
-      summary: Grant Request you have rejected
-      value:
-        id: grant_req_01jpjenf5q6cawy43yxfcrxhct
-        donor_account_id: donor_account_01jpjenf5q6cawy43yxfcrxhct
-        giving_pool_id: 0bf40881-8ee2-47fb-98ca-f58c7999aa34
-        status: rejected
-        ein: 53-0196605
-        nonprofit_name: American Red Cross
-        amount_cents: 10000
-        frequency: one_time
-        form_url: https://example.org/donate
-        purpose: Disaster relief
-        note: Thank you for your service.
-        donor_contact:
-          name: Warren Buffet
-          email: warrenBuffet@example.com
-          phone: '+12125550100'
-          address:
-            line1: 3555 Farnam Street
-            line2: null
-            city: Omaha
-            state: NE
-            zip: '68131'
-        rejection_reason: Grant amount exceeds donor's available balance.
-        created_at: '2026-04-03T14:22:00Z'
-        updated_at: '2026-04-04T09:15:00Z'
-    GrantRequestAwaitingAccountDecisionOutput:
-      summary: Grant Request waiting on Donor Account approval
-      value:
-        id: grant_req_01jpjenf5q6cawy43yxfcrxhct
-        donor_account_id: donor_account_01jpjenf5q6cawy43yxfcrxhct
-        giving_pool_id: null
-        status: awaiting_account_decision
-        ein: 53-0196605
-        nonprofit_name: American Red Cross
-        amount_cents: 10000
-        frequency: one_time
-        form_url: https://example.org/donate
-        purpose: null
-        note: null
-        donor_contact:
-          name: Warren Buffet
-          email: warrenBuffet@example.com
-          phone: '+12125550100'
-          address:
-            line1: 3555 Farnam Street
-            line2: null
-            city: Omaha
-            state: NE
-            zip: '68131'
-        rejection_reason: null
-        created_at: '2026-04-01T11:55:00Z'
-        updated_at: '2026-04-01T11:55:00Z'
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
   responses:
-    AuthenticationError:
-      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Unauthorized:
-              value:
-                type: about:blank
-                title: API Error
-                status: 401
-                detail: Authentication credentials were missing or invalid.
-    InternalServerError:
-      description: Internal Server Error
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            InternalServerError:
-              value:
-                type: about:blank
-                title: API Error
-                status: 500
-                detail: The server encountered an error processing your request.
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
     ConflictError:
       description: Resource Conflicts
       headers:
@@ -657,6 +613,22 @@ components:
                 title: API Error
                 status: 409
                 detail: The request conflicts with the current state of the resource.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
     BadRequestError:
       description: The request is invalid or contains invalid parameters
       headers:
@@ -673,22 +645,6 @@ components:
                 title: API Error
                 status: 400
                 detail: The request is invalid or contains invalid parameters.
-    PreconditionFailedError:
-      description: Precondition Failed
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            PreconditionFailed:
-              value:
-                type: about:blank
-                title: API Error
-                status: 412
-                detail: A precondition for the request was not met.
     ForbiddenError:
       description: Access denied
       headers:
@@ -705,19 +661,55 @@ components:
                 title: API Error
                 status: 403
                 detail: You do not have permission to access this resource.
-  requestBodies:
-    RejectGrantRequest:
-      description: The request to reject a Grant Request.
-      required: false
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
       content:
-        application/json:
+        application/problem+json:
           schema:
-            type: object
-            properties:
-              reason:
-                type: string
-                description: 'A human-readable reason for the rejection. Maximum length: 400 characters.'
-                example: Grant amount exceeds donor's available balance.
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    PreconditionFailedError:
+      description: Precondition Failed
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            PreconditionFailed:
+              value:
+                type: about:blank
+                title: API Error
+                status: 412
+                detail: A precondition for the request was not met.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
+  requestBodies:
     SubmitGrantRequest:
       description: 'The request to submit a Grant Request.
 
@@ -735,19 +727,19 @@ components:
               comment:
                 type: string
                 description: 'An optional comment recorded with the submission. Maximum length: 400 characters.'
-  headers:
-    X-Request-Id:
-      description: The unique identifier for the request
-      schema:
-        type: string
+    RejectGrantRequest:
+      description: The request to reject a Grant Request.
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              reason:
+                type: string
+                description: 'A human-readable reason for the rejection. Maximum length: 400 characters.'
+                example: Grant amount exceeds donor's available balance.
   securitySchemes:
-    oauth2:
-      type: oauth2
-      description: OAuth 2.0 Bearer token. A client may hold both scopes, but each FDX authorization must contain exactly one — they are mutually exclusive per authorization. An authorization containing both will be rejected. See the Authentication page for token exchange details.
-      flows:
-        authorizationCode:
-          authorizationUrl: https://dashboard.givechariot.com/oauth/authorize
-          tokenUrl: https://api.givechariot.com/auth/oauth/token
-          scopes:
-            read:bank_accounts: Read access to bank account data
-            sync:connected_accounts: Sync access to connected account data
+    bearerAuth:
+      type: http
+      scheme: bearer

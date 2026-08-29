@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Chariot FDX Accounts Contact API
+  title: Chariot FDX Contact API
   version: '6.0'
   description: Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.
   contact:
@@ -46,52 +46,45 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    ProblemDetails:
+    PhoneNumberType:
+      type: string
+      description: Type of phone number
+      enum:
+      - HOME
+      - BUSINESS
+      - CELL
+      - FAX
+    PersonName:
       type: object
-      description: Error response following RFC 7807 Problem Details for HTTP APIs.
+      description: A person's name.
+      properties:
+        first:
+          type: string
+        middle:
+          type: string
+        last:
+          type: string
+        suffix:
+          type: string
+        prefix:
+          type: string
+        company:
+          type: string
+    AccountPhone:
+      type: object
+      description: A phone number.
       required:
       - type
-      - title
-      - status
+      - number
       properties:
         type:
+          $ref: '#/components/schemas/PhoneNumberType'
+        country:
           type: string
-          description: A URI reference that identifies the problem type
-          example: about:blank
-        title:
+          description: Country calling code (e.g., "+1")
+        number:
           type: string
-          description: A short human-readable summary of the problem type
-          example: Bad Request
-        status:
-          type: integer
-          description: The HTTP status code
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem
-          example: The startTime parameter must be before endTime
-        instance:
-          type: string
-          description: A URI reference that identifies the specific occurrence of the problem
-    BusinessCustomer:
-      type: object
-      description: Business customer information.
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          description: Legal business name
-        registeredId:
-          type: string
-          description: Registered identifier (e.g., EIN)
-    CustomerRelationship:
-      type: string
-      description: Relationship of the holder to the account
-      enum:
-      - AUTHORIZED_USER
-      - BUSINESS
-      - PRIMARY
+          description: Phone number
     GetAccountContactResponse:
       type: object
       description: Contact information associated with an account.
@@ -112,46 +105,31 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AccountPhone'
-    PhoneNumberType:
+    BusinessCustomer:
+      type: object
+      description: Business customer information.
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: Legal business name
+        registeredId:
+          type: string
+          description: Registered identifier (e.g., EIN)
+    CustomerRelationship:
       type: string
-      description: Type of phone number
+      description: Relationship of the holder to the account
       enum:
-      - HOME
+      - AUTHORIZED_USER
       - BUSINESS
-      - CELL
-      - FAX
+      - PRIMARY
     AccountHolderType:
       type: string
       description: Type of account holder
       enum:
       - BUSINESS
       - CONSUMER
-    AccountAddress:
-      type: object
-      description: A postal address.
-      required:
-      - line1
-      - city
-      - region
-      - postalCode
-      - country
-      properties:
-        line1:
-          type: string
-        line2:
-          type: string
-        line3:
-          type: string
-        city:
-          type: string
-        region:
-          type: string
-          description: State or region code
-        postalCode:
-          type: string
-        country:
-          type: string
-          description: ISO 3166-1 alpha-2 country code
     AccountHolder:
       type: object
       description: An account holder with their contact details.
@@ -180,40 +158,68 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AccountPhone'
-    AccountPhone:
+    AccountAddress:
       type: object
-      description: A phone number.
+      description: A postal address.
       required:
-      - type
-      - number
+      - line1
+      - city
+      - region
+      - postalCode
+      - country
       properties:
-        type:
-          $ref: '#/components/schemas/PhoneNumberType'
+        line1:
+          type: string
+        line2:
+          type: string
+        line3:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+          description: State or region code
+        postalCode:
+          type: string
         country:
           type: string
-          description: Country calling code (e.g., "+1")
-        number:
-          type: string
-          description: Phone number
-    PersonName:
+          description: ISO 3166-1 alpha-2 country code
+    ProblemDetails:
       type: object
-      description: A person's name.
+      description: Error response following RFC 7807 Problem Details for HTTP APIs.
+      required:
+      - type
+      - title
+      - status
       properties:
-        first:
+        type:
           type: string
-        middle:
+          description: A URI reference that identifies the problem type
+          example: about:blank
+        title:
           type: string
-        last:
+          description: A short human-readable summary of the problem type
+          example: Bad Request
+        status:
+          type: integer
+          description: The HTTP status code
+          example: 400
+        detail:
           type: string
-        suffix:
+          description: A human-readable explanation specific to this occurrence of the problem
+          example: The startTime parameter must be before endTime
+        instance:
           type: string
-        prefix:
-          type: string
-        company:
-          type: string
+          description: A URI reference that identifies the specific occurrence of the problem
   responses:
     Forbidden:
       description: Insufficient permissions or IP not whitelisted
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Unauthorized:
+      description: Missing or invalid OAuth 2.0 Bearer token
       content:
         application/problem+json:
           schema:
@@ -232,12 +238,6 @@ components:
             $ref: '#/components/schemas/ProblemDetails'
     InternalServerError:
       description: Unexpected server error
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    Unauthorized:
-      description: Missing or invalid OAuth 2.0 Bearer token
       content:
         application/problem+json:
           schema:

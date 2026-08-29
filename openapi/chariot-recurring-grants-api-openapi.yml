@@ -1,19 +1,18 @@
 openapi: 3.2.0
 info:
-  title: Chariot FDX Accounts Recurring Grants API
-  version: '6.0'
-  description: Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.
+  title: Chariot Recurring Grants API
+  version: v1
+  description: The Chariot REST API. Please see https://docs.givechariot.com/api for more details.
   contact:
     name: Chariot Development Team
     url: https://givechariot.com/contact
     email: developers@givechariot.com
+  termsOfService: https://givechariot.com/legal-nonprofit
 servers:
-- url: https://api.givechariot.com/fdx/v6
+- url: https://sandboxapi.givechariot.com
+  description: Sandbox
+- url: https://api.givechariot.com
   description: Production
-- url: https://devapi.givechariot.com/fdx/v6
-  description: Staging
-security:
-- oauth2: []
 tags:
 - name: recurring_grants
 paths:
@@ -161,37 +160,158 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    GoneError:
+      description: Resource Gone or Expired
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Gone:
+              value:
+                type: about:blank
+                title: API Error
+                status: 410
+                detail: The resource is no longer available.
+    ListRecurringGrantsResponse:
+      description: The response for RecurringGrants.list
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecurringGrant'
+              nextPageToken:
+                type: string
+                description: A cursor token to use to retrieve the next page of results by making another API call to the same endpoint with the same parameters (only changing the pageToken). If specified, then more results exist on the server that were not returned, otherwise no more results exist on the server.
+          example:
+            results:
+            - id: 29650c10-1eb3-4f97-a63e-f2e41c145b53
+              workflowSessionId: b76fa69f-c554-43b2-af9a-1d4bb9a02016
+              fundId: daf-id
+              createdAt: '2021-08-10 15:00:00.000'
+              updatedAt: '2021-08-11 15:34:00.000'
+              amount: 15000
+              frequency: MONTHLY
+            nextPageToken: c3f685f2-2dda-4956-815b-39867a5e5638
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    ConflictError:
+      description: Resource Conflicts
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Conflict:
+              value:
+                type: about:blank
+                title: API Error
+                status: 409
+                detail: The request conflicts with the current state of the resource.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+  examples:
+    RecurringGrantOutput:
+      summary: Simple recurring grant output.
+      value:
+        id: 1e60800e-849b-43d1-870e-57afc8d75473
+        workflowSessionId: cfe09e64-6a74-4dab-a565-361185a6f248
+        fundId: daf-id
+        createdAt: '2021-08-10 15:00:00.000'
+        updatedAt: '2021-08-11 15:34:00.000'
+        amount: 15000
+        frequency: MONTHLY
   schemas:
-    ProblemDetails:
-      type: object
-      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
-      required:
-      - type
-      - title
-      - status
-      - detail
-      properties:
-        type:
-          type: string
-          description: A URI reference identifying the problem type.
-          example: about:blank
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-          example: API Error
-        status:
-          type: integer
-          description: The HTTP status code for this error.
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence.
-          example: The request is invalid or contains invalid parameters.
-      example:
-        type: about:blank
-        title: API Error
-        status: 400
-        detail: The request is invalid or contains invalid parameters.
     RecurringGrant:
       type: object
       description: 'A RecurringGrant represents a successfully initiated recurring grant request with a Donor Advised Fund.
@@ -297,17 +417,41 @@ components:
         postalCode:
           type: string
           description: 'ZIP or postal code. Maximum length: 255 characters.'
-  examples:
-    RecurringGrantOutput:
-      summary: Simple recurring grant output.
-      value:
-        id: 1e60800e-849b-43d1-870e-57afc8d75473
-        workflowSessionId: cfe09e64-6a74-4dab-a565-361185a6f248
-        fundId: daf-id
-        createdAt: '2021-08-10 15:00:00.000'
-        updatedAt: '2021-08-11 15:34:00.000'
-        amount: 15000
-        frequency: MONTHLY
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
   requestBodies:
     RecurringGrantCaptureRequest:
       description: 'The request to create and submit a monthly recurring grant. This is useful to capture a recurring grant intent associated with Connect workflow session.
@@ -395,159 +539,7 @@ components:
                   Note that including a custom designation may cause the grant approval process to take longer.
 
                   Designations over 100 characters will be truncated.'
-  responses:
-    AuthenticationError:
-      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Unauthorized:
-              value:
-                type: about:blank
-                title: API Error
-                status: 401
-                detail: Authentication credentials were missing or invalid.
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
-    InternalServerError:
-      description: Internal Server Error
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            InternalServerError:
-              value:
-                type: about:blank
-                title: API Error
-                status: 500
-                detail: The server encountered an error processing your request.
-    ConflictError:
-      description: Resource Conflicts
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Conflict:
-              value:
-                type: about:blank
-                title: API Error
-                status: 409
-                detail: The request conflicts with the current state of the resource.
-    ListRecurringGrantsResponse:
-      description: The response for RecurringGrants.list
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              results:
-                type: array
-                items:
-                  $ref: '#/components/schemas/RecurringGrant'
-              nextPageToken:
-                type: string
-                description: A cursor token to use to retrieve the next page of results by making another API call to the same endpoint with the same parameters (only changing the pageToken). If specified, then more results exist on the server that were not returned, otherwise no more results exist on the server.
-          example:
-            results:
-            - id: 29650c10-1eb3-4f97-a63e-f2e41c145b53
-              workflowSessionId: b76fa69f-c554-43b2-af9a-1d4bb9a02016
-              fundId: daf-id
-              createdAt: '2021-08-10 15:00:00.000'
-              updatedAt: '2021-08-11 15:34:00.000'
-              amount: 15000
-              frequency: MONTHLY
-            nextPageToken: c3f685f2-2dda-4956-815b-39867a5e5638
-    ForbiddenError:
-      description: Access denied
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Forbidden:
-              value:
-                type: about:blank
-                title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
-    BadRequestError:
-      description: The request is invalid or contains invalid parameters
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            BadRequest:
-              value:
-                type: about:blank
-                title: API Error
-                status: 400
-                detail: The request is invalid or contains invalid parameters.
-    GoneError:
-      description: Resource Gone or Expired
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Gone:
-              value:
-                type: about:blank
-                title: API Error
-                status: 410
-                detail: The resource is no longer available.
-  headers:
-    X-Request-Id:
-      description: The unique identifier for the request
-      schema:
-        type: string
   securitySchemes:
-    oauth2:
-      type: oauth2
-      description: OAuth 2.0 Bearer token. A client may hold both scopes, but each FDX authorization must contain exactly one — they are mutually exclusive per authorization. An authorization containing both will be rejected. See the Authentication page for token exchange details.
-      flows:
-        authorizationCode:
-          authorizationUrl: https://dashboard.givechariot.com/oauth/authorize
-          tokenUrl: https://api.givechariot.com/auth/oauth/token
-          scopes:
-            read:bank_accounts: Read access to bank account data
-            sync:connected_accounts: Sync access to connected account data
+    bearerAuth:
+      type: http
+      scheme: bearer

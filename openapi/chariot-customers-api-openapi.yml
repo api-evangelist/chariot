@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Chariot FDX Accounts Customers API
+  title: Chariot FDX Customers API
   version: '6.0'
   description: Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.
   contact:
@@ -64,6 +64,32 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    PersonName:
+      type: object
+      description: A person's name.
+      properties:
+        first:
+          type: string
+        middle:
+          type: string
+        last:
+          type: string
+        suffix:
+          type: string
+        prefix:
+          type: string
+        company:
+          type: string
+    Page:
+      type: object
+      description: Pagination metadata for list responses.
+      properties:
+        nextPageKey:
+          type: string
+          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
+        totalElements:
+          type: integer
+          description: Total number of elements across all pages
     ProblemDetails:
       type: object
       description: Error response following RFC 7807 Problem Details for HTTP APIs.
@@ -91,30 +117,6 @@ components:
         instance:
           type: string
           description: A URI reference that identifies the specific occurrence of the problem
-    BusinessCustomer:
-      type: object
-      description: Business customer information.
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          description: Legal business name
-        registeredId:
-          type: string
-          description: Registered identifier (e.g., EIN)
-    CustomerListResponse:
-      type: object
-      description: Paginated list of customers.
-      required:
-      - customers
-      properties:
-        page:
-          $ref: '#/components/schemas/Page'
-        customers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Customer'
     Customer:
       type: object
       description: A customer (organization) associated with an account.
@@ -139,22 +141,6 @@ components:
             $ref: '#/components/schemas/AccountAddress'
         businessCustomer:
           $ref: '#/components/schemas/BusinessCustomer'
-    Page:
-      type: object
-      description: Pagination metadata for list responses.
-      properties:
-        nextPageKey:
-          type: string
-          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
-        totalElements:
-          type: integer
-          description: Total number of elements across all pages
-    CustomerType:
-      type: string
-      description: Type of customer
-      enum:
-      - BUSINESS
-      - INDIVIDUAL
     AccountAddress:
       type: object
       description: A postal address.
@@ -181,31 +167,45 @@ components:
         country:
           type: string
           description: ISO 3166-1 alpha-2 country code
-    PersonName:
+    CustomerListResponse:
       type: object
-      description: A person's name.
+      description: Paginated list of customers.
+      required:
+      - customers
       properties:
-        first:
+        page:
+          $ref: '#/components/schemas/Page'
+        customers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Customer'
+    CustomerType:
+      type: string
+      description: Type of customer
+      enum:
+      - BUSINESS
+      - INDIVIDUAL
+    BusinessCustomer:
+      type: object
+      description: Business customer information.
+      required:
+      - name
+      properties:
+        name:
           type: string
-        middle:
+          description: Legal business name
+        registeredId:
           type: string
-        last:
-          type: string
-        suffix:
-          type: string
-        prefix:
-          type: string
-        company:
-          type: string
+          description: Registered identifier (e.g., EIN)
   responses:
-    Forbidden:
-      description: Insufficient permissions or IP not whitelisted
+    NotFound:
+      description: Resource not found
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-    NotFound:
-      description: Resource not found
+    Unauthorized:
+      description: Missing or invalid OAuth 2.0 Bearer token
       content:
         application/problem+json:
           schema:
@@ -216,8 +216,8 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-    Unauthorized:
-      description: Missing or invalid OAuth 2.0 Bearer token
+    Forbidden:
+      description: Insufficient permissions or IP not whitelisted
       content:
         application/problem+json:
           schema:

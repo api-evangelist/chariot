@@ -1,19 +1,18 @@
 openapi: 3.2.0
 info:
-  title: Chariot FDX Accounts Authorization Tokens API
-  version: '6.0'
-  description: Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.
+  title: Chariot Authorization Tokens API
+  version: v1
+  description: The Chariot REST API. Please see https://docs.givechariot.com/api for more details.
   contact:
     name: Chariot Development Team
     url: https://givechariot.com/contact
     email: developers@givechariot.com
+  termsOfService: https://givechariot.com/legal-nonprofit
 servers:
-- url: https://api.givechariot.com/fdx/v6
+- url: https://sandboxapi.givechariot.com
+  description: Sandbox
+- url: https://api.givechariot.com
   description: Production
-- url: https://devapi.givechariot.com/fdx/v6
-  description: Staging
-security:
-- oauth2: []
 tags:
 - name: Authorization Tokens
 paths:
@@ -282,131 +281,208 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  examples:
+    DonorAccountApprovedOutput:
+      summary: Approved donor account
+      value:
+        id: donor_account_01jpjenf5q6cawy43yxfcrxhct
+        status: approved
+        donor:
+          email: warrenBuffet@example.com
+          first_name: Warren
+          last_name: Buffet
+          phone: '+12125550100'
+        external_id: ACME-DAF-DONOR-1042
+        approval:
+          approved_at: '2026-04-02T18:30:00Z'
+          approved_by: daf:fid_01jpjenf5q6cawy43yxfcrxhct
+        rejection: null
+        disabled: false
+        created_at: '2026-04-01T12:00:00Z'
+        updated_at: '2026-04-02T18:30:00Z'
+    DonorAuthorizationTokenOutput:
+      summary: Authorization token (post-creation; code is omitted)
+      value:
+        id: auth_token_01jpjenf5q6cawy43yxfcrxhct
+        donor_account_id: donor_account_01jpjenf5q6cawy43yxfcrxhct
+        status: verified
+        created_at: '2026-04-01T12:00:00Z'
+        expires_at: '2026-05-01T12:00:00Z'
+        verified_at: '2026-04-02T18:30:00Z'
+    DonorAuthorizationTokenCreatedOutput:
+      summary: Newly created authorization token (code is only present on creation)
+      value:
+        id: auth_token_01jpjenf5q6cawy43yxfcrxhct
+        donor_account_id: donor_account_01jpjenf5q6cawy43yxfcrxhct
+        status: pending
+        code: DAFP-7K3X-9M4Q
+        created_at: '2026-04-01T12:00:00Z'
+        expires_at: '2026-05-01T12:00:00Z'
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
+  responses:
+    ConflictError:
+      description: Resource Conflicts
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Conflict:
+              value:
+                type: about:blank
+                title: API Error
+                status: 409
+                detail: The request conflicts with the current state of the resource.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    ListDonorAuthorizationTokensResponse:
+      description: The response for DonorAccounts.listAuthorizationTokens
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DonorAuthorizationToken'
+              next_page_token:
+                type:
+                - string
+                - 'null'
+                description: A cursor token to use to retrieve the next page of results by making another API call to the same endpoint with the same parameters (only changing the page_token). If specified, then more results exist on the server that were not returned, otherwise no more results exist on the server.
+          examples:
+            Default:
+              value:
+                results:
+                - id: auth_token_01jpjenf5q6cawy43yxfcrxhct
+                  donor_account_id: donor_account_01jpjenf5q6cawy43yxfcrxhct
+                  status: verified
+                  created_at: '2026-04-01T12:00:00Z'
+                  expires_at: '2026-05-01T12:00:00Z'
+                  verified_at: '2026-04-02T18:30:00Z'
+                next_page_token: null
+    GoneError:
+      description: Resource Gone or Expired
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Gone:
+              value:
+                type: about:blank
+                title: API Error
+                status: 410
+                detail: The resource is no longer available.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    PreconditionFailedError:
+      description: Precondition Failed
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            PreconditionFailed:
+              value:
+                type: about:blank
+                title: API Error
+                status: 412
+                detail: A precondition for the request was not met.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
   schemas:
-    ProblemDetails:
-      type: object
-      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
-      required:
-      - type
-      - title
-      - status
-      - detail
-      properties:
-        type:
-          type: string
-          description: A URI reference identifying the problem type.
-          example: about:blank
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-          example: API Error
-        status:
-          type: integer
-          description: The HTTP status code for this error.
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence.
-          example: The request is invalid or contains invalid parameters.
-      example:
-        type: about:blank
-        title: API Error
-        status: 400
-        detail: The request is invalid or contains invalid parameters.
-    DonorAuthorizationTokenStatus:
-      type: string
-      description: "The status of a [Donor Authorization Token](/api/authorization-tokens).\n  * `pending`: The token has been issued but not yet verified.\n  * `verified`: The token has been verified and can no longer be used.\n  * `revoked`: The token was explicitly revoked before being verified.\n  * `expired`: The token's `expires_at` has passed and it can no longer be verified."
-      enum:
-      - pending
-      - verified
-      - revoked
-      - expired
-      example: pending
-    DonorAuthorizationToken:
-      type: object
-      description: 'A Donor Authorization Token is a single-use binding credential that ties a [Donor Account](/api/donor-accounts) to a verified identity exchange between DAFpay and the DAF.
-
-
-        Tokens have two creation paths:
-
-
-        - **DAF-Initiated Setup**: The DAF creates a Donor Account and then a token, surfaces the token''s `code` to the donor via their portal, and the donor enters the `code` into DAFpay to approve their account.
-
-        - **Donor-Initiated Verification**: After a donor submits a Grant Request without an approved Donor Account, DAFpay automatically creates a token and emails the `code` to the donor. The DAF later receives the `code` from the donor and calls [Verify Authorization Token](/api/authorization-tokens/verify) to approve the linked Donor Account.
-
-
-        Tokens are single-use: once verified, the token''s status becomes `verified` and the `code` cannot be used again.'
-      required:
-      - id
-      - donor_account_id
-      - status
-      - created_at
-      - expires_at
-      properties:
-        id:
-          type: string
-          readOnly: true
-          description: The unique identifier for this object.
-          example: auth_token_01jpjenf5q6cawy43yxfcrxhct
-        donor_account_id:
-          type: string
-          readOnly: true
-          description: The ID of the [Donor Account](/api/donor-accounts) this token is bound to.
-          example: donor_account_01jpjenf5q6cawy43yxfcrxhct
-        status:
-          $ref: '#/components/schemas/DonorAuthorizationTokenStatus'
-        code:
-          type: string
-          readOnly: true
-          description: 'The token''s secret code value.
-
-
-            <Warning>
-
-            The `code` is **only returned in the response of [Create Authorization Token](/api/authorization-tokens/create)**. It is omitted from all other responses (Get, List). If the code is lost, [revoke](/api/authorization-tokens/revoke) the token and create a new one.
-
-            </Warning>
-
-
-            The format is a 12-character alphanumeric string designed to be easy for donors to read aloud or copy. Codes are not case-sensitive when verified.'
-          example: DAFP-7K3X-9M4Q
-        created_at:
-          type: string
-          readOnly: true
-          format: date-time
-          description: Time when the token was issued. Expressed in RFC 3339 format.
-          example: '2026-04-01T12:00:00Z'
-        expires_at:
-          type: string
-          readOnly: true
-          format: date-time
-          description: Time at which this token will expire and can no longer be verified. Defaults to 30 days after creation; configurable via the `expires_in` parameter on [Create Authorization Token](/api/authorization-tokens/create).
-          example: '2026-05-01T12:00:00Z'
-        verified_at:
-          type: string
-          readOnly: true
-          format: date-time
-          description: Time at which the token was verified. Only set when `status` is `verified`.
-          example: '2026-04-02T18:30:00Z'
-        revoked_at:
-          type: string
-          readOnly: true
-          format: date-time
-          description: Time at which the token was revoked. Only set when `status` is `revoked`.
-          example: '2026-04-02T18:30:00Z'
-        metadata:
-          type: object
-          description: A map of arbitrary string keys and values to store information about the object.
-          additionalProperties:
-            type: string
-    DonorAccountStatus:
-      type: string
-      description: "The status of a [Donor Account](/api/donor-accounts).\n  * `pending`: The Donor Account has been created but the DAF has not yet approved or rejected it.\n  * `approved`: The DAF has verified the donor's identity and Grants from this account can be processed.\n  * `rejected`: The DAF has rejected the Donor Account. Grants from this account will not be processed."
-      enum:
-      - pending
-      - approved
-      - rejected
-      example: pending
     DonorAccount:
       type: object
       description: 'A Donor Account represents a DAFpay donor identity at a DAF.
@@ -548,202 +624,130 @@ components:
           description: A map of arbitrary string keys and values to store information about the object.
           additionalProperties:
             type: string
-  responses:
-    AuthenticationError:
-      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Unauthorized:
-              value:
-                type: about:blank
-                title: API Error
-                status: 401
-                detail: Authentication credentials were missing or invalid.
-    ListDonorAuthorizationTokensResponse:
-      description: The response for DonorAccounts.listAuthorizationTokens
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              results:
-                type: array
-                items:
-                  $ref: '#/components/schemas/DonorAuthorizationToken'
-              next_page_token:
-                type:
-                - string
-                - 'null'
-                description: A cursor token to use to retrieve the next page of results by making another API call to the same endpoint with the same parameters (only changing the page_token). If specified, then more results exist on the server that were not returned, otherwise no more results exist on the server.
-          examples:
-            Default:
-              value:
-                results:
-                - id: auth_token_01jpjenf5q6cawy43yxfcrxhct
-                  donor_account_id: donor_account_01jpjenf5q6cawy43yxfcrxhct
-                  status: verified
-                  created_at: '2026-04-01T12:00:00Z'
-                  expires_at: '2026-05-01T12:00:00Z'
-                  verified_at: '2026-04-02T18:30:00Z'
-                next_page_token: null
-    GoneError:
-      description: Resource Gone or Expired
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Gone:
-              value:
-                type: about:blank
-                title: API Error
-                status: 410
-                detail: The resource is no longer available.
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
-    InternalServerError:
-      description: Internal Server Error
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            InternalServerError:
-              value:
-                type: about:blank
-                title: API Error
-                status: 500
-                detail: The server encountered an error processing your request.
-    ConflictError:
-      description: Resource Conflicts
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Conflict:
-              value:
-                type: about:blank
-                title: API Error
-                status: 409
-                detail: The request conflicts with the current state of the resource.
-    BadRequestError:
-      description: The request is invalid or contains invalid parameters
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            BadRequest:
-              value:
-                type: about:blank
-                title: API Error
-                status: 400
-                detail: The request is invalid or contains invalid parameters.
-    PreconditionFailedError:
-      description: Precondition Failed
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            PreconditionFailed:
-              value:
-                type: about:blank
-                title: API Error
-                status: 412
-                detail: A precondition for the request was not met.
-    ForbiddenError:
-      description: Access denied
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Forbidden:
-              value:
-                type: about:blank
-                title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
-  examples:
-    DonorAuthorizationTokenOutput:
-      summary: Authorization token (post-creation; code is omitted)
-      value:
-        id: auth_token_01jpjenf5q6cawy43yxfcrxhct
-        donor_account_id: donor_account_01jpjenf5q6cawy43yxfcrxhct
-        status: verified
-        created_at: '2026-04-01T12:00:00Z'
-        expires_at: '2026-05-01T12:00:00Z'
-        verified_at: '2026-04-02T18:30:00Z'
-    DonorAuthorizationTokenCreatedOutput:
-      summary: Newly created authorization token (code is only present on creation)
-      value:
-        id: auth_token_01jpjenf5q6cawy43yxfcrxhct
-        donor_account_id: donor_account_01jpjenf5q6cawy43yxfcrxhct
-        status: pending
-        code: DAFP-7K3X-9M4Q
-        created_at: '2026-04-01T12:00:00Z'
-        expires_at: '2026-05-01T12:00:00Z'
-    DonorAccountApprovedOutput:
-      summary: Approved donor account
-      value:
-        id: donor_account_01jpjenf5q6cawy43yxfcrxhct
-        status: approved
-        donor:
-          email: warrenBuffet@example.com
-          first_name: Warren
-          last_name: Buffet
-          phone: '+12125550100'
-        external_id: ACME-DAF-DONOR-1042
-        approval:
-          approved_at: '2026-04-02T18:30:00Z'
-          approved_by: daf:fid_01jpjenf5q6cawy43yxfcrxhct
-        rejection: null
-        disabled: false
-        created_at: '2026-04-01T12:00:00Z'
-        updated_at: '2026-04-02T18:30:00Z'
+    DonorAuthorizationTokenStatus:
+      type: string
+      description: "The status of a [Donor Authorization Token](/api/authorization-tokens).\n  * `pending`: The token has been issued but not yet verified.\n  * `verified`: The token has been verified and can no longer be used.\n  * `revoked`: The token was explicitly revoked before being verified.\n  * `expired`: The token's `expires_at` has passed and it can no longer be verified."
+      enum:
+      - pending
+      - verified
+      - revoked
+      - expired
+      example: pending
+    DonorAccountStatus:
+      type: string
+      description: "The status of a [Donor Account](/api/donor-accounts).\n  * `pending`: The Donor Account has been created but the DAF has not yet approved or rejected it.\n  * `approved`: The DAF has verified the donor's identity and Grants from this account can be processed.\n  * `rejected`: The DAF has rejected the Donor Account. Grants from this account will not be processed."
+      enum:
+      - pending
+      - approved
+      - rejected
+      example: pending
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
+    DonorAuthorizationToken:
+      type: object
+      description: 'A Donor Authorization Token is a single-use binding credential that ties a [Donor Account](/api/donor-accounts) to a verified identity exchange between DAFpay and the DAF.
+
+
+        Tokens have two creation paths:
+
+
+        - **DAF-Initiated Setup**: The DAF creates a Donor Account and then a token, surfaces the token''s `code` to the donor via their portal, and the donor enters the `code` into DAFpay to approve their account.
+
+        - **Donor-Initiated Verification**: After a donor submits a Grant Request without an approved Donor Account, DAFpay automatically creates a token and emails the `code` to the donor. The DAF later receives the `code` from the donor and calls [Verify Authorization Token](/api/authorization-tokens/verify) to approve the linked Donor Account.
+
+
+        Tokens are single-use: once verified, the token''s status becomes `verified` and the `code` cannot be used again.'
+      required:
+      - id
+      - donor_account_id
+      - status
+      - created_at
+      - expires_at
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: The unique identifier for this object.
+          example: auth_token_01jpjenf5q6cawy43yxfcrxhct
+        donor_account_id:
+          type: string
+          readOnly: true
+          description: The ID of the [Donor Account](/api/donor-accounts) this token is bound to.
+          example: donor_account_01jpjenf5q6cawy43yxfcrxhct
+        status:
+          $ref: '#/components/schemas/DonorAuthorizationTokenStatus'
+        code:
+          type: string
+          readOnly: true
+          description: 'The token''s secret code value.
+
+
+            <Warning>
+
+            The `code` is **only returned in the response of [Create Authorization Token](/api/authorization-tokens/create)**. It is omitted from all other responses (Get, List). If the code is lost, [revoke](/api/authorization-tokens/revoke) the token and create a new one.
+
+            </Warning>
+
+
+            The format is a 12-character alphanumeric string designed to be easy for donors to read aloud or copy. Codes are not case-sensitive when verified.'
+          example: DAFP-7K3X-9M4Q
+        created_at:
+          type: string
+          readOnly: true
+          format: date-time
+          description: Time when the token was issued. Expressed in RFC 3339 format.
+          example: '2026-04-01T12:00:00Z'
+        expires_at:
+          type: string
+          readOnly: true
+          format: date-time
+          description: Time at which this token will expire and can no longer be verified. Defaults to 30 days after creation; configurable via the `expires_in` parameter on [Create Authorization Token](/api/authorization-tokens/create).
+          example: '2026-05-01T12:00:00Z'
+        verified_at:
+          type: string
+          readOnly: true
+          format: date-time
+          description: Time at which the token was verified. Only set when `status` is `verified`.
+          example: '2026-04-02T18:30:00Z'
+        revoked_at:
+          type: string
+          readOnly: true
+          format: date-time
+          description: Time at which the token was revoked. Only set when `status` is `revoked`.
+          example: '2026-04-02T18:30:00Z'
+        metadata:
+          type: object
+          description: A map of arbitrary string keys and values to store information about the object.
+          additionalProperties:
+            type: string
   requestBodies:
     CreateDonorAuthorizationTokenRequest:
       description: 'The request to create a new Authorization Token bound to a Donor Account.
@@ -782,19 +786,7 @@ components:
                 type: string
                 description: 'The DAF''s internal identifier for this Donor Account. If provided, will be set on the Donor Account as part of the verification. Maximum length: 255 characters.'
                 example: ACME-DAF-DONOR-1042
-  headers:
-    X-Request-Id:
-      description: The unique identifier for the request
-      schema:
-        type: string
   securitySchemes:
-    oauth2:
-      type: oauth2
-      description: OAuth 2.0 Bearer token. A client may hold both scopes, but each FDX authorization must contain exactly one — they are mutually exclusive per authorization. An authorization containing both will be rejected. See the Authentication page for token exchange details.
-      flows:
-        authorizationCode:
-          authorizationUrl: https://dashboard.givechariot.com/oauth/authorize
-          tokenUrl: https://api.givechariot.com/auth/oauth/token
-          scopes:
-            read:bank_accounts: Read access to bank account data
-            sync:connected_accounts: Sync access to connected account data
+    bearerAuth:
+      type: http
+      scheme: bearer

@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Chariot FDX Accounts Transactions API
+  title: Chariot FDX Transactions API
   version: '6.0'
   description: Financial Data Exchange (FDX) v6 compatible API for read-only access to Chariot bank account data. Implements the FDX v6 standard for account information, transactions, and statements.
   contact:
@@ -49,58 +49,50 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Number of results per page. Clamped to the range 10–100.
+      schema:
+        type: integer
+        minimum: 10
+        maximum: 100
+        default: 10
+    PageKey:
+      name: pageKey
+      in: query
+      required: false
+      description: Cursor token for pagination. Pass the `nextPageKey` value from a previous response.
+      schema:
+        type: string
+        format: uuid
+    EndTime:
+      name: endTime
+      in: query
+      required: false
+      description: 'End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.'
+      schema:
+        type: string
+        format: date
+    AccountId:
+      name: id
+      in: path
+      required: true
+      description: Unique identifier for the account
+      schema:
+        type: string
+        format: uuid
+    StartTime:
+      name: startTime
+      in: query
+      required: false
+      description: 'Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.'
+      schema:
+        type: string
+        format: date
   schemas:
-    ProblemDetails:
-      type: object
-      description: Error response following RFC 7807 Problem Details for HTTP APIs.
-      required:
-      - type
-      - title
-      - status
-      properties:
-        type:
-          type: string
-          description: A URI reference that identifies the problem type
-          example: about:blank
-        title:
-          type: string
-          description: A short human-readable summary of the problem type
-          example: Bad Request
-        status:
-          type: integer
-          description: The HTTP status code
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem
-          example: The startTime parameter must be before endTime
-        instance:
-          type: string
-          description: A URI reference that identifies the specific occurrence of the problem
-    Link:
-      type: object
-      description: A hyperlink reference.
-      required:
-      - href
-      properties:
-        href:
-          type: string
-          description: URI of the linked resource
-    LineItem:
-      type: object
-      description: A line item within a transaction.
-      properties:
-        description:
-          type: string
-        amount:
-          type: number
-          format: double
-        checkNumber:
-          type: integer
-        memo:
-          type: string
-        reference:
-          type: string
     ListTransactionsResponse:
       type: object
       description: Paginated list of transactions.
@@ -113,6 +105,70 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DepositTransaction'
+    TransactionStatus:
+      type: string
+      description: Status of the transaction
+      enum:
+      - PENDING
+      - POSTED
+      - AUTHORIZATION
+      - MEMO
+    AccountCategory:
+      type: string
+      description: Category of account
+      enum:
+      - DEPOSIT_ACCOUNT
+    Link:
+      type: object
+      description: A hyperlink reference.
+      required:
+      - href
+      properties:
+        href:
+          type: string
+          description: URI of the linked resource
+    DepositTransactionType:
+      type: string
+      description: Type of deposit transaction
+      enum:
+      - ADJUSTMENT
+      - ATMDEPOSIT
+      - ATMWITHDRAWAL
+      - BILLPAYMENT
+      - CHECK
+      - DEPOSIT
+      - DIRECTDEPOSIT
+      - DIVIDEND
+      - FEE
+      - INTEREST
+      - POSCREDIT
+      - POSDEBIT
+      - PREAUTHORIZEDDEPOSIT
+      - PREAUTHORIZEDWITHDRAWAL
+      - TRANSFER
+      - WITHDRAWAL
+    Page:
+      type: object
+      description: Pagination metadata for list responses.
+      properties:
+        nextPageKey:
+          type: string
+          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
+        totalElements:
+          type: integer
+          description: Total number of elements across all pages
+    TransactionReward:
+      type: object
+      description: Reward information associated with a transaction.
+      properties:
+        categoryId:
+          type: string
+        accrued:
+          type: number
+          format: double
+        adjusted:
+          type: number
+          format: double
     DepositTransaction:
       type: object
       description: A deposit account transaction.
@@ -187,67 +243,6 @@ components:
         checkNumber:
           type: integer
           description: Check number if applicable
-    DepositTransactionType:
-      type: string
-      description: Type of deposit transaction
-      enum:
-      - ADJUSTMENT
-      - ATMDEPOSIT
-      - ATMWITHDRAWAL
-      - BILLPAYMENT
-      - CHECK
-      - DEPOSIT
-      - DIRECTDEPOSIT
-      - DIVIDEND
-      - FEE
-      - INTEREST
-      - POSCREDIT
-      - POSDEBIT
-      - PREAUTHORIZEDDEPOSIT
-      - PREAUTHORIZEDWITHDRAWAL
-      - TRANSFER
-      - WITHDRAWAL
-    TransactionDirection:
-      type: string
-      description: Whether the transaction is a debit or credit
-      enum:
-      - DEBIT
-      - CREDIT
-    AccountCategory:
-      type: string
-      description: Category of account
-      enum:
-      - DEPOSIT_ACCOUNT
-    TransactionStatus:
-      type: string
-      description: Status of the transaction
-      enum:
-      - PENDING
-      - POSTED
-      - AUTHORIZATION
-      - MEMO
-    Page:
-      type: object
-      description: Pagination metadata for list responses.
-      properties:
-        nextPageKey:
-          type: string
-          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
-        totalElements:
-          type: integer
-          description: Total number of elements across all pages
-    TransactionReward:
-      type: object
-      description: Reward information associated with a transaction.
-      properties:
-        categoryId:
-          type: string
-        accrued:
-          type: number
-          format: double
-        adjusted:
-          type: number
-          format: double
     FiAttribute:
       type: object
       description: A financial institution-specific attribute.
@@ -259,6 +254,54 @@ components:
           type: string
         value:
           type: string
+    LineItem:
+      type: object
+      description: A line item within a transaction.
+      properties:
+        description:
+          type: string
+        amount:
+          type: number
+          format: double
+        checkNumber:
+          type: integer
+        memo:
+          type: string
+        reference:
+          type: string
+    ProblemDetails:
+      type: object
+      description: Error response following RFC 7807 Problem Details for HTTP APIs.
+      required:
+      - type
+      - title
+      - status
+      properties:
+        type:
+          type: string
+          description: A URI reference that identifies the problem type
+          example: about:blank
+        title:
+          type: string
+          description: A short human-readable summary of the problem type
+          example: Bad Request
+        status:
+          type: integer
+          description: The HTTP status code
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem
+          example: The startTime parameter must be before endTime
+        instance:
+          type: string
+          description: A URI reference that identifies the specific occurrence of the problem
+    TransactionDirection:
+      type: string
+      description: Whether the transaction is a debit or credit
+      enum:
+      - DEBIT
+      - CREDIT
   responses:
     Forbidden:
       description: Insufficient permissions or IP not whitelisted
@@ -268,12 +311,6 @@ components:
             $ref: '#/components/schemas/ProblemDetails'
     NotFound:
       description: Resource not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    InternalServerError:
-      description: Unexpected server error
       content:
         application/problem+json:
           schema:
@@ -290,49 +327,12 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-  parameters:
-    EndTime:
-      name: endTime
-      in: query
-      required: false
-      description: 'End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.'
-      schema:
-        type: string
-        format: date
-    Limit:
-      name: limit
-      in: query
-      required: false
-      description: Number of results per page. Clamped to the range 10–100.
-      schema:
-        type: integer
-        minimum: 10
-        maximum: 100
-        default: 10
-    PageKey:
-      name: pageKey
-      in: query
-      required: false
-      description: Cursor token for pagination. Pass the `nextPageKey` value from a previous response.
-      schema:
-        type: string
-        format: uuid
-    StartTime:
-      name: startTime
-      in: query
-      required: false
-      description: 'Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.'
-      schema:
-        type: string
-        format: date
-    AccountId:
-      name: id
-      in: path
-      required: true
-      description: Unique identifier for the account
-      schema:
-        type: string
-        format: uuid
+    InternalServerError:
+      description: Unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
   securitySchemes:
     oauth2:
       type: oauth2
