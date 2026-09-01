@@ -46,7 +46,7 @@ created: '2026-07-17'
 modified: '2026-07-18'
 tags:
 - Payments
-- Donor Advised Funds
+- Donor-Advised Funds
 - Charitable Giving
 - Non-Profit
 - Fintech
@@ -129,7 +129,7 @@ apis:
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
   tags:
-  - deposits
+  - Deposits
   tags_raw:
   - deposits
   properties:
@@ -141,7 +141,7 @@ apis:
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
   tags:
-  - disbursements
+  - Disbursements
   tags_raw:
   - disbursements
   properties:
@@ -153,7 +153,7 @@ apis:
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
   tags:
-  - donations
+  - Donations
   tags_raw:
   - donations
   properties:
@@ -175,7 +175,7 @@ apis:
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
   tags:
-  - Donor Advised Funds
+  - Donor-Advised Funds
   tags_raw:
   - Donor Advised Funds
   properties:
@@ -261,7 +261,7 @@ apis:
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
   tags:
-  - mailbox
+  - Mailbox
   tags_raw:
   - mailbox
   properties:
@@ -306,7 +306,8 @@ apis:
   description: The paymentSources API from Chariot — 2 operation(s) for paymentsources.
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
-  tags: []
+  tags:
+  - Payment Sources
   tags_raw:
   - paymentSources
   properties:
@@ -383,7 +384,8 @@ apis:
   description: The verificationRequests API from Chariot — 2 operation(s) for verificationrequests.
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
-  tags: []
+  tags:
+  - Verification Requests
   tags_raw:
   - verificationRequests
   properties:
