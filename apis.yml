@@ -397,6 +397,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Website
+  url: https://www.givechariot.com/
 - type: CapabilityMap
   url: capabilities/chariot-capability-edges.yml
   name: Chariot Business Capability Map
