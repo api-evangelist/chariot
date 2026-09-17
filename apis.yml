@@ -301,18 +301,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/chariot-organizations-api-openapi.yml
-- aid: chariot:chariot-paymentsources-api
-  name: Chariot paymentSources API
-  description: The paymentSources API from Chariot — 2 operation(s) for paymentsources.
-  humanURL: https://docs.givechariot.com/api
-  baseURL: https://api.givechariot.com
-  tags:
-  - Payment Sources
-  tags_raw:
-  - paymentSources
-  properties:
-  - type: OpenAPI
-    url: openapi/chariot-paymentsources-api-openapi.yml
 - aid: chariot:chariot-programs-api
   name: Chariot Programs API
   description: The Programs API from Chariot — 2 operation(s) for programs.
@@ -379,18 +367,26 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/chariot-unintegrated-grants-api-openapi.yml
-- aid: chariot:chariot-verificationrequests-api
-  name: Chariot verificationRequests API
-  description: The verificationRequests API from Chariot — 2 operation(s) for verificationrequests.
+- aid: chariot:chariot-payment-sources-api
+  name: Chariot Payment Sources API
+  description: The Payment Sources API from Chariot — 2 operation(s) for payment sources.
+  humanURL: https://docs.givechariot.com/api
+  baseURL: https://api.givechariot.com
+  tags:
+  - Payment Sources
+  properties:
+  - type: OpenAPI
+    url: openapi/chariot-payment-sources-api-openapi.yml
+- aid: chariot:chariot-verification-requests-api
+  name: Chariot Verification Requests API
+  description: The Verification Requests API from Chariot — 2 operation(s) for verification requests.
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
   tags:
   - Verification Requests
-  tags_raw:
-  - verificationRequests
   properties:
   - type: OpenAPI
-    url: openapi/chariot-verificationrequests-api-openapi.yml
+    url: openapi/chariot-verification-requests-api-openapi.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
