@@ -60,8 +60,6 @@ paths:
       description: 'Create and submit a new recurring grant. This should be used to capture a recurring grant intent from an authorized DAFpay workflow session and submit the recurring grant request to the DAF sponsor.
 
 
-        <Warning>
-
         Error handling:
 
         - The recurring grant must be captured within 15 minutes of authorization otherwise the request will return status `410 Gone`.
@@ -74,9 +72,7 @@ paths:
 
         - The amount must be less than or equal to the user''s DAF account balance otherwise the request will return status `400 Bad Request`.
 
-        - Any inputs exceeding the maximum allowed length will be automatically truncated unless otherwise stated.
-
-        </Warning>'
+        - Any inputs exceeding the maximum allowed length will be automatically truncated unless otherwise stated.'
       operationId: create-recurring-grant
       tags:
       - recurring_grants
@@ -160,146 +156,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    BadRequestError:
-      description: The request is invalid or contains invalid parameters
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            BadRequest:
-              value:
-                type: about:blank
-                title: API Error
-                status: 400
-                detail: The request is invalid or contains invalid parameters.
-    AuthenticationError:
-      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Unauthorized:
-              value:
-                type: about:blank
-                title: API Error
-                status: 401
-                detail: Authentication credentials were missing or invalid.
-    GoneError:
-      description: Resource Gone or Expired
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Gone:
-              value:
-                type: about:blank
-                title: API Error
-                status: 410
-                detail: The resource is no longer available.
-    ListRecurringGrantsResponse:
-      description: The response for RecurringGrants.list
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              results:
-                type: array
-                items:
-                  $ref: '#/components/schemas/RecurringGrant'
-              nextPageToken:
-                type: string
-                description: A cursor token to use to retrieve the next page of results by making another API call to the same endpoint with the same parameters (only changing the pageToken). If specified, then more results exist on the server that were not returned, otherwise no more results exist on the server.
-          example:
-            results:
-            - id: 29650c10-1eb3-4f97-a63e-f2e41c145b53
-              workflowSessionId: b76fa69f-c554-43b2-af9a-1d4bb9a02016
-              fundId: daf-id
-              createdAt: '2021-08-10 15:00:00.000'
-              updatedAt: '2021-08-11 15:34:00.000'
-              amount: 15000
-              frequency: MONTHLY
-            nextPageToken: c3f685f2-2dda-4956-815b-39867a5e5638
-    ForbiddenError:
-      description: Access denied
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Forbidden:
-              value:
-                type: about:blank
-                title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
-    ConflictError:
-      description: Resource Conflicts
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Conflict:
-              value:
-                type: about:blank
-                title: API Error
-                status: 409
-                detail: The request conflicts with the current state of the resource.
-    InternalServerError:
-      description: Internal Server Error
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            InternalServerError:
-              value:
-                type: about:blank
-                title: API Error
-                status: 500
-                detail: The server encountered an error processing your request.
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
   examples:
     RecurringGrantOutput:
       summary: Simple recurring grant output.
@@ -311,147 +167,6 @@ components:
         updatedAt: '2021-08-11 15:34:00.000'
         amount: 15000
         frequency: MONTHLY
-  schemas:
-    RecurringGrant:
-      type: object
-      description: 'A RecurringGrant represents a successfully initiated recurring grant request with a Donor Advised Fund.
-
-        RecurringGrants are created when a person interacts with an instance of Chariot Connect and successfully submits a recurring grant and completes the workflow.
-
-        On creation, each RecurringGrant object will also have a Grant object created to represent the first grant of the recurring grant.
-
-        There can be many grants associated with the same recurring grant.'
-      required:
-      - id
-      - workflowSessionId
-      - fundId
-      - amount
-      - frequency
-      properties:
-        id:
-          type: string
-          readOnly: true
-          description: The unique identifier for the object
-          format: uuid
-          example: cfe09e64-6a74-4dab-a565-361185a6f248
-        trackingId:
-          type: string
-          readOnly: true
-          description: The tracking ID for the grant
-          example: L9E182VBGP
-        workflowSessionId:
-          type: string
-          readOnly: true
-          description: ID of the Connect Workflow Session associated with this grant
-          format: uuid
-          example: 2d4b2a43-a5b4-4be1-ad1f-f932016ca4a6
-        fundId:
-          type: string
-          readOnly: true
-          description: ID of the donor advised fund
-          example: daf-id
-        frequency:
-          type: string
-          description: How often the DAF provider will submit the recurring grant. At the moment, monthly is the only supported frequency.
-          enum:
-          - MONTHLY
-          example: MONTHLY
-        externalRecurringGrantId:
-          type: string
-          description: ID of the grant associated with the donor advised fund
-          example: 897823sdjf8sfjs
-        createdAt:
-          type: string
-          readOnly: true
-          format: date-time
-          description: Time when this object was created; expressed in RFC 3339 format
-          example: '2020-01-31T23:00:00Z'
-        updatedAt:
-          type: string
-          readOnly: true
-          format: date-time
-          description: Time when this object was last updated; expressed in RFC 3339 format
-          example: '2020-01-31T23:59:59Z'
-        amount:
-          type: number
-          format: integer
-          description: The grant amount expressed in units of whole cents
-          example: 15000
-        firstName:
-          type: string
-          description: The donor's first name
-          example: Warren
-        lastName:
-          type: string
-          description: The donor's last name
-          example: Buffet
-        phone:
-          type: string
-          description: The donor's phone number
-          example: '1237861020'
-        email:
-          type: string
-          description: The donor's email
-          example: warrenBuffet@example.com
-        note:
-          type: string
-          description: An note inputted by the user at submisson
-          example: Please dedicate in memory of grandma
-        address:
-          $ref: '#/components/schemas/GrantAddress'
-    GrantAddress:
-      type: object
-      properties:
-        line1:
-          type: string
-          description: 'Address line 1 (e.g. street, PO Box, or company name). Maximum length: 255 characters.'
-        line2:
-          type: string
-          description: 'Address line 2 (e.g. apartment, suite, unit, or building). Maximum length: 255 characters.'
-        city:
-          type: string
-          description: 'City, district, suburb, town, or village.. Maximum length: 255 characters.'
-        state:
-          type: string
-          description: 'State, county, province, or region. Maximum length: 255 characters.'
-        postalCode:
-          type: string
-          description: 'ZIP or postal code. Maximum length: 255 characters.'
-    ProblemDetails:
-      type: object
-      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
-      required:
-      - type
-      - title
-      - status
-      - detail
-      properties:
-        type:
-          type: string
-          description: A URI reference identifying the problem type.
-          example: about:blank
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-          example: API Error
-        status:
-          type: integer
-          description: The HTTP status code for this error.
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence.
-          example: The request is invalid or contains invalid parameters.
-      example:
-        type: about:blank
-        title: API Error
-        status: 400
-        detail: The request is invalid or contains invalid parameters.
-  headers:
-    X-Request-Id:
-      description: The unique identifier for the request
-      schema:
-        type: string
   requestBodies:
     RecurringGrantCaptureRequest:
       description: 'The request to create and submit a monthly recurring grant. This is useful to capture a recurring grant intent associated with Connect workflow session.
@@ -539,6 +254,287 @@ components:
                   Note that including a custom designation may cause the grant approval process to take longer.
 
                   Designations over 100 characters will be truncated.'
+  responses:
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+    ListRecurringGrantsResponse:
+      description: The response for RecurringGrants.list
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecurringGrant'
+              nextPageToken:
+                type: string
+                description: A cursor token to use to retrieve the next page of results by making another API call to the same endpoint with the same parameters (only changing the pageToken). If specified, then more results exist on the server that were not returned, otherwise no more results exist on the server.
+          example:
+            results:
+            - id: 29650c10-1eb3-4f97-a63e-f2e41c145b53
+              workflowSessionId: b76fa69f-c554-43b2-af9a-1d4bb9a02016
+              fundId: daf-id
+              createdAt: '2021-08-10 15:00:00.000'
+              updatedAt: '2021-08-11 15:34:00.000'
+              amount: 15000
+              frequency: MONTHLY
+            nextPageToken: c3f685f2-2dda-4956-815b-39867a5e5638
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
+    GoneError:
+      description: Resource Gone or Expired
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Gone:
+              value:
+                type: about:blank
+                title: API Error
+                status: 410
+                detail: The resource is no longer available.
+    ConflictError:
+      description: Resource Conflicts
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Conflict:
+              value:
+                type: about:blank
+                title: API Error
+                status: 409
+                detail: The request conflicts with the current state of the resource.
+  schemas:
+    GrantAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+          description: 'Address line 1 (e.g. street, PO Box, or company name). Maximum length: 255 characters.'
+        line2:
+          type: string
+          description: 'Address line 2 (e.g. apartment, suite, unit, or building). Maximum length: 255 characters.'
+        city:
+          type: string
+          description: 'City, district, suburb, town, or village.. Maximum length: 255 characters.'
+        state:
+          type: string
+          description: 'State, county, province, or region. Maximum length: 255 characters.'
+        postalCode:
+          type: string
+          description: 'ZIP or postal code. Maximum length: 255 characters.'
+    RecurringGrant:
+      type: object
+      description: 'A RecurringGrant represents a successfully initiated recurring grant request with a Donor Advised Fund.
+
+        RecurringGrants are created when a person interacts with an instance of Chariot Connect and successfully submits a recurring grant and completes the workflow.
+
+        On creation, each RecurringGrant object will also have a Grant object created to represent the first grant of the recurring grant.
+
+        There can be many grants associated with the same recurring grant.'
+      required:
+      - id
+      - workflowSessionId
+      - fundId
+      - amount
+      - frequency
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: The unique identifier for the object
+          format: uuid
+          example: cfe09e64-6a74-4dab-a565-361185a6f248
+        trackingId:
+          type: string
+          readOnly: true
+          description: The tracking ID for the grant
+          example: L9E182VBGP
+        workflowSessionId:
+          type: string
+          readOnly: true
+          description: ID of the Connect Workflow Session associated with this grant
+          format: uuid
+          example: 2d4b2a43-a5b4-4be1-ad1f-f932016ca4a6
+        fundId:
+          type: string
+          readOnly: true
+          description: ID of the donor advised fund
+          example: daf-id
+        frequency:
+          type: string
+          description: How often the DAF provider will submit the recurring grant. At the moment, monthly is the only supported frequency.
+          enum:
+          - MONTHLY
+          example: MONTHLY
+        externalRecurringGrantId:
+          type: string
+          description: ID of the grant associated with the donor advised fund
+          example: 897823sdjf8sfjs
+        createdAt:
+          type: string
+          readOnly: true
+          format: date-time
+          description: Time when this object was created; expressed in RFC 3339 format
+          example: '2020-01-31T23:00:00Z'
+        updatedAt:
+          type: string
+          readOnly: true
+          format: date-time
+          description: Time when this object was last updated; expressed in RFC 3339 format
+          example: '2020-01-31T23:59:59Z'
+        amount:
+          type: number
+          format: integer
+          description: The grant amount expressed in units of whole cents
+          example: 15000
+        firstName:
+          type: string
+          description: The donor's first name
+          example: Warren
+        lastName:
+          type: string
+          description: The donor's last name
+          example: Buffet
+        phone:
+          type: string
+          description: The donor's phone number
+          example: '1237861020'
+        email:
+          type: string
+          description: The donor's email
+          example: warrenBuffet@example.com
+        note:
+          type: string
+          description: An note inputted by the user at submisson
+          example: Please dedicate in memory of grandma
+        address:
+          $ref: '#/components/schemas/GrantAddress'
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http

@@ -179,11 +179,7 @@ paths:
       description: 'Simulate an inbound transfer failure.
 
 
-        <Note title="Sandbox Only" icon="fa-light fa-atom-simple">
-
-        This API is only available in the sandbox environment.
-
-        </Note>'
+        This API is only available in the sandbox environment.'
       operationId: simulateInboundTransferFailure
       tags:
       - inboundTransfers
@@ -216,11 +212,7 @@ paths:
       description: 'Simulate an inbound transfer completion.
 
 
-        <Note title="Sandbox Only" icon="fa-light fa-atom-simple">
-
-        This API is only available in the sandbox environment.
-
-        </Note>'
+        This API is only available in the sandbox environment.'
       operationId: simulateInboundTransferCompletion
       tags:
       - inboundTransfers
@@ -248,55 +240,20 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  headers:
+    Location:
+      description: The URI of the created object
+      schema:
+        type: string
+    Idempotency-Key:
+      description: Idempotency key for the request
+      schema:
+        type: string
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
   responses:
-    BadRequestError:
-      description: The request is invalid or contains invalid parameters
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            BadRequest:
-              value:
-                type: about:blank
-                title: API Error
-                status: 400
-                detail: The request is invalid or contains invalid parameters.
-    AuthenticationError:
-      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Unauthorized:
-              value:
-                type: about:blank
-                title: API Error
-                status: 401
-                detail: Authentication credentials were missing or invalid.
-    InternalServerError:
-      description: Internal Server Error
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            InternalServerError:
-              value:
-                type: about:blank
-                title: API Error
-                status: 500
-                detail: The server encountered an error processing your request.
     PreconditionFailedError:
       description: Precondition Failed
       headers:
@@ -313,8 +270,8 @@ components:
                 title: API Error
                 status: 412
                 detail: A precondition for the request was not met.
-    ForbiddenError:
-      description: Access denied
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
       headers:
         X-Request-Id:
           $ref: '#/components/headers/X-Request-Id'
@@ -323,12 +280,28 @@ components:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
           examples:
-            Forbidden:
+            Unauthorized:
               value:
                 type: about:blank
                 title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
     ListInboundTransfersResponse:
       description: The response for InboundTransfers.list
       headers:
@@ -346,6 +319,54 @@ components:
               nextPageToken:
                 type: string
                 description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
     ConflictError:
       description: Resource Conflicts
       headers:
@@ -362,35 +383,32 @@ components:
                 title: API Error
                 status: 409
                 detail: The request conflicts with the current state of the resource.
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
+  requestBodies:
+    CreateInboundTransferRequest:
+      description: The request body for originating an inbound transfer from an external bank account
+      required: true
       content:
-        application/problem+json:
+        application/json:
           schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
-  headers:
-    Location:
-      description: The URI of the created object
-      schema:
-        type: string
-    Idempotency-Key:
-      description: Idempotency key for the request
-      schema:
-        type: string
-    X-Request-Id:
-      description: The unique identifier for the request
-      schema:
-        type: string
+            type: object
+            required:
+            - amount
+            - account_id
+            properties:
+              amount:
+                type: number
+                description: 'The amount of the transfer in cents.
+
+                  This amount must be positive.'
+                example: 10000
+              account_id:
+                type: string
+                description: The identifier of the financial account that will receive the transfer.
+                example: account_01jpjenf5q6cawy43yxfcrxhct
+              description:
+                type: string
+                description: An arbitrary string attached to the object. Often useful for displaying to users.
+                example: Inbound ACH Transfer from my bank account
   schemas:
     InboundTransfer:
       type: object
@@ -475,32 +493,6 @@ components:
         title: API Error
         status: 400
         detail: The request is invalid or contains invalid parameters.
-  requestBodies:
-    CreateInboundTransferRequest:
-      description: The request body for originating an inbound transfer from an external bank account
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-            - amount
-            - account_id
-            properties:
-              amount:
-                type: number
-                description: 'The amount of the transfer in cents.
-
-                  This amount must be positive.'
-                example: 10000
-              account_id:
-                type: string
-                description: The identifier of the financial account that will receive the transfer.
-                example: account_01jpjenf5q6cawy43yxfcrxhct
-              description:
-                type: string
-                description: An arbitrary string attached to the object. Often useful for displaying to users.
-                example: Inbound ACH Transfer from my bank account
   securitySchemes:
     bearerAuth:
       type: http

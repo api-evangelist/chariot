@@ -69,22 +69,53 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    ListAccountsResponse:
+    Page:
       type: object
-      description: Paginated list of deposit accounts.
-      required:
-      - accounts
+      description: Pagination metadata for list responses.
       properties:
-        organizationId:
+        nextPageKey:
           type: string
-          format: uuid
-          description: The organization that owns the accounts. Equivalent to the customerId returned by GET /customers/current.
-        page:
-          $ref: '#/components/schemas/Page'
-        accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/DepositAccount'
+          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
+        totalElements:
+          type: integer
+          description: Total number of elements across all pages
+    AccountType:
+      type: string
+      description: Type of deposit account
+      enum:
+      - CHECKING
+    Currency:
+      type: object
+      description: Currency information.
+      required:
+      - currencyCode
+      properties:
+        currencyCode:
+          type: string
+          description: ISO 4217 currency code
+          example: USD
+    BalanceType:
+      type: string
+      description: Type of balance
+      enum:
+      - ASSET
+    AccountStatus:
+      type: string
+      description: Status of the account
+      enum:
+      - OPEN
+      - CLOSED
+      - DELINQUENT
+      - NEGATIVECURRENTBALANCE
+      - PAID
+      - PENDINGCLOSE
+      - PENDINGOPEN
+      - RESTRICTED
+    AccountCategory:
+      type: string
+      description: Category of account
+      enum:
+      - DEPOSIT_ACCOUNT
     DepositAccountDetails:
       description: Detailed deposit account information including balances.
       allOf:
@@ -126,48 +157,6 @@ components:
           transferOut:
             type: boolean
             description: Whether the account supports outgoing transfers
-    AccountType:
-      type: string
-      description: Type of deposit account
-      enum:
-      - CHECKING
-    Currency:
-      type: object
-      description: Currency information.
-      required:
-      - currencyCode
-      properties:
-        currencyCode:
-          type: string
-          description: ISO 4217 currency code
-          example: USD
-    AccountStatus:
-      type: string
-      description: Status of the account
-      enum:
-      - OPEN
-      - CLOSED
-      - DELINQUENT
-      - NEGATIVECURRENTBALANCE
-      - PAID
-      - PENDINGCLOSE
-      - PENDINGOPEN
-      - RESTRICTED
-    Page:
-      type: object
-      description: Pagination metadata for list responses.
-      properties:
-        nextPageKey:
-          type: string
-          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
-        totalElements:
-          type: integer
-          description: Total number of elements across all pages
-    AccountCategory:
-      type: string
-      description: Category of account
-      enum:
-      - DEPOSIT_ACCOUNT
     DepositAccount:
       type: object
       description: A deposit (bank) account.
@@ -219,11 +208,22 @@ components:
           type: string
           format: date
           description: Date the account was closed (YYYY-MM-DD). Present only for closed accounts.
-    BalanceType:
-      type: string
-      description: Type of balance
-      enum:
-      - ASSET
+    ListAccountsResponse:
+      type: object
+      description: Paginated list of deposit accounts.
+      required:
+      - accounts
+      properties:
+        organizationId:
+          type: string
+          format: uuid
+          description: The organization that owns the accounts. Equivalent to the customerId returned by GET /customers/current.
+        page:
+          $ref: '#/components/schemas/Page'
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepositAccount'
     ProblemDetails:
       type: object
       description: Error response following RFC 7807 Problem Details for HTTP APIs.
@@ -252,16 +252,6 @@ components:
           type: string
           description: A URI reference that identifies the specific occurrence of the problem
   parameters:
-    Limit:
-      name: limit
-      in: query
-      required: false
-      description: Number of results per page. Clamped to the range 10–100.
-      schema:
-        type: integer
-        minimum: 10
-        maximum: 100
-        default: 10
     PageKey:
       name: pageKey
       in: query
@@ -278,15 +268,19 @@ components:
       schema:
         type: string
         format: uuid
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Number of results per page. Clamped to the range 10–100.
+      schema:
+        type: integer
+        minimum: 10
+        maximum: 100
+        default: 10
   responses:
     NotFound:
       description: Resource not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    Unauthorized:
-      description: Missing or invalid OAuth 2.0 Bearer token
       content:
         application/problem+json:
           schema:
@@ -297,14 +291,20 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
     InternalServerError:
       description: Unexpected server error
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-    BadRequest:
-      description: Invalid request parameters
+    Unauthorized:
+      description: Missing or invalid OAuth 2.0 Bearer token
       content:
         application/problem+json:
           schema:

@@ -14,7 +14,7 @@ servers:
 - url: https://api.givechariot.com
   description: Production
 tags:
-- name: donations
+- name: Donations
 paths:
   /v1/donations:
     get:
@@ -22,7 +22,7 @@ paths:
       description: List donations for your account.
       operationId: listDonations
       tags:
-      - donations
+      - Donations
       security:
       - bearerAuth: []
       parameters:
@@ -84,7 +84,7 @@ paths:
       description: Get a donation by its unique identifier.
       operationId: getDonation
       tags:
-      - donations
+      - Donations
       security:
       - bearerAuth: []
       parameters:
@@ -114,6 +114,29 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    Artifact:
+      type: object
+      description: An artifact is a source file that was used to create the donation.
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: The unique identifier for the artifact.
+          example: artifact_01j8rs605a4gctmbm58d87mvsj
+        name:
+          type: string
+          description: The name of the artifact.
+          example: donation_receipt.pdf
+        file_id:
+          type: string
+          description: The unique identifier for the file that the artifact is associated with.
+          example: file_01j8rs605a4gctmbm58d87mvsj
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date and time when the artifact was created.
+          example: '2020-01-31T23:59:59Z'
     Donor:
       type: object
       description: The donor information for the transaction
@@ -140,58 +163,92 @@ components:
           example: 415-555-1212
         address:
           $ref: '#/components/schemas/Address'
-    Address:
+    DafGrant:
       type: object
+      description: A subhash containing information grant details from a Donor-Advised Fund sponsor.
       required:
-      - city
-      - country
-      - line1
-      - postal_code
-      - state
+      - organization_name
       properties:
-        city:
+        organization_name:
           type: string
-          description: 'City, district, suburb, town, or village. Maximum length: 255 characters.'
-          example: New York
-        country:
+          description: The name of the Donor Advised Fund sponsor.
+          readOnly: true
+          example: Daffy Charitable Fund
+        donor_fund_name:
           type: string
-          description: Two-letter country code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
-          example: US
-        line1:
-          type: string
-          description: 'Address line 1 (e.g. street, PO Box, or company name). Maximum length: 255 characters.'
-          example: 123 Main St.
-        line2:
-          type: string
-          description: 'Address line 2 (e.g. apartment, suite, unit, or building). Maximum length: 255 characters.'
-        postal_code:
-          type: string
-          description: 'ZIP or postal code. Maximum length: 40 characters.'
-          example: '12345'
-        state:
-          type: string
-          description: State, county, province, or region
-          example: NY
-    CorporateMatch:
-      type: object
-      description: A subhash containing information about the corporate match for the donation.
-      properties:
-        match_amount:
-          type: integer
-          format: int64
-          description: The amount of the corporate match for the donation in minor units of the donation currency.
-        company_name:
-          type: string
-          description: The name of the company that matched the donation.
-          example: Google
+          description: The name of the donor's fund at the Donor Advised Fund sponsor.
+          example: The Smith Family Fund
         program_name:
           type: string
-          description: The name of the program that matched the donation.
-          example: Google Matching Grant Program
-        source:
+          description: The name of the program at the Donor Advised Fund sponsor.
+        sponsor_grant_id:
           type: string
-          description: The source of the corporate match.
-          example: Payroll
+          description: The identifier for the grant at the Donor Advised Fund sponsor.
+          example: 93492947-7894-4663-a944-f2469d0027ca
+    PropertyValue:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          $ref: '#/components/schemas/PropertyType'
+        text_value:
+          type: string
+          description: The text value of the property.
+        enum_value_id:
+          type: string
+          description: The unique identifier for the enum value.
+        user_value_id:
+          type: string
+          description: The unique identifier for the user.
+        boolean_value:
+          type: boolean
+          description: The boolean value of the property.
+        date_value:
+          type: string
+          format: date-time
+          description: The date value of the property.
+        empty:
+          type: boolean
+          description: 'Whether the property value is empty.
+
+            Can use this to unset property values when assigning a property.'
+    PlatformAcceptance:
+      type: object
+      description: A subhash containing information about the acceptance of the grant from the platform.
+      properties:
+        accepted:
+          type: boolean
+          description: Whether the grant was accepted from the platform.
+          example: true
+        expires_at:
+          type: string
+          format: date-time
+          description: The date and time when the acceptance of the grant will expire.
+          example: '2020-01-31T23:59:59Z'
+    Platform:
+      type: object
+      description: A subhash containing information about the platform that facilitated the donation.
+      properties:
+        name:
+          type: string
+          description: The name of the platform.
+          example: PayPal Grant Payments
+        platform_grant_id:
+          type: string
+          description: The identifier for the grant within the platform's system.
+          example: 93492947-7894-4663-a944-f2469d0027ca
+        metadata:
+          type: object
+          description: Additional key value pairs that were passed to the platform during the donation initiation.
+          additionalProperties:
+            type: string
+        acceptance:
+          description: 'A subhash containing information about the acceptance of the grant from the platform.
+
+            This is only present if the platform requires grant acceptance before disbursing funds.'
+          allOf:
+          - $ref: '#/components/schemas/PlatformAcceptance'
     Donation:
       type: object
       description: A Donation is a gift of money to a nonprofit organization.
@@ -332,6 +389,58 @@ components:
           - RECEIVED_IN_CHARIOT
           - RECEIVED_OUTSIDE_CHARIOT
           - CANCELED
+    Address:
+      type: object
+      required:
+      - city
+      - country
+      - line1
+      - postal_code
+      - state
+      properties:
+        city:
+          type: string
+          description: 'City, district, suburb, town, or village. Maximum length: 255 characters.'
+          example: New York
+        country:
+          type: string
+          description: Two-letter country code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+          example: US
+        line1:
+          type: string
+          description: 'Address line 1 (e.g. street, PO Box, or company name). Maximum length: 255 characters.'
+          example: 123 Main St.
+        line2:
+          type: string
+          description: 'Address line 2 (e.g. apartment, suite, unit, or building). Maximum length: 255 characters.'
+        postal_code:
+          type: string
+          description: 'ZIP or postal code. Maximum length: 40 characters.'
+          example: '12345'
+        state:
+          type: string
+          description: State, county, province, or region
+          example: NY
+    PropertyAssignment:
+      type: object
+      description: A property assignment is a key-value pair that is associated with a donation.
+      properties:
+        property_id:
+          type: string
+          description: The unique identifier for the property.
+          example: prop_01j8rs605a4gctmbm58d87mvsj
+        value:
+          $ref: '#/components/schemas/PropertyValue'
+    PropertyType:
+      type: string
+      description: The data type of a property.
+      enum:
+      - text
+      - enum
+      - user
+      - boolean
+      - date
+      example: text
     DonationSettlement:
       type: object
       description: 'If the payment for the donation was received by Chariot, this object will contain additional information
@@ -364,97 +473,6 @@ components:
             Indicates when the funds become available to the nonprofit.
 
             Expressed in RFC 3339 format.'
-          example: '2020-01-31T23:59:59Z'
-    Platform:
-      type: object
-      description: A subhash containing information about the platform that facilitated the donation.
-      properties:
-        name:
-          type: string
-          description: The name of the platform.
-          example: PayPal Grant Payments
-        platform_grant_id:
-          type: string
-          description: The identifier for the grant within the platform's system.
-          example: 93492947-7894-4663-a944-f2469d0027ca
-        metadata:
-          type: object
-          description: Additional key value pairs that were passed to the platform during the donation initiation.
-          additionalProperties:
-            type: string
-        acceptance:
-          description: 'A subhash containing information about the acceptance of the grant from the platform.
-
-            This is only present if the platform requires grant acceptance before disbursing funds.'
-          allOf:
-          - $ref: '#/components/schemas/PlatformAcceptance'
-    Artifact:
-      type: object
-      description: An artifact is a source file that was used to create the donation.
-      properties:
-        id:
-          type: string
-          readOnly: true
-          description: The unique identifier for the artifact.
-          example: artifact_01j8rs605a4gctmbm58d87mvsj
-        name:
-          type: string
-          description: The name of the artifact.
-          example: donation_receipt.pdf
-        file_id:
-          type: string
-          description: The unique identifier for the file that the artifact is associated with.
-          example: file_01j8rs605a4gctmbm58d87mvsj
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-          description: The date and time when the artifact was created.
-          example: '2020-01-31T23:59:59Z'
-    PropertyAssignment:
-      type: object
-      description: A property assignment is a key-value pair that is associated with a donation.
-      properties:
-        property_id:
-          type: string
-          description: The unique identifier for the property.
-          example: prop_01j8rs605a4gctmbm58d87mvsj
-        value:
-          $ref: '#/components/schemas/PropertyValue'
-    DafGrant:
-      type: object
-      description: A subhash containing information grant details from a Donor-Advised Fund sponsor.
-      required:
-      - organization_name
-      properties:
-        organization_name:
-          type: string
-          description: The name of the Donor Advised Fund sponsor.
-          readOnly: true
-          example: Daffy Charitable Fund
-        donor_fund_name:
-          type: string
-          description: The name of the donor's fund at the Donor Advised Fund sponsor.
-          example: The Smith Family Fund
-        program_name:
-          type: string
-          description: The name of the program at the Donor Advised Fund sponsor.
-        sponsor_grant_id:
-          type: string
-          description: The identifier for the grant at the Donor Advised Fund sponsor.
-          example: 93492947-7894-4663-a944-f2469d0027ca
-    PlatformAcceptance:
-      type: object
-      description: A subhash containing information about the acceptance of the grant from the platform.
-      properties:
-        accepted:
-          type: boolean
-          description: Whether the grant was accepted from the platform.
-          example: true
-        expires_at:
-          type: string
-          format: date-time
-          description: The date and time when the acceptance of the grant will expire.
           example: '2020-01-31T23:59:59Z'
     DonationAttribution:
       type: object
@@ -498,44 +516,26 @@ components:
         title: API Error
         status: 400
         detail: The request is invalid or contains invalid parameters.
-    PropertyValue:
+    CorporateMatch:
       type: object
-      required:
-      - type
+      description: A subhash containing information about the corporate match for the donation.
       properties:
-        type:
-          $ref: '#/components/schemas/PropertyType'
-        text_value:
+        match_amount:
+          type: integer
+          format: int64
+          description: The amount of the corporate match for the donation in minor units of the donation currency.
+        company_name:
           type: string
-          description: The text value of the property.
-        enum_value_id:
+          description: The name of the company that matched the donation.
+          example: Google
+        program_name:
           type: string
-          description: The unique identifier for the enum value.
-        user_value_id:
+          description: The name of the program that matched the donation.
+          example: Google Matching Grant Program
+        source:
           type: string
-          description: The unique identifier for the user.
-        boolean_value:
-          type: boolean
-          description: The boolean value of the property.
-        date_value:
-          type: string
-          format: date-time
-          description: The date value of the property.
-        empty:
-          type: boolean
-          description: 'Whether the property value is empty.
-
-            Can use this to unset property values when assigning a property.'
-    PropertyType:
-      type: string
-      description: The data type of a property.
-      enum:
-      - text
-      - enum
-      - user
-      - boolean
-      - date
-      example: text
+          description: The source of the corporate match.
+          example: Payroll
     DonationInitiation:
       type: object
       description: 'If the donation was initiated through a Chariot Connect instance (DAFpay), this object will contain additional information
@@ -590,12 +590,23 @@ components:
           enum:
           - ONE_TIME
           - MONTHLY
-  headers:
-    X-Request-Id:
-      description: The unique identifier for the request
-      schema:
-        type: string
   responses:
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
     NotFoundError:
       description: Resource Not Found
       headers:
@@ -644,6 +655,22 @@ components:
                 title: API Error
                 status: 403
                 detail: You do not have permission to access this resource.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
     ListDonationsResponse:
       description: The response for Donations.list
       headers:
@@ -661,38 +688,11 @@ components:
               next_page_token:
                 type: string
                 description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
-    AuthenticationError:
-      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Unauthorized:
-              value:
-                type: about:blank
-                title: API Error
-                status: 401
-                detail: Authentication credentials were missing or invalid.
-    InternalServerError:
-      description: Internal Server Error
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            InternalServerError:
-              value:
-                type: about:blank
-                title: API Error
-                status: 500
-                detail: The server encountered an error processing your request.
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http

@@ -35,7 +35,9 @@
     "chariot-unintegrated-grants-api-openapi.yml",
     "chariot-verificationrequests-api-openapi.yml"
   ],
-  "archived": [],
+  "archived": [
+    "deleted 2 superseded output(s) from the previous generation"
+  ],
   "errors": [],
   "warnings": [],
   "notes": [
@@ -65,7 +67,9 @@
     "chariot-openapi-original.yml: declared missing tag: properties",
     "chariot-openapi-original.yml: declared missing tag: recurring_grants",
     "chariot-openapi-original.yml: declared missing tag: unintegrated_grants",
-    "chariot-openapi-original.yml: declared missing tag: verificationRequests"
+    "chariot-openapi-original.yml: declared missing tag: verificationRequests",
+    "superseded outputs removed: chariot-payment-sources-api-openapi.yml, chariot-verification-requests-api-openapi.yml",
+    "apis.yml register: written (+2 apis, 29 total)"
   ],
   "skipped": [
     "chariot-accounts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
@@ -89,13 +93,13 @@
     "chariot-nonprofitaddresses-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "chariot-nonprofitcontacts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "chariot-organizations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "chariot-paymentsources-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "chariot-payment-sources-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "chariot-programs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "chariot-properties-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "chariot-recurring-grants-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "chariot-statements-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "chariot-transactions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "chariot-unintegrated-grants-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "chariot-verificationrequests-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+    "chariot-verification-requests-api-openapi.yml: previously refined output, superseded by openapi/_original/"
   ]
 }

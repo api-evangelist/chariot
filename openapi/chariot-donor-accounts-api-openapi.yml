@@ -24,10 +24,10 @@ paths:
 
         This endpoint is intended for DAF providers who want to set up a Donor Account on behalf of a donor before that donor uses DAFpay for the first time.
 
-        See the [DAF-Initiated Setup guide](/guides/dafpay/donor-accounts/daf-initiated-setup) for the most common use of this endpoint.
+        See the DAF-Initiated Setup guide for the most common use of this endpoint.
 
 
-        On creation, the Donor Account is placed in `pending` status. To make the account immediately usable for grant submissions, follow up with [Create Authorization Token](/api/donor-accounts/create-authorization-token) and provide the resulting code to the donor — when the donor enters the code in DAFpay, the Donor Account is automatically approved.'
+        On creation, the Donor Account is placed in `pending` status. To make the account immediately usable for grant submissions, follow up with Create Authorization Token and provide the resulting code to the donor — when the donor enters the code in DAFpay, the Donor Account is automatically approved.'
       operationId: create-donor-account
       tags:
       - Donor Accounts
@@ -218,11 +218,7 @@ paths:
         This endpoint is idempotent — calling it on an already-disabled account returns the Donor Account unchanged.
 
 
-        <Warning>
-
-        - The Donor Account must be in `approved` status. Calls on a `pending` or `rejected` account return status `409 Conflict`.
-
-        </Warning>'
+        - The Donor Account must be in `approved` status. Calls on a `pending` or `rejected` account return status `409 Conflict`.'
       operationId: disable-donor-account
       tags:
       - Donor Accounts
@@ -270,11 +266,7 @@ paths:
         This endpoint is idempotent — calling it on an account that is already enabled returns the Donor Account unchanged.
 
 
-        <Warning>
-
-        - The Donor Account must be in `approved` status. Calls on a `pending` or `rejected` account return status `409 Conflict`.
-
-        </Warning>'
+        - The Donor Account must be in `approved` status. Calls on a `pending` or `rejected` account return status `409 Conflict`.'
       operationId: enable-donor-account
       tags:
       - Donor Accounts
@@ -314,23 +306,60 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  examples:
+    DonorAccountEnabledOutput:
+      summary: Previously-disabled donor account that has been re-enabled
+      value:
+        id: donor_account_01jpjenf5q6cawy43yxfcrxhct
+        status: approved
+        donor:
+          email: warrenBuffet@example.com
+          first_name: Warren
+          last_name: Buffet
+          phone: '+12125550100'
+        external_id: ACME-DAF-DONOR-1042
+        approval:
+          approved_at: '2026-04-02T18:30:00Z'
+          approved_by: daf:fid_01jpjenf5q6cawy43yxfcrxhct
+        rejection: null
+        disabled: false
+        created_at: '2026-04-01T12:00:00Z'
+        updated_at: '2026-04-06T11:00:00Z'
+    DonorAccountDisabledOutput:
+      summary: Approved donor account that has been disabled
+      value:
+        id: donor_account_01jpjenf5q6cawy43yxfcrxhct
+        status: approved
+        donor:
+          email: warrenBuffet@example.com
+          first_name: Warren
+          last_name: Buffet
+          phone: '+12125550100'
+        external_id: ACME-DAF-DONOR-1042
+        approval:
+          approved_at: '2026-04-02T18:30:00Z'
+          approved_by: daf:fid_01jpjenf5q6cawy43yxfcrxhct
+        rejection: null
+        disabled: true
+        created_at: '2026-04-01T12:00:00Z'
+        updated_at: '2026-04-05T09:00:00Z'
+    DonorAccountOutput:
+      summary: Pending donor account
+      value:
+        id: donor_account_01jpjenf5q6cawy43yxfcrxhct
+        status: pending
+        donor:
+          email: warrenBuffet@example.com
+          first_name: null
+          last_name: null
+          phone: null
+        external_id: ACME-DAF-DONOR-1042
+        approval: null
+        rejection: null
+        disabled: false
+        created_at: '2026-04-01T12:00:00Z'
+        updated_at: '2026-04-01T12:00:00Z'
   responses:
-    BadRequestError:
-      description: The request is invalid or contains invalid parameters
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            BadRequest:
-              value:
-                type: about:blank
-                title: API Error
-                status: 400
-                detail: The request is invalid or contains invalid parameters.
     AuthenticationError:
       description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
       headers:
@@ -347,6 +376,22 @@ components:
                 title: API Error
                 status: 401
                 detail: Authentication credentials were missing or invalid.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
     ForbiddenError:
       description: Access denied
       headers:
@@ -400,8 +445,8 @@ components:
               created_at: '2026-04-01T12:00:00Z'
               updated_at: '2026-04-02T18:30:00Z'
             next_page_token: c3f685f2-2dda-4956-815b-39867a5e5638
-    ConflictError:
-      description: Resource Conflicts
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
       headers:
         X-Request-Id:
           $ref: '#/components/headers/X-Request-Id'
@@ -410,12 +455,12 @@ components:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
           examples:
-            Conflict:
+            BadRequest:
               value:
                 type: about:blank
                 title: API Error
-                status: 409
-                detail: The request conflicts with the current state of the resource.
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
     InternalServerError:
       description: Internal Server Error
       headers:
@@ -432,8 +477,8 @@ components:
                 title: API Error
                 status: 500
                 detail: The server encountered an error processing your request.
-    NotFoundError:
-      description: Resource Not Found
+    ConflictError:
+      description: Resource Conflicts
       headers:
         X-Request-Id:
           $ref: '#/components/headers/X-Request-Id'
@@ -442,153 +487,13 @@ components:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
           examples:
-            NotFound:
+            Conflict:
               value:
                 type: about:blank
                 title: API Error
-                status: 404
-                detail: The requested resource was not found.
-  examples:
-    DonorAccountDisabledOutput:
-      summary: Approved donor account that has been disabled
-      value:
-        id: donor_account_01jpjenf5q6cawy43yxfcrxhct
-        status: approved
-        donor:
-          email: warrenBuffet@example.com
-          first_name: Warren
-          last_name: Buffet
-          phone: '+12125550100'
-        external_id: ACME-DAF-DONOR-1042
-        approval:
-          approved_at: '2026-04-02T18:30:00Z'
-          approved_by: daf:fid_01jpjenf5q6cawy43yxfcrxhct
-        rejection: null
-        disabled: true
-        created_at: '2026-04-01T12:00:00Z'
-        updated_at: '2026-04-05T09:00:00Z'
-    DonorAccountEnabledOutput:
-      summary: Previously-disabled donor account that has been re-enabled
-      value:
-        id: donor_account_01jpjenf5q6cawy43yxfcrxhct
-        status: approved
-        donor:
-          email: warrenBuffet@example.com
-          first_name: Warren
-          last_name: Buffet
-          phone: '+12125550100'
-        external_id: ACME-DAF-DONOR-1042
-        approval:
-          approved_at: '2026-04-02T18:30:00Z'
-          approved_by: daf:fid_01jpjenf5q6cawy43yxfcrxhct
-        rejection: null
-        disabled: false
-        created_at: '2026-04-01T12:00:00Z'
-        updated_at: '2026-04-06T11:00:00Z'
-    DonorAccountOutput:
-      summary: Pending donor account
-      value:
-        id: donor_account_01jpjenf5q6cawy43yxfcrxhct
-        status: pending
-        donor:
-          email: warrenBuffet@example.com
-          first_name: null
-          last_name: null
-          phone: null
-        external_id: ACME-DAF-DONOR-1042
-        approval: null
-        rejection: null
-        disabled: false
-        created_at: '2026-04-01T12:00:00Z'
-        updated_at: '2026-04-01T12:00:00Z'
-  requestBodies:
-    UpdateDonorAccountRequest:
-      description: 'The request to update mutable properties on a Donor Account.
-
-        Note that the Donor Account''s status is managed automatically through the Authorization Token verification flow and cannot be changed directly via this endpoint.'
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              donor:
-                type: object
-                description: Mutable donor identity fields. Only the fields you pass are updated; omitted fields are left unchanged.
-                properties:
-                  first_name:
-                    type: string
-                    description: The donor's first name.
-                    example: Warren
-                  last_name:
-                    type: string
-                    description: The donor's last name.
-                    example: Buffet
-                  phone:
-                    type: string
-                    description: The donor's phone number.
-                    example: '+12125550100'
-              external_id:
-                type: string
-                description: 'The DAF''s internal identifier for this Donor Account. Maximum length: 255 characters.'
-                example: ACME-DAF-DONOR-1042
-              metadata:
-                type: object
-                description: A map of arbitrary string keys and values to store information about the object.
-                additionalProperties:
-                  type: string
-    CreateDonorAccountRequest:
-      description: 'The request to create a new Donor Account.
-
-        Used by DAFs to pre-establish access for a donor before that donor authenticates through DAFpay.'
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-            - donor
-            properties:
-              donor:
-                type: object
-                description: The donor's identity and profile information. `email` is required and **must** match the email the donor will use when authenticating with DAFpay — DAFpay matches incoming verified emails to existing Accounts. Other fields are optional and may be filled in later by the donor during DAFpay profile setup.
-                required:
-                - email
-                properties:
-                  email:
-                    type: string
-                    description: The donor's email. Must match the email the donor will use when authenticating with DAFpay.
-                    example: warrenBuffet@example.com
-                  first_name:
-                    type: string
-                    description: The donor's first name.
-                    example: Warren
-                  last_name:
-                    type: string
-                    description: The donor's last name.
-                    example: Buffet
-                  phone:
-                    type: string
-                    description: The donor's phone number.
-                    example: '+12125550100'
-              external_id:
-                type: string
-                description: 'The DAF''s internal identifier for this Donor Account. Optional but strongly recommended — it allows you to reconcile DAFpay grants with the donor''s record in your own system without an additional update later. Maximum length: 255 characters.'
-                example: ACME-DAF-DONOR-1042
-              metadata:
-                type: object
-                description: A map of arbitrary string keys and values to store information about the object.
-                additionalProperties:
-                  type: string
+                status: 409
+                detail: The request conflicts with the current state of the resource.
   schemas:
-    DonorAccountStatus:
-      type: string
-      description: "The status of a [Donor Account](/api/donor-accounts).\n  * `pending`: The Donor Account has been created but the DAF has not yet approved or rejected it.\n  * `approved`: The DAF has verified the donor's identity and Grants from this account can be processed.\n  * `rejected`: The DAF has rejected the Donor Account. Grants from this account will not be processed."
-      enum:
-      - pending
-      - approved
-      - rejected
-      example: pending
     DonorAccount:
       type: object
       description: 'A Donor Account represents a DAFpay donor identity at a DAF.
@@ -730,6 +635,14 @@ components:
           description: A map of arbitrary string keys and values to store information about the object.
           additionalProperties:
             type: string
+    DonorAccountStatus:
+      type: string
+      description: "The status of a [Donor Account](/api/donor-accounts).\n  * `pending`: The Donor Account has been created but the DAF has not yet approved or rejected it.\n  * `approved`: The DAF has verified the donor's identity and Grants from this account can be processed.\n  * `rejected`: The DAF has rejected the Donor Account. Grants from this account will not be processed."
+      enum:
+      - pending
+      - approved
+      - rejected
+      example: pending
     ProblemDetails:
       type: object
       description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
@@ -760,6 +673,85 @@ components:
         title: API Error
         status: 400
         detail: The request is invalid or contains invalid parameters.
+  requestBodies:
+    UpdateDonorAccountRequest:
+      description: 'The request to update mutable properties on a Donor Account.
+
+        Note that the Donor Account''s status is managed automatically through the Authorization Token verification flow and cannot be changed directly via this endpoint.'
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              donor:
+                type: object
+                description: Mutable donor identity fields. Only the fields you pass are updated; omitted fields are left unchanged.
+                properties:
+                  first_name:
+                    type: string
+                    description: The donor's first name.
+                    example: Warren
+                  last_name:
+                    type: string
+                    description: The donor's last name.
+                    example: Buffet
+                  phone:
+                    type: string
+                    description: The donor's phone number.
+                    example: '+12125550100'
+              external_id:
+                type: string
+                description: 'The DAF''s internal identifier for this Donor Account. Maximum length: 255 characters.'
+                example: ACME-DAF-DONOR-1042
+              metadata:
+                type: object
+                description: A map of arbitrary string keys and values to store information about the object.
+                additionalProperties:
+                  type: string
+    CreateDonorAccountRequest:
+      description: 'The request to create a new Donor Account.
+
+        Used by DAFs to pre-establish access for a donor before that donor authenticates through DAFpay.'
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - donor
+            properties:
+              donor:
+                type: object
+                description: The donor's identity and profile information. `email` is required and **must** match the email the donor will use when authenticating with DAFpay — DAFpay matches incoming verified emails to existing Accounts. Other fields are optional and may be filled in later by the donor during DAFpay profile setup.
+                required:
+                - email
+                properties:
+                  email:
+                    type: string
+                    description: The donor's email. Must match the email the donor will use when authenticating with DAFpay.
+                    example: warrenBuffet@example.com
+                  first_name:
+                    type: string
+                    description: The donor's first name.
+                    example: Warren
+                  last_name:
+                    type: string
+                    description: The donor's last name.
+                    example: Buffet
+                  phone:
+                    type: string
+                    description: The donor's phone number.
+                    example: '+12125550100'
+              external_id:
+                type: string
+                description: 'The DAF''s internal identifier for this Donor Account. Optional but strongly recommended — it allows you to reconcile DAFpay grants with the donor''s record in your own system without an additional update later. Maximum length: 255 characters.'
+                example: ACME-DAF-DONOR-1042
+              metadata:
+                type: object
+                description: A map of arbitrary string keys and values to store information about the object.
+                additionalProperties:
+                  type: string
   headers:
     X-Request-Id:
       description: The unique identifier for the request

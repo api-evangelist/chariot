@@ -49,50 +49,40 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  parameters:
-    Limit:
-      name: limit
-      in: query
-      required: false
-      description: Number of results per page. Clamped to the range 10–100.
-      schema:
-        type: integer
-        minimum: 10
-        maximum: 100
-        default: 10
-    PageKey:
-      name: pageKey
-      in: query
-      required: false
-      description: Cursor token for pagination. Pass the `nextPageKey` value from a previous response.
-      schema:
-        type: string
-        format: uuid
-    EndTime:
-      name: endTime
-      in: query
-      required: false
-      description: 'End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.'
-      schema:
-        type: string
-        format: date
-    AccountId:
-      name: id
-      in: path
-      required: true
-      description: Unique identifier for the account
-      schema:
-        type: string
-        format: uuid
-    StartTime:
-      name: startTime
-      in: query
-      required: false
-      description: 'Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.'
-      schema:
-        type: string
-        format: date
   schemas:
+    LineItem:
+      type: object
+      description: A line item within a transaction.
+      properties:
+        description:
+          type: string
+        amount:
+          type: number
+          format: double
+        checkNumber:
+          type: integer
+        memo:
+          type: string
+        reference:
+          type: string
+    TransactionStatus:
+      type: string
+      description: Status of the transaction
+      enum:
+      - PENDING
+      - POSTED
+      - AUTHORIZATION
+      - MEMO
+    Page:
+      type: object
+      description: Pagination metadata for list responses.
+      properties:
+        nextPageKey:
+          type: string
+          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
+        totalElements:
+          type: integer
+          description: Total number of elements across all pages
     ListTransactionsResponse:
       type: object
       description: Paginated list of transactions.
@@ -105,19 +95,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DepositTransaction'
-    TransactionStatus:
-      type: string
-      description: Status of the transaction
-      enum:
-      - PENDING
-      - POSTED
-      - AUTHORIZATION
-      - MEMO
-    AccountCategory:
-      type: string
-      description: Category of account
-      enum:
-      - DEPOSIT_ACCOUNT
     Link:
       type: object
       description: A hyperlink reference.
@@ -127,6 +104,12 @@ components:
         href:
           type: string
           description: URI of the linked resource
+    TransactionDirection:
+      type: string
+      description: Whether the transaction is a debit or credit
+      enum:
+      - DEBIT
+      - CREDIT
     DepositTransactionType:
       type: string
       description: Type of deposit transaction
@@ -147,28 +130,17 @@ components:
       - PREAUTHORIZEDWITHDRAWAL
       - TRANSFER
       - WITHDRAWAL
-    Page:
+    FiAttribute:
       type: object
-      description: Pagination metadata for list responses.
+      description: A financial institution-specific attribute.
+      required:
+      - name
+      - value
       properties:
-        nextPageKey:
+        name:
           type: string
-          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
-        totalElements:
-          type: integer
-          description: Total number of elements across all pages
-    TransactionReward:
-      type: object
-      description: Reward information associated with a transaction.
-      properties:
-        categoryId:
+        value:
           type: string
-        accrued:
-          type: number
-          format: double
-        adjusted:
-          type: number
-          format: double
     DepositTransaction:
       type: object
       description: A deposit account transaction.
@@ -243,32 +215,11 @@ components:
         checkNumber:
           type: integer
           description: Check number if applicable
-    FiAttribute:
-      type: object
-      description: A financial institution-specific attribute.
-      required:
-      - name
-      - value
-      properties:
-        name:
-          type: string
-        value:
-          type: string
-    LineItem:
-      type: object
-      description: A line item within a transaction.
-      properties:
-        description:
-          type: string
-        amount:
-          type: number
-          format: double
-        checkNumber:
-          type: integer
-        memo:
-          type: string
-        reference:
-          type: string
+    AccountCategory:
+      type: string
+      description: Category of account
+      enum:
+      - DEPOSIT_ACCOUNT
     ProblemDetails:
       type: object
       description: Error response following RFC 7807 Problem Details for HTTP APIs.
@@ -296,27 +247,64 @@ components:
         instance:
           type: string
           description: A URI reference that identifies the specific occurrence of the problem
-    TransactionDirection:
-      type: string
-      description: Whether the transaction is a debit or credit
-      enum:
-      - DEBIT
-      - CREDIT
+    TransactionReward:
+      type: object
+      description: Reward information associated with a transaction.
+      properties:
+        categoryId:
+          type: string
+        accrued:
+          type: number
+          format: double
+        adjusted:
+          type: number
+          format: double
+  parameters:
+    EndTime:
+      name: endTime
+      in: query
+      required: false
+      description: 'End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.'
+      schema:
+        type: string
+        format: date
+    PageKey:
+      name: pageKey
+      in: query
+      required: false
+      description: Cursor token for pagination. Pass the `nextPageKey` value from a previous response.
+      schema:
+        type: string
+        format: uuid
+    StartTime:
+      name: startTime
+      in: query
+      required: false
+      description: 'Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.'
+      schema:
+        type: string
+        format: date
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Number of results per page. Clamped to the range 10–100.
+      schema:
+        type: integer
+        minimum: 10
+        maximum: 100
+        default: 10
+    AccountId:
+      name: id
+      in: path
+      required: true
+      description: Unique identifier for the account
+      schema:
+        type: string
+        format: uuid
   responses:
-    Forbidden:
-      description: Insufficient permissions or IP not whitelisted
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
     NotFound:
       description: Resource not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    BadRequest:
-      description: Invalid request parameters
       content:
         application/problem+json:
           schema:
@@ -327,8 +315,20 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
+    Forbidden:
+      description: Insufficient permissions or IP not whitelisted
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
     InternalServerError:
       description: Unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    BadRequest:
+      description: Invalid request parameters
       content:
         application/problem+json:
           schema:

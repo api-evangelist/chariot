@@ -14,7 +14,7 @@ servers:
 - url: https://api.givechariot.com
   description: Production
 tags:
-- name: properties
+- name: Properties
 paths:
   /v1/properties:
     get:
@@ -22,7 +22,7 @@ paths:
       description: List properties for your account.
       operationId: listProperties
       tags:
-      - properties
+      - Properties
       security:
       - bearerAuth: []
       parameters:
@@ -62,7 +62,7 @@ paths:
       description: Get a property by its unique identifier.
       operationId: getProperty
       tags:
-      - properties
+      - Properties
       security:
       - bearerAuth: []
       parameters:
@@ -96,7 +96,7 @@ paths:
       description: List all options for an enum or user property.
       operationId: listPropertyOptions
       tags:
-      - properties
+      - Properties
       security:
       - bearerAuth: []
       parameters:
@@ -143,7 +143,7 @@ paths:
         The resource identifiers must be of the same resource_type as the Property, otherwise a 400 Bad Request error will be returned.'
       operationId: assignProperty
       tags:
-      - properties
+      - Properties
       security:
       - bearerAuth: []
       parameters:
@@ -170,134 +170,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    BadRequestError:
-      description: The request is invalid or contains invalid parameters
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            BadRequest:
-              value:
-                type: about:blank
-                title: API Error
-                status: 400
-                detail: The request is invalid or contains invalid parameters.
-    AuthenticationError:
-      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Unauthorized:
-              value:
-                type: about:blank
-                title: API Error
-                status: 401
-                detail: Authentication credentials were missing or invalid.
-    ListPropertyOptionsResponse:
-      description: The response for Properties.listOptions
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              results:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PropertyOptionValue'
-              next_page_token:
-                type: string
-                description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
-    AssignPropertyResponse:
-      description: The response for Properties.assign
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              num_updated:
-                type: integer
-                description: The number of resources that were updated.
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
-    ForbiddenError:
-      description: Access denied
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Forbidden:
-              value:
-                type: about:blank
-                title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
-    InternalServerError:
-      description: Internal Server Error
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            InternalServerError:
-              value:
-                type: about:blank
-                title: API Error
-                status: 500
-                detail: The server encountered an error processing your request.
-    ListPropertiesResponse:
-      description: The response for Properties.list
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              results:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Property'
-              next_page_token:
-                type: string
-                description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
   schemas:
     ResourceType:
       type: string
@@ -305,16 +177,6 @@ components:
       enum:
       - donation
       - deposit
-    PropertyType:
-      type: string
-      description: The data type of a property.
-      enum:
-      - text
-      - enum
-      - user
-      - boolean
-      - date
-      example: text
     PropertyValue:
       type: object
       required:
@@ -343,6 +205,22 @@ components:
           description: 'Whether the property value is empty.
 
             Can use this to unset property values when assigning a property.'
+    PropertyOptionValue:
+      type: object
+      description: A value for an enum or user property.
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the property value.
+        name:
+          type: string
+          description: The human readable string for the property value.
+        description:
+          type: string
+          description: A description of the property option.
     Property:
       type: object
       description: A custom key-value pair that is associated with a donation.
@@ -374,22 +252,6 @@ components:
           type: integer
           format: int32
           description: The total number of options for enum and user properties. When this is greater than the length of `options`, use the [List Property Options](/api-reference/properties/list-options) endpoint to paginate through all options.
-    PropertyOptionValue:
-      type: object
-      description: A value for an enum or user property.
-      required:
-      - id
-      - name
-      properties:
-        id:
-          type: string
-          description: The unique identifier for the property value.
-        name:
-          type: string
-          description: The human readable string for the property value.
-        description:
-          type: string
-          description: A description of the property option.
     ProblemDetails:
       type: object
       description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
@@ -420,6 +282,144 @@ components:
         title: API Error
         status: 400
         detail: The request is invalid or contains invalid parameters.
+    PropertyType:
+      type: string
+      description: The data type of a property.
+      enum:
+      - text
+      - enum
+      - user
+      - boolean
+      - date
+      example: text
+  responses:
+    ListPropertyOptionsResponse:
+      description: The response for Properties.listOptions
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PropertyOptionValue'
+              next_page_token:
+                type: string
+                description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+    AssignPropertyResponse:
+      description: The response for Properties.assign
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              num_updated:
+                type: integer
+                description: The number of resources that were updated.
+    ListPropertiesResponse:
+      description: The response for Properties.list
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Property'
+              next_page_token:
+                type: string
+                description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
   requestBodies:
     AssignPropertyRequest:
       description: The request to add a property value to a donation or deposit resource.

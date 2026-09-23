@@ -14,19 +14,17 @@ servers:
 - url: https://api.givechariot.com
   description: Production
 tags:
-- name: verificationRequests
+- name: Verification Requests
 paths:
   /v1/verification_requests:
     post:
       summary: Create a verification request
       description: 'Request verification of an unlisted organization. If the organization cannot be found through Chariot''s search,
 
-        you can submit a verification request so that Chariot''s compliance team can review and verify the organization.
-
-        '
+        you can submit a verification request so that Chariot''s compliance team can review and verify the organization.'
       operationId: createVerificationRequest
       tags:
-      - verificationRequests
+      - Verification Requests
       security:
       - bearerAuth: []
       requestBody:
@@ -53,12 +51,10 @@ paths:
           $ref: '#/components/responses/PreconditionFailedError'
     get:
       summary: List verification requests
-      description: 'Returns a paginated list of all verification requests for the authenticated grantmaker.
-
-        '
+      description: Returns a paginated list of all verification requests for the authenticated grantmaker.
       operationId: listVerificationRequests
       tags:
-      - verificationRequests
+      - Verification Requests
       security:
       - bearerAuth: []
       parameters:
@@ -95,12 +91,10 @@ paths:
   /v1/verification_requests/{id}:
     get:
       summary: Get a verification request
-      description: 'Get a specific verification request by its unique identifier.
-
-        '
+      description: Get a specific verification request by its unique identifier.
       operationId: getVerificationRequest
       tags:
-      - verificationRequests
+      - Verification Requests
       security:
       - bearerAuth: []
       parameters:
@@ -129,39 +123,16 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  headers:
+    Location:
+      description: The URI of the created object
+      schema:
+        type: string
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
   responses:
-    BadRequestError:
-      description: The request is invalid or contains invalid parameters
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            BadRequest:
-              value:
-                type: about:blank
-                title: API Error
-                status: 400
-                detail: The request is invalid or contains invalid parameters.
-    AuthenticationError:
-      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Unauthorized:
-              value:
-                type: about:blank
-                title: API Error
-                status: 401
-                detail: Authentication credentials were missing or invalid.
     PreconditionFailedError:
       description: Precondition Failed
       headers:
@@ -195,8 +166,8 @@ components:
               next_page_token:
                 type: string
                 description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the page_token). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
-    ForbiddenError:
-      description: Access denied
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
       headers:
         X-Request-Id:
           $ref: '#/components/headers/X-Request-Id'
@@ -205,44 +176,12 @@ components:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
           examples:
-            Forbidden:
+            Unauthorized:
               value:
                 type: about:blank
                 title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
-    ConflictError:
-      description: Resource Conflicts
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Conflict:
-              value:
-                type: about:blank
-                title: API Error
-                status: 409
-                detail: The request conflicts with the current state of the resource.
-    InternalServerError:
-      description: Internal Server Error
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            InternalServerError:
-              value:
-                type: about:blank
-                title: API Error
-                status: 500
-                detail: The server encountered an error processing your request.
+                status: 401
+                detail: Authentication credentials were missing or invalid.
     NotFoundError:
       description: Resource Not Found
       headers:
@@ -259,16 +198,79 @@ components:
                 title: API Error
                 status: 404
                 detail: The requested resource was not found.
-  headers:
-    Location:
-      description: The URI of the created object
-      schema:
-        type: string
-    X-Request-Id:
-      description: The unique identifier for the request
-      schema:
-        type: string
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
+    ConflictError:
+      description: Resource Conflicts
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Conflict:
+              value:
+                type: about:blank
+                title: API Error
+                status: 409
+                detail: The request conflicts with the current state of the resource.
   schemas:
+    VerificationRequestStatus:
+      type: string
+      description: "The status of the verification request.\nPossible values include:\n  - `needs_review`: The request has been submitted and is awaiting review by Chariot's compliance team\n  - `verified`: The organization has been verified as tax-exempt and eligible for disbursements\n  - `failed`: Chariot's compliance team determined the organization is not eligible"
+      example: needs_review
+      enum:
+      - needs_review
+      - verified
+      - failed
     VerificationRequest:
       type: object
       description: 'A verification request allows grantmakers to request that Chariot''s compliance team verify an unlisted organization,
@@ -328,14 +330,6 @@ components:
           description: When the verification request was last updated
           example: '2020-01-31T23:00:00Z'
           readOnly: true
-    VerificationRequestStatus:
-      type: string
-      description: "The status of the verification request.\nPossible values include:\n  - `needs_review`: The request has been submitted and is awaiting review by Chariot's compliance team\n  - `verified`: The organization has been verified as tax-exempt and eligible for disbursements\n  - `failed`: Chariot's compliance team determined the organization is not eligible"
-      example: needs_review
-      enum:
-      - needs_review
-      - verified
-      - failed
     VerificationRequestAddress:
       type: object
       description: A mailing address for the organization being verified.

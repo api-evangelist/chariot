@@ -54,82 +54,6 @@ components:
       - BUSINESS
       - CELL
       - FAX
-    PersonName:
-      type: object
-      description: A person's name.
-      properties:
-        first:
-          type: string
-        middle:
-          type: string
-        last:
-          type: string
-        suffix:
-          type: string
-        prefix:
-          type: string
-        company:
-          type: string
-    AccountPhone:
-      type: object
-      description: A phone number.
-      required:
-      - type
-      - number
-      properties:
-        type:
-          $ref: '#/components/schemas/PhoneNumberType'
-        country:
-          type: string
-          description: Country calling code (e.g., "+1")
-        number:
-          type: string
-          description: Phone number
-    GetAccountContactResponse:
-      type: object
-      description: Contact information associated with an account.
-      properties:
-        holders:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountHolder'
-        emails:
-          type: array
-          items:
-            type: string
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountAddress'
-        telephones:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountPhone'
-    BusinessCustomer:
-      type: object
-      description: Business customer information.
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          description: Legal business name
-        registeredId:
-          type: string
-          description: Registered identifier (e.g., EIN)
-    CustomerRelationship:
-      type: string
-      description: Relationship of the holder to the account
-      enum:
-      - AUTHORIZED_USER
-      - BUSINESS
-      - PRIMARY
-    AccountHolderType:
-      type: string
-      description: Type of account holder
-      enum:
-      - BUSINESS
-      - CONSUMER
     AccountHolder:
       type: object
       description: An account holder with their contact details.
@@ -184,6 +108,62 @@ components:
         country:
           type: string
           description: ISO 3166-1 alpha-2 country code
+    AccountHolderType:
+      type: string
+      description: Type of account holder
+      enum:
+      - BUSINESS
+      - CONSUMER
+    CustomerRelationship:
+      type: string
+      description: Relationship of the holder to the account
+      enum:
+      - AUTHORIZED_USER
+      - BUSINESS
+      - PRIMARY
+    PersonName:
+      type: object
+      description: A person's name.
+      properties:
+        first:
+          type: string
+        middle:
+          type: string
+        last:
+          type: string
+        suffix:
+          type: string
+        prefix:
+          type: string
+        company:
+          type: string
+    BusinessCustomer:
+      type: object
+      description: Business customer information.
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: Legal business name
+        registeredId:
+          type: string
+          description: Registered identifier (e.g., EIN)
+    AccountPhone:
+      type: object
+      description: A phone number.
+      required:
+      - type
+      - number
+      properties:
+        type:
+          $ref: '#/components/schemas/PhoneNumberType'
+        country:
+          type: string
+          description: Country calling code (e.g., "+1")
+        number:
+          type: string
+          description: Phone number
     ProblemDetails:
       type: object
       description: Error response following RFC 7807 Problem Details for HTTP APIs.
@@ -211,15 +191,41 @@ components:
         instance:
           type: string
           description: A URI reference that identifies the specific occurrence of the problem
+    GetAccountContactResponse:
+      type: object
+      description: Contact information associated with an account.
+      properties:
+        holders:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountHolder'
+        emails:
+          type: array
+          items:
+            type: string
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountAddress'
+        telephones:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountPhone'
   responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
     Forbidden:
       description: Insufficient permissions or IP not whitelisted
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-    Unauthorized:
-      description: Missing or invalid OAuth 2.0 Bearer token
+    InternalServerError:
+      description: Unexpected server error
       content:
         application/problem+json:
           schema:
@@ -230,14 +236,8 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-    NotFound:
-      description: Resource not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    InternalServerError:
-      description: Unexpected server error
+    Unauthorized:
+      description: Missing or invalid OAuth 2.0 Bearer token
       content:
         application/problem+json:
           schema:

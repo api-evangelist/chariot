@@ -87,84 +87,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  parameters:
-    Limit:
-      name: limit
-      in: query
-      required: false
-      description: Number of results per page. Clamped to the range 10–100.
-      schema:
-        type: integer
-        minimum: 10
-        maximum: 100
-        default: 10
-    StatementId:
-      name: statementId
-      in: path
-      required: true
-      description: Unique identifier for the statement
-      schema:
-        type: string
-        format: uuid
-    PageKey:
-      name: pageKey
-      in: query
-      required: false
-      description: Cursor token for pagination. Pass the `nextPageKey` value from a previous response.
-      schema:
-        type: string
-        format: uuid
-    AccountId:
-      name: id
-      in: path
-      required: true
-      description: Unique identifier for the account
-      schema:
-        type: string
-        format: uuid
-    StartTime:
-      name: startTime
-      in: query
-      required: false
-      description: 'Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.'
-      schema:
-        type: string
-        format: date
-    EndTime:
-      name: endTime
-      in: query
-      required: false
-      description: 'End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.'
-      schema:
-        type: string
-        format: date
   schemas:
-    Link:
-      type: object
-      description: A hyperlink reference.
-      required:
-      - href
-      properties:
-        href:
-          type: string
-          description: URI of the linked resource
-    DocumentStatus:
-      type: string
-      description: Status of a document
-      enum:
-      - AVAILABLE
-    ListStatementsResponse:
-      type: object
-      description: Paginated list of statements.
-      required:
-      - statements
-      properties:
-        page:
-          $ref: '#/components/schemas/Page'
-        statements:
-          type: array
-          items:
-            $ref: '#/components/schemas/Statement'
     Page:
       type: object
       description: Pagination metadata for list responses.
@@ -204,6 +127,20 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Link'
+    Link:
+      type: object
+      description: A hyperlink reference.
+      required:
+      - href
+      properties:
+        href:
+          type: string
+          description: URI of the linked resource
+    DocumentStatus:
+      type: string
+      description: Status of a document
+      enum:
+      - AVAILABLE
     ProblemDetails:
       type: object
       description: Error response following RFC 7807 Problem Details for HTTP APIs.
@@ -231,21 +168,72 @@ components:
         instance:
           type: string
           description: A URI reference that identifies the specific occurrence of the problem
+    ListStatementsResponse:
+      type: object
+      description: Paginated list of statements.
+      required:
+      - statements
+      properties:
+        page:
+          $ref: '#/components/schemas/Page'
+        statements:
+          type: array
+          items:
+            $ref: '#/components/schemas/Statement'
+  parameters:
+    PageKey:
+      name: pageKey
+      in: query
+      required: false
+      description: Cursor token for pagination. Pass the `nextPageKey` value from a previous response.
+      schema:
+        type: string
+        format: uuid
+    StatementId:
+      name: statementId
+      in: path
+      required: true
+      description: Unique identifier for the statement
+      schema:
+        type: string
+        format: uuid
+    StartTime:
+      name: startTime
+      in: query
+      required: false
+      description: 'Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.'
+      schema:
+        type: string
+        format: date
+    EndTime:
+      name: endTime
+      in: query
+      required: false
+      description: 'End date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with startTime or omitted entirely.'
+      schema:
+        type: string
+        format: date
+    AccountId:
+      name: id
+      in: path
+      required: true
+      description: Unique identifier for the account
+      schema:
+        type: string
+        format: uuid
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: Number of results per page. Clamped to the range 10–100.
+      schema:
+        type: integer
+        minimum: 10
+        maximum: 100
+        default: 10
   responses:
     NotFound:
       description: Resource not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    Unauthorized:
-      description: Missing or invalid OAuth 2.0 Bearer token
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    BadRequest:
-      description: Invalid request parameters
       content:
         application/problem+json:
           schema:
@@ -262,8 +250,20 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
     InternalServerError:
       description: Unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Unauthorized:
+      description: Missing or invalid OAuth 2.0 Bearer token
       content:
         application/problem+json:
           schema:

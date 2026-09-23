@@ -25,13 +25,9 @@ paths:
         The returned Connect can be used to integrate the client-side Chariot Connect component using the `id` property (CID) and also query for data generated from the Chariot Connect instance using the connect_id query parameter in any of the List Grants API endpoints.
 
 
-        <Note>
-
         Only one Connect object can be created per organization.
 
-        If one already exists, this will return a `200 OK` status with the existing object.
-
-        </Note>'
+        If one already exists, this will return a `200 OK` status with the existing object.'
       operationId: create-connect
       tags:
       - Connects
@@ -116,87 +112,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    BadRequestError:
-      description: The request is invalid or contains invalid parameters
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            BadRequest:
-              value:
-                type: about:blank
-                title: API Error
-                status: 400
-                detail: The request is invalid or contains invalid parameters.
-    AuthenticationError:
-      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Unauthorized:
-              value:
-                type: about:blank
-                title: API Error
-                status: 401
-                detail: Authentication credentials were missing or invalid.
-    InternalServerError:
-      description: Internal Server Error
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            InternalServerError:
-              value:
-                type: about:blank
-                title: API Error
-                status: 500
-                detail: The server encountered an error processing your request.
-    ForbiddenError:
-      description: Access denied
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Forbidden:
-              value:
-                type: about:blank
-                title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
   headers:
     Location:
       description: The URI of the created object
@@ -206,64 +121,6 @@ components:
       description: The unique identifier for the request
       schema:
         type: string
-  requestBodies:
-    CreateConnectRequest:
-      description: The request to create a new Connect object for a nonprofit.
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-            - organization_id
-            - contact
-            properties:
-              organization_id:
-                type: string
-                description: The unique identifier for the organization
-                example: org_1234567890
-              contact:
-                type: object
-                required:
-                - email
-                properties:
-                  email:
-                    type: string
-                    description: The email address for the nonprofit account contact
-                    example: ben.give@co.com
-                  phone:
-                    type: string
-                    description: The phone number for the nonprofit account contact
-                    example: '9127772424'
-                  first_name:
-                    type: string
-                    description: The first name of the nonprofit account contact that manages this Connect
-                    example: Ben
-                  last_name:
-                    type: string
-                    description: The last name of the nonprofit account contact that manages this Connect
-                    example: Give
-              name:
-                type: string
-                description: A human readable name of the Connect, optional.
-              metadata:
-                type: object
-                description: A map of arbitrary string keys and values to store information about the object.
-                additionalProperties:
-                  type: string
-  examples:
-    ConnectOutput:
-      summary: Simple connect output
-      value:
-        id: test_de5a2e7d-c960-4eaa-8bd2-e8d2cc5b1a55
-        name: website
-        apiKey: test_98235982835
-        active: true
-        createdAt: '2021-07-10 15:00:00.000'
-        updatedAt: '2020-01-31T23:59:59Z'
-        createdBy: user123
-        metadata:
-          tag1: value1
   schemas:
     Connect:
       type: object
@@ -347,6 +204,145 @@ components:
         title: API Error
         status: 400
         detail: The request is invalid or contains invalid parameters.
+  responses:
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
+  requestBodies:
+    CreateConnectRequest:
+      description: The request to create a new Connect object for a nonprofit.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - organization_id
+            - contact
+            properties:
+              organization_id:
+                type: string
+                description: The unique identifier for the organization
+                example: org_1234567890
+              contact:
+                type: object
+                required:
+                - email
+                properties:
+                  email:
+                    type: string
+                    description: The email address for the nonprofit account contact
+                    example: ben.give@co.com
+                  phone:
+                    type: string
+                    description: The phone number for the nonprofit account contact
+                    example: '9127772424'
+                  first_name:
+                    type: string
+                    description: The first name of the nonprofit account contact that manages this Connect
+                    example: Ben
+                  last_name:
+                    type: string
+                    description: The last name of the nonprofit account contact that manages this Connect
+                    example: Give
+              name:
+                type: string
+                description: A human readable name of the Connect, optional.
+              metadata:
+                type: object
+                description: A map of arbitrary string keys and values to store information about the object.
+                additionalProperties:
+                  type: string
+  examples:
+    ConnectOutput:
+      summary: Simple connect output
+      value:
+        id: test_de5a2e7d-c960-4eaa-8bd2-e8d2cc5b1a55
+        name: website
+        apiKey: test_98235982835
+        active: true
+        createdAt: '2021-07-10 15:00:00.000'
+        updatedAt: '2020-01-31T23:59:59Z'
+        createdBy: user123
+        metadata:
+          tag1: value1
   securitySchemes:
     bearerAuth:
       type: http

@@ -14,7 +14,7 @@ servers:
 - url: https://api.givechariot.com
   description: Production
 tags:
-- name: paymentSources
+- name: Payment Sources
 paths:
   /v1/payment_sources:
     get:
@@ -38,7 +38,7 @@ paths:
         Payment Sources should be setup and managed through the Chariot Dashboard.'
       operationId: listPaymentSources
       tags:
-      - paymentSources
+      - Payment Sources
       security:
       - bearerAuth: []
       parameters:
@@ -88,7 +88,7 @@ paths:
         Payment Sources should be setup and managed through the Chariot Dashboard.'
       operationId: getPaymentSource
       tags:
-      - paymentSources
+      - Payment Sources
       security:
       - bearerAuth: []
       parameters:
@@ -117,105 +117,105 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    BadRequestError:
-      description: The request is invalid or contains invalid parameters
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            BadRequest:
-              value:
-                type: about:blank
-                title: API Error
-                status: 400
-                detail: The request is invalid or contains invalid parameters.
-    AuthenticationError:
-      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Unauthorized:
-              value:
-                type: about:blank
-                title: API Error
-                status: 401
-                detail: Authentication credentials were missing or invalid.
-    ListPaymentSourcesResponse:
-      description: The response for PaymentSources.list
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              results:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PaymentSource'
-              next_page_token:
-                type: string
-                description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
-    ForbiddenError:
-      description: Access denied
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Forbidden:
-              value:
-                type: about:blank
-                title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
-    InternalServerError:
-      description: Internal Server Error
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            InternalServerError:
-              value:
-                type: about:blank
-                title: API Error
-                status: 500
-                detail: The server encountered an error processing your request.
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
   schemas:
+    PostalAddress:
+      type: object
+      description: 'A postal address is a mailing address where physical mail can be received.
+
+        Postal addresses can be used to receive paper checks.'
+      required:
+      - city
+      - country
+      - line1
+      - postal_code
+      - state
+      properties:
+        city:
+          type: string
+          description: City, district, suburb, town, or village.
+          example: New York
+        country:
+          type: string
+          description: Two-letter country code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+          example: US
+        line1:
+          type: string
+          description: Address line 1 (e.g. street, PO Box, or company name)
+          example: 123 Main St.
+        line2:
+          type: string
+          description: Address line 2 (e.g. apartment, suite, unit, or building)
+          example: Suite 2504
+        postal_code:
+          type: string
+          description: ZIP or postal code
+          example: '12345'
+        state:
+          type: string
+          description: State, county, province, or region
+          example: NY
+    FinancialAddress:
+      type: object
+      description: 'A subhash containing information about the electronic bank address payment rail details.
+
+        This is only available for manual and connected_account payment sources.'
+      properties:
+        ach:
+          $ref: '#/components/schemas/AchAddress'
+    Lockbox:
+      type: object
+      description: 'A US mailing address to process incoming physical mail and checks.
+
+        This is only available for lockbox payment sources.'
+      properties:
+        address:
+          $ref: '#/components/schemas/PostalAddress'
+    AchAddress:
+      type: object
+      description: A subhash containing information about the electronic bank address payment rail details.
+      required:
+      - institution_name
+      - account_number
+      - routing_number
+      properties:
+        account_number:
+          type: string
+          description: The account number of that uniquely identifies the account at the institution
+          example: '987654321'
+        routing_number:
+          type: string
+          description: The American Bankers' Association (ABA) Routing Transit Number (RTN) for the destination account.
+          example: '101050001'
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
     PaymentSource:
       type: object
       description: 'A Payment Source represents a segregated address for incoming deposits.
@@ -268,104 +268,104 @@ components:
           readOnly: true
           description: The date and time when the payment source was last updated
           example: '2020-01-31T23:59:59Z'
-    FinancialAddress:
-      type: object
-      description: 'A subhash containing information about the electronic bank address payment rail details.
-
-        This is only available for manual and connected_account payment sources.'
-      properties:
-        ach:
-          $ref: '#/components/schemas/AchAddress'
-    PostalAddress:
-      type: object
-      description: 'A postal address is a mailing address where physical mail can be received.
-
-        Postal addresses can be used to receive paper checks.'
-      required:
-      - city
-      - country
-      - line1
-      - postal_code
-      - state
-      properties:
-        city:
-          type: string
-          description: City, district, suburb, town, or village.
-          example: New York
-        country:
-          type: string
-          description: Two-letter country code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
-          example: US
-        line1:
-          type: string
-          description: Address line 1 (e.g. street, PO Box, or company name)
-          example: 123 Main St.
-        line2:
-          type: string
-          description: Address line 2 (e.g. apartment, suite, unit, or building)
-          example: Suite 2504
-        postal_code:
-          type: string
-          description: ZIP or postal code
-          example: '12345'
-        state:
-          type: string
-          description: State, county, province, or region
-          example: NY
-    AchAddress:
-      type: object
-      description: A subhash containing information about the electronic bank address payment rail details.
-      required:
-      - institution_name
-      - account_number
-      - routing_number
-      properties:
-        account_number:
-          type: string
-          description: The account number of that uniquely identifies the account at the institution
-          example: '987654321'
-        routing_number:
-          type: string
-          description: The American Bankers' Association (ABA) Routing Transit Number (RTN) for the destination account.
-          example: '101050001'
-    Lockbox:
-      type: object
-      description: 'A US mailing address to process incoming physical mail and checks.
-
-        This is only available for lockbox payment sources.'
-      properties:
-        address:
-          $ref: '#/components/schemas/PostalAddress'
-    ProblemDetails:
-      type: object
-      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
-      required:
-      - type
-      - title
-      - status
-      - detail
-      properties:
-        type:
-          type: string
-          description: A URI reference identifying the problem type.
-          example: about:blank
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-          example: API Error
-        status:
-          type: integer
-          description: The HTTP status code for this error.
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence.
-          example: The request is invalid or contains invalid parameters.
-      example:
-        type: about:blank
-        title: API Error
-        status: 400
-        detail: The request is invalid or contains invalid parameters.
+  responses:
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    ListPaymentSourcesResponse:
+      description: The response for PaymentSources.list
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentSource'
+              next_page_token:
+                type: string
+                description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
   headers:
     X-Request-Id:
       description: The unique identifier for the request
