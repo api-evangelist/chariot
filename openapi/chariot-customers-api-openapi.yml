@@ -64,72 +64,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    Page:
-      type: object
-      description: Pagination metadata for list responses.
-      properties:
-        nextPageKey:
-          type: string
-          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
-        totalElements:
-          type: integer
-          description: Total number of elements across all pages
-    CustomerListResponse:
-      type: object
-      description: Paginated list of customers.
-      required:
-      - customers
-      properties:
-        page:
-          $ref: '#/components/schemas/Page'
-        customers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Customer'
-    AccountAddress:
-      type: object
-      description: A postal address.
-      required:
-      - line1
-      - city
-      - region
-      - postalCode
-      - country
-      properties:
-        line1:
-          type: string
-        line2:
-          type: string
-        line3:
-          type: string
-        city:
-          type: string
-        region:
-          type: string
-          description: State or region code
-        postalCode:
-          type: string
-        country:
-          type: string
-          description: ISO 3166-1 alpha-2 country code
-    CustomerType:
-      type: string
-      description: Type of customer
-      enum:
-      - BUSINESS
-      - INDIVIDUAL
-    BusinessCustomer:
-      type: object
-      description: Business customer information.
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          description: Legal business name
-        registeredId:
-          type: string
-          description: Registered identifier (e.g., EIN)
     ProblemDetails:
       type: object
       description: Error response following RFC 7807 Problem Details for HTTP APIs.
@@ -157,6 +91,28 @@ components:
         instance:
           type: string
           description: A URI reference that identifies the specific occurrence of the problem
+    CustomerListResponse:
+      type: object
+      description: Paginated list of customers.
+      required:
+      - customers
+      properties:
+        page:
+          $ref: '#/components/schemas/Page'
+        customers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Customer'
+    Page:
+      type: object
+      description: Pagination metadata for list responses.
+      properties:
+        nextPageKey:
+          type: string
+          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
+        totalElements:
+          type: integer
+          description: Total number of elements across all pages
     Customer:
       type: object
       description: A customer (organization) associated with an account.
@@ -181,6 +137,32 @@ components:
             $ref: '#/components/schemas/AccountAddress'
         businessCustomer:
           $ref: '#/components/schemas/BusinessCustomer'
+    AccountAddress:
+      type: object
+      description: A postal address.
+      required:
+      - line1
+      - city
+      - region
+      - postalCode
+      - country
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        line3:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+          description: State or region code
+        postalCode:
+          type: string
+        country:
+          type: string
+          description: ISO 3166-1 alpha-2 country code
     PersonName:
       type: object
       description: A person's name.
@@ -197,18 +179,33 @@ components:
           type: string
         company:
           type: string
-  parameters:
-    AccountId:
-      name: id
-      in: path
-      required: true
-      description: Unique identifier for the account
-      schema:
-        type: string
-        format: uuid
+    BusinessCustomer:
+      type: object
+      description: Business customer information.
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: Legal business name
+        registeredId:
+          type: string
+          description: Registered identifier (e.g., EIN)
+    CustomerType:
+      type: string
+      description: Type of customer
+      enum:
+      - BUSINESS
+      - INDIVIDUAL
   responses:
     NotFound:
       description: Resource not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Unauthorized:
+      description: Missing or invalid OAuth 2.0 Bearer token
       content:
         application/problem+json:
           schema:
@@ -225,12 +222,15 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-    Unauthorized:
-      description: Missing or invalid OAuth 2.0 Bearer token
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
+  parameters:
+    AccountId:
+      name: id
+      in: path
+      required: true
+      description: Unique identifier for the account
+      schema:
+        type: string
+        format: uuid
   securitySchemes:
     oauth2:
       type: oauth2

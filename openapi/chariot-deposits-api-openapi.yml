@@ -107,72 +107,36 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    InboundAchTransfer:
+    ProblemDetails:
       type: object
-      description: An ACH transfer initiated outside of Chariot to your financial account.
-      properties:
-        standard_entry_class_code:
-          type: string
-          description: The Standard Entry Class (SEC) code for the ACH transfer.
-          example: WEB
-        company_entry_description:
-          type: string
-          description: The company entry description for the ACH transfer.
-          example: GRANTPMT
-        originator_routing_number:
-          type: string
-          description: The routing number of the originator of the ACH transfer.
-          example: '1234567890'
-        originator_company_name:
-          type: string
-          description: The name of the originator of the ACH transfer.
-          example: Charity Good
-        trace_number:
-          type: string
-          description: The trace number for the ACH transfer.
-          example: '1234567890'
-        effective_date:
-          type: string
-          format: date-time
-          description: The effective date for the ACH transfer.
-          example: '2020-01-31T23:00:00Z'
-        status:
-          type: string
-          description: The status of the ACH transfer.
-          example: accepted
-          enum:
-          - pending
-          - declined
-          - accepted
-          - returned
-    PropertyValue:
-      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
       required:
       - type
+      - title
+      - status
+      - detail
       properties:
         type:
-          $ref: '#/components/schemas/PropertyType'
-        text_value:
           type: string
-          description: The text value of the property.
-        enum_value_id:
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
           type: string
-          description: The unique identifier for the enum value.
-        user_value_id:
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
           type: string
-          description: The unique identifier for the user.
-        boolean_value:
-          type: boolean
-          description: The boolean value of the property.
-        date_value:
-          type: string
-          format: date-time
-          description: The date value of the property.
-        empty:
-          type: boolean
-          description: 'Whether the property value is empty.
-
-            Can use this to unset property values when assigning a property.'
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
     Deposit:
       type: object
       description: A Deposit is a transfer of money for a charitable donation or a batch of donations.
@@ -282,6 +246,30 @@ components:
           description: A subhash containing information about the check deposit associated with the deposit.
           allOf:
           - $ref: '#/components/schemas/CheckDeposit'
+    InboundAccountTransfer:
+      type: object
+      description: 'An instant transfer of funds between two financial accounts.
+
+        This is the preferred method of transferring funds for Grantmakers within Chariot''s Network.'
+      required:
+      - created_at
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time the account transfer was created
+          example: '2020-01-31T23:00:00Z'
+          readOnly: true
+    PropertyType:
+      type: string
+      description: The data type of a property.
+      enum:
+      - text
+      - enum
+      - user
+      - boolean
+      - date
+      example: text
     CheckDeposit:
       type: object
       description: A check deposit represents a physical check that is deposited into a financial account.
@@ -312,60 +300,72 @@ components:
           - deposited
           - rejected
           - returned
-    InboundAccountTransfer:
+    PropertyValue:
       type: object
-      description: 'An instant transfer of funds between two financial accounts.
-
-        This is the preferred method of transferring funds for Grantmakers within Chariot''s Network.'
-      required:
-      - created_at
-      properties:
-        created_at:
-          type: string
-          format: date-time
-          description: The date and time the account transfer was created
-          example: '2020-01-31T23:00:00Z'
-          readOnly: true
-    PropertyType:
-      type: string
-      description: The data type of a property.
-      enum:
-      - text
-      - enum
-      - user
-      - boolean
-      - date
-      example: text
-    ProblemDetails:
-      type: object
-      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
       required:
       - type
-      - title
-      - status
-      - detail
       properties:
         type:
+          $ref: '#/components/schemas/PropertyType'
+        text_value:
           type: string
-          description: A URI reference identifying the problem type.
-          example: about:blank
-        title:
+          description: The text value of the property.
+        enum_value_id:
           type: string
-          description: A short, human-readable summary of the problem type.
-          example: API Error
+          description: The unique identifier for the enum value.
+        user_value_id:
+          type: string
+          description: The unique identifier for the user.
+        boolean_value:
+          type: boolean
+          description: The boolean value of the property.
+        date_value:
+          type: string
+          format: date-time
+          description: The date value of the property.
+        empty:
+          type: boolean
+          description: 'Whether the property value is empty.
+
+            Can use this to unset property values when assigning a property.'
+    InboundAchTransfer:
+      type: object
+      description: An ACH transfer initiated outside of Chariot to your financial account.
+      properties:
+        standard_entry_class_code:
+          type: string
+          description: The Standard Entry Class (SEC) code for the ACH transfer.
+          example: WEB
+        company_entry_description:
+          type: string
+          description: The company entry description for the ACH transfer.
+          example: GRANTPMT
+        originator_routing_number:
+          type: string
+          description: The routing number of the originator of the ACH transfer.
+          example: '1234567890'
+        originator_company_name:
+          type: string
+          description: The name of the originator of the ACH transfer.
+          example: Charity Good
+        trace_number:
+          type: string
+          description: The trace number for the ACH transfer.
+          example: '1234567890'
+        effective_date:
+          type: string
+          format: date-time
+          description: The effective date for the ACH transfer.
+          example: '2020-01-31T23:00:00Z'
         status:
-          type: integer
-          description: The HTTP status code for this error.
-          example: 400
-        detail:
           type: string
-          description: A human-readable explanation specific to this occurrence.
-          example: The request is invalid or contains invalid parameters.
-      example:
-        type: about:blank
-        title: API Error
-        status: 400
-        detail: The request is invalid or contains invalid parameters.
+          description: The status of the ACH transfer.
+          example: accepted
+          enum:
+          - pending
+          - declined
+          - accepted
+          - returned
   responses:
     AuthenticationError:
       description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
@@ -383,22 +383,6 @@ components:
                 title: API Error
                 status: 401
                 detail: Authentication credentials were missing or invalid.
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
     ForbiddenError:
       description: Access denied
       headers:
@@ -415,6 +399,22 @@ components:
                 title: API Error
                 status: 403
                 detail: You do not have permission to access this resource.
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
     ListDepositsResponse:
       description: The response for Deposits.list
       headers:
@@ -432,8 +432,8 @@ components:
               next_page_token:
                 type: string
                 description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
-    BadRequestError:
-      description: The request is invalid or contains invalid parameters
+    NotFoundError:
+      description: Resource Not Found
       headers:
         X-Request-Id:
           $ref: '#/components/headers/X-Request-Id'
@@ -442,12 +442,12 @@ components:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
           examples:
-            BadRequest:
+            NotFound:
               value:
                 type: about:blank
                 title: API Error
-                status: 400
-                detail: The request is invalid or contains invalid parameters.
+                status: 404
+                detail: The requested resource was not found.
     InternalServerError:
       description: Internal Server Error
       headers:

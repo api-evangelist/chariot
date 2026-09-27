@@ -304,8 +304,8 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
-    AuthenticationError:
-      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+    ForbiddenError:
+      description: Access denied
       headers:
         X-Request-Id:
           $ref: '#/components/headers/X-Request-Id'
@@ -314,28 +314,12 @@ components:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
           examples:
-            Unauthorized:
+            Forbidden:
               value:
                 type: about:blank
                 title: API Error
-                status: 401
-                detail: Authentication credentials were missing or invalid.
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
+                status: 403
+                detail: You do not have permission to access this resource.
     BadRequestError:
       description: The request is invalid or contains invalid parameters
       headers:
@@ -368,38 +352,6 @@ components:
                 title: API Error
                 status: 412
                 detail: A precondition for the request was not met.
-    ConflictError:
-      description: Resource Conflicts
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Conflict:
-              value:
-                type: about:blank
-                title: API Error
-                status: 409
-                detail: The request conflicts with the current state of the resource.
-    ForbiddenError:
-      description: Access denied
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Forbidden:
-              value:
-                type: about:blank
-                title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
     InternalServerError:
       description: Internal Server Error
       headers:
@@ -416,42 +368,63 @@ components:
                 title: API Error
                 status: 500
                 detail: The server encountered an error processing your request.
-  headers:
-    X-Request-Id:
-      description: The unique identifier for the request
-      schema:
-        type: string
+    ConflictError:
+      description: Resource Conflicts
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Conflict:
+              value:
+                type: about:blank
+                title: API Error
+                status: 409
+                detail: The request conflicts with the current state of the resource.
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
   schemas:
-    GrantRequestStatus:
+    GrantRequestFrequency:
       type: string
       enum:
-      - awaiting_account_decision
-      - pending
-      - submitted
-      - rejected
-      description: 'The lifecycle status of a Grant Request.
-
-
-        - `awaiting_account_decision`: The linked Donor Account is not yet `approved`. Advances automatically when the account is approved.
-
-        - `pending`: The Donor Account is approved and the Grant Request is awaiting your decision.
-
-        - `submitted`: You have submitted the grant in your system. Terminal.
-
-        - `rejected`: You have rejected the grant and it will not be processed. Terminal.'
-    GrantRequestDonorContact:
-      type: object
-      description: A snapshot of the donor's contact information captured for this Grant Request.
-      properties:
-        name:
-          type: string
-        email:
-          type: string
-          format: email
-        phone:
-          type: string
-        address:
-          $ref: '#/components/schemas/GrantRequestDonorContactAddress'
+      - one_time
+      - monthly
+      - quarterly
+      - annual
+      description: How often the donor intends this grant to recur. Only frequencies enabled in your DAF Provider settings will appear on Grant Requests.
     GrantRequest:
       type: object
       description: 'A Grant Request is a donation intent submitted by a donor through the DAFpay payment option, addressed to a specific nonprofit.
@@ -538,14 +511,36 @@ components:
           format: date-time
           description: Time when this object was last updated, expressed in RFC 3339 format.
           example: '2026-04-01T12:00:00Z'
-    GrantRequestFrequency:
+    GrantRequestDonorContact:
+      type: object
+      description: A snapshot of the donor's contact information captured for this Grant Request.
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        address:
+          $ref: '#/components/schemas/GrantRequestDonorContactAddress'
+    GrantRequestStatus:
       type: string
       enum:
-      - one_time
-      - monthly
-      - quarterly
-      - annual
-      description: How often the donor intends this grant to recur. Only frequencies enabled in your DAF Provider settings will appear on Grant Requests.
+      - awaiting_account_decision
+      - pending
+      - submitted
+      - rejected
+      description: 'The lifecycle status of a Grant Request.
+
+
+        - `awaiting_account_decision`: The linked Donor Account is not yet `approved`. Advances automatically when the account is approved.
+
+        - `pending`: The Donor Account is approved and the Grant Request is awaiting your decision.
+
+        - `submitted`: You have submitted the grant in your system. Terminal.
+
+        - `rejected`: You have rejected the grant and it will not be processed. Terminal.'
     ProblemDetails:
       type: object
       description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
@@ -592,34 +587,37 @@ components:
           type: string
         zip:
           type: string
+  requestBodies:
+    SubmitGrantRequest:
+      description: 'The request to submit a Grant Request.
+
+        All fields are optional — an empty body is valid.'
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              external_grant_id:
+                type: string
+                description: 'The DAF''s internal identifier for this grant. Setting this at submission time provides a useful audit trail and reconciliation key. Maximum length: 255 characters.'
+                example: ACME-GRANT-2026-00481
+              comment:
+                type: string
+                description: 'An optional comment recorded with the submission. Maximum length: 400 characters.'
+    RejectGrantRequest:
+      description: The request to reject a Grant Request.
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              reason:
+                type: string
+                description: 'A human-readable reason for the rejection. Maximum length: 400 characters.'
+                example: Grant amount exceeds donor's available balance.
   examples:
-    GrantRequestRejectedOutput:
-      summary: Grant Request you have rejected
-      value:
-        id: grant_req_01jpjenf5q6cawy43yxfcrxhct
-        donor_account_id: donor_account_01jpjenf5q6cawy43yxfcrxhct
-        giving_pool_id: 0bf40881-8ee2-47fb-98ca-f58c7999aa34
-        status: rejected
-        ein: 53-0196605
-        nonprofit_name: American Red Cross
-        amount_cents: 10000
-        frequency: one_time
-        form_url: https://example.org/donate
-        purpose: Disaster relief
-        note: Thank you for your service.
-        donor_contact:
-          name: Warren Buffet
-          email: warrenBuffet@example.com
-          phone: '+12125550100'
-          address:
-            line1: 3555 Farnam Street
-            line2: null
-            city: Omaha
-            state: NE
-            zip: '68131'
-        rejection_reason: Grant amount exceeds donor's available balance.
-        created_at: '2026-04-03T14:22:00Z'
-        updated_at: '2026-04-04T09:15:00Z'
     GrantRequestPendingOutput:
       summary: Grant Request awaiting your decision
       value:
@@ -647,6 +645,33 @@ components:
         rejection_reason: null
         created_at: '2026-04-03T14:22:00Z'
         updated_at: '2026-04-03T14:22:00Z'
+    GrantRequestRejectedOutput:
+      summary: Grant Request you have rejected
+      value:
+        id: grant_req_01jpjenf5q6cawy43yxfcrxhct
+        donor_account_id: donor_account_01jpjenf5q6cawy43yxfcrxhct
+        giving_pool_id: 0bf40881-8ee2-47fb-98ca-f58c7999aa34
+        status: rejected
+        ein: 53-0196605
+        nonprofit_name: American Red Cross
+        amount_cents: 10000
+        frequency: one_time
+        form_url: https://example.org/donate
+        purpose: Disaster relief
+        note: Thank you for your service.
+        donor_contact:
+          name: Warren Buffet
+          email: warrenBuffet@example.com
+          phone: '+12125550100'
+          address:
+            line1: 3555 Farnam Street
+            line2: null
+            city: Omaha
+            state: NE
+            zip: '68131'
+        rejection_reason: Grant amount exceeds donor's available balance.
+        created_at: '2026-04-03T14:22:00Z'
+        updated_at: '2026-04-04T09:15:00Z'
     GrantRequestAwaitingAccountDecisionOutput:
       summary: Grant Request waiting on Donor Account approval
       value:
@@ -701,36 +726,11 @@ components:
         rejection_reason: null
         created_at: '2026-04-03T14:22:00Z'
         updated_at: '2026-04-04T09:15:00Z'
-  requestBodies:
-    SubmitGrantRequest:
-      description: 'The request to submit a Grant Request.
-
-        All fields are optional — an empty body is valid.'
-      required: false
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              external_grant_id:
-                type: string
-                description: 'The DAF''s internal identifier for this grant. Setting this at submission time provides a useful audit trail and reconciliation key. Maximum length: 255 characters.'
-                example: ACME-GRANT-2026-00481
-              comment:
-                type: string
-                description: 'An optional comment recorded with the submission. Maximum length: 400 characters.'
-    RejectGrantRequest:
-      description: The request to reject a Grant Request.
-      required: false
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              reason:
-                type: string
-                description: 'A human-readable reason for the rejection. Maximum length: 400 characters.'
-                example: Grant amount exceeds donor's available balance.
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http

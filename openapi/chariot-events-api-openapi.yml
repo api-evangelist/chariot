@@ -92,163 +92,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    ListEventsResponse:
-      description: The response for Events.list
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              results:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Event'
-              nextPageToken:
-                type: string
-                description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
-    AuthenticationError:
-      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Unauthorized:
-              value:
-                type: about:blank
-                title: API Error
-                status: 401
-                detail: Authentication credentials were missing or invalid.
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
-    ForbiddenError:
-      description: Access denied
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Forbidden:
-              value:
-                type: about:blank
-                title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
-    BadRequestError:
-      description: The request is invalid or contains invalid parameters
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            BadRequest:
-              value:
-                type: about:blank
-                title: API Error
-                status: 400
-                detail: The request is invalid or contains invalid parameters.
-    InternalServerError:
-      description: Internal Server Error
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            InternalServerError:
-              value:
-                type: about:blank
-                title: API Error
-                status: 500
-                detail: The server encountered an error processing your request.
   schemas:
-    Event:
-      type: object
-      description: 'Events are records of things that happened to objects at Chariot.
-
-        '
-      properties:
-        id:
-          type: string
-          description: The unique identifier for the event
-          example: 203c4e56-5c39-4a66-abcd-2ec8af99a1b9
-          readOnly: true
-        category:
-          $ref: '#/components/schemas/EventCategory'
-        created_at:
-          type: string
-          format: date-time
-          description: The date and time the event was created
-          example: '2024-01-19T18:48:56.37Z'
-          readOnly: true
-        associated_object_id:
-          type: string
-          description: The unique identifier for the associated object
-          example: 4d06d393-1f14-46cf-b02d-8db17d7ed06a
-          readOnly: true
-        associated_object_type:
-          type: string
-          description: The type of the associated object
-          example: grant
-          readOnly: true
-    EventCategory:
-      type: string
-      description: 'The category of the event. This is useful for filtering events.
-
-
-        Event names follow the pattern `{resource}.{event_type}` where `event_type` is either `created` or `updated`. Status transitions (for example, a Donor Account moving to `approved` or `rejected`) are emitted as `{resource}.updated` events — fetch the object to read its current status.
-
-        '
-      enum:
-      - grant.created
-      - grant.updated
-      - unintegrated_grant.created
-      - unintegrated_grant.updated
-      - donor_account.created
-      - donor_account.updated
-      - authorization_token.created
-      - authorization_token.updated
-      - grant_request.created
-      - grant_request.updated
-      - disbursement.created
-      - disbursement.updated
-      - inbound_transfer.created
-      - inbound_transfer.updated
-      - donation.created
-      - donation.updated
-      - deposit.created
-      - deposit.updated
-      - verification_request.created
-      - verification_request.updated
     ProblemDetails:
       type: object
       description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
@@ -279,6 +123,162 @@ components:
         title: API Error
         status: 400
         detail: The request is invalid or contains invalid parameters.
+    EventCategory:
+      type: string
+      description: 'The category of the event. This is useful for filtering events.
+
+
+        Event names follow the pattern `{resource}.{event_type}` where `event_type` is either `created` or `updated`. Status transitions (for example, a Donor Account moving to `approved` or `rejected`) are emitted as `{resource}.updated` events — fetch the object to read its current status.
+
+        '
+      enum:
+      - grant.created
+      - grant.updated
+      - unintegrated_grant.created
+      - unintegrated_grant.updated
+      - donor_account.created
+      - donor_account.updated
+      - authorization_token.created
+      - authorization_token.updated
+      - grant_request.created
+      - grant_request.updated
+      - disbursement.created
+      - disbursement.updated
+      - inbound_transfer.created
+      - inbound_transfer.updated
+      - donation.created
+      - donation.updated
+      - deposit.created
+      - deposit.updated
+      - verification_request.created
+      - verification_request.updated
+    Event:
+      type: object
+      description: 'Events are records of things that happened to objects at Chariot.
+
+        '
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the event
+          example: 203c4e56-5c39-4a66-abcd-2ec8af99a1b9
+          readOnly: true
+        category:
+          $ref: '#/components/schemas/EventCategory'
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time the event was created
+          example: '2024-01-19T18:48:56.37Z'
+          readOnly: true
+        associated_object_id:
+          type: string
+          description: The unique identifier for the associated object
+          example: 4d06d393-1f14-46cf-b02d-8db17d7ed06a
+          readOnly: true
+        associated_object_type:
+          type: string
+          description: The type of the associated object
+          example: grant
+          readOnly: true
+  responses:
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    ListEventsResponse:
+      description: The response for Events.list
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+              nextPageToken:
+                type: string
+                description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
   headers:
     X-Request-Id:
       description: The unique identifier for the request

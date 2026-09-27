@@ -118,74 +118,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    PostalAddress:
-      type: object
-      description: 'A postal address is a mailing address where physical mail can be received.
-
-        Postal addresses can be used to receive paper checks.'
-      required:
-      - city
-      - country
-      - line1
-      - postal_code
-      - state
-      properties:
-        city:
-          type: string
-          description: City, district, suburb, town, or village.
-          example: New York
-        country:
-          type: string
-          description: Two-letter country code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
-          example: US
-        line1:
-          type: string
-          description: Address line 1 (e.g. street, PO Box, or company name)
-          example: 123 Main St.
-        line2:
-          type: string
-          description: Address line 2 (e.g. apartment, suite, unit, or building)
-          example: Suite 2504
-        postal_code:
-          type: string
-          description: ZIP or postal code
-          example: '12345'
-        state:
-          type: string
-          description: State, county, province, or region
-          example: NY
-    FinancialAddress:
-      type: object
-      description: 'A subhash containing information about the electronic bank address payment rail details.
-
-        This is only available for manual and connected_account payment sources.'
-      properties:
-        ach:
-          $ref: '#/components/schemas/AchAddress'
-    Lockbox:
-      type: object
-      description: 'A US mailing address to process incoming physical mail and checks.
-
-        This is only available for lockbox payment sources.'
-      properties:
-        address:
-          $ref: '#/components/schemas/PostalAddress'
-    AchAddress:
-      type: object
-      description: A subhash containing information about the electronic bank address payment rail details.
-      required:
-      - institution_name
-      - account_number
-      - routing_number
-      properties:
-        account_number:
-          type: string
-          description: The account number of that uniquely identifies the account at the institution
-          example: '987654321'
-        routing_number:
-          type: string
-          description: The American Bankers' Association (ABA) Routing Transit Number (RTN) for the destination account.
-          example: '101050001'
     ProblemDetails:
       type: object
       description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
@@ -216,6 +148,14 @@ components:
         title: API Error
         status: 400
         detail: The request is invalid or contains invalid parameters.
+    Lockbox:
+      type: object
+      description: 'A US mailing address to process incoming physical mail and checks.
+
+        This is only available for lockbox payment sources.'
+      properties:
+        address:
+          $ref: '#/components/schemas/PostalAddress'
     PaymentSource:
       type: object
       description: 'A Payment Source represents a segregated address for incoming deposits.
@@ -268,39 +208,67 @@ components:
           readOnly: true
           description: The date and time when the payment source was last updated
           example: '2020-01-31T23:59:59Z'
+    AchAddress:
+      type: object
+      description: A subhash containing information about the electronic bank address payment rail details.
+      required:
+      - institution_name
+      - account_number
+      - routing_number
+      properties:
+        account_number:
+          type: string
+          description: The account number of that uniquely identifies the account at the institution
+          example: '987654321'
+        routing_number:
+          type: string
+          description: The American Bankers' Association (ABA) Routing Transit Number (RTN) for the destination account.
+          example: '101050001'
+    FinancialAddress:
+      type: object
+      description: 'A subhash containing information about the electronic bank address payment rail details.
+
+        This is only available for manual and connected_account payment sources.'
+      properties:
+        ach:
+          $ref: '#/components/schemas/AchAddress'
+    PostalAddress:
+      type: object
+      description: 'A postal address is a mailing address where physical mail can be received.
+
+        Postal addresses can be used to receive paper checks.'
+      required:
+      - city
+      - country
+      - line1
+      - postal_code
+      - state
+      properties:
+        city:
+          type: string
+          description: City, district, suburb, town, or village.
+          example: New York
+        country:
+          type: string
+          description: Two-letter country code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+          example: US
+        line1:
+          type: string
+          description: Address line 1 (e.g. street, PO Box, or company name)
+          example: 123 Main St.
+        line2:
+          type: string
+          description: Address line 2 (e.g. apartment, suite, unit, or building)
+          example: Suite 2504
+        postal_code:
+          type: string
+          description: ZIP or postal code
+          example: '12345'
+        state:
+          type: string
+          description: State, county, province, or region
+          example: NY
   responses:
-    AuthenticationError:
-      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Unauthorized:
-              value:
-                type: about:blank
-                title: API Error
-                status: 401
-                detail: Authentication credentials were missing or invalid.
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
     ForbiddenError:
       description: Access denied
       headers:
@@ -350,6 +318,38 @@ components:
                 title: API Error
                 status: 400
                 detail: The request is invalid or contains invalid parameters.
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
     InternalServerError:
       description: Internal Server Error
       headers:

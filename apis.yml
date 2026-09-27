@@ -128,7 +128,7 @@ apis:
   - type: OpenAPI
     url: openapi/chariot-customers-api-openapi.yml
 - aid: chariot:chariot-deposits-api
-  name: Chariot deposits API
+  name: Chariot Deposits API
   description: The deposits API from Chariot — 2 operation(s) for deposits.
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
@@ -140,7 +140,7 @@ apis:
   - type: OpenAPI
     url: openapi/chariot-deposits-api-openapi.yml
 - aid: chariot:chariot-disbursements-api
-  name: Chariot disbursements API
+  name: Chariot Disbursements API
   description: The disbursements API from Chariot — 9 operation(s) for disbursements.
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
@@ -152,7 +152,7 @@ apis:
   - type: OpenAPI
     url: openapi/chariot-disbursements-api-openapi.yml
 - aid: chariot:chariot-donations-api
-  name: Chariot donations API
+  name: Chariot Donations API
   description: The donations API from Chariot — 2 operation(s) for donations.
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
@@ -208,7 +208,7 @@ apis:
   - type: OpenAPI
     url: openapi/chariot-events-api-openapi.yml
 - aid: chariot:chariot-financial-accounts-api
-  name: Chariot financial_accounts API
+  name: Chariot Financial Accounts API
   description: The financial_accounts API from Chariot — 3 operation(s) for financial_accounts.
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
@@ -249,7 +249,7 @@ apis:
   - type: OpenAPI
     url: openapi/chariot-grants-api-openapi.yml
 - aid: chariot:chariot-inboundtransfers-api
-  name: Chariot inboundTransfers API
+  name: Chariot Inbound Transfers API
   description: The inboundTransfers API from Chariot — 5 operation(s) for inboundtransfers.
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
@@ -260,7 +260,7 @@ apis:
   - type: OpenAPI
     url: openapi/chariot-inboundtransfers-api-openapi.yml
 - aid: chariot:chariot-mailbox-api
-  name: Chariot mailbox API
+  name: Chariot Mailbox API
   description: The mailbox API from Chariot — 2 operation(s) for mailbox.
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
@@ -272,7 +272,7 @@ apis:
   - type: OpenAPI
     url: openapi/chariot-mailbox-api-openapi.yml
 - aid: chariot:chariot-nonprofitaddresses-api
-  name: Chariot nonprofitAddresses API
+  name: Chariot Nonprofit Addresses API
   description: The nonprofitAddresses API from Chariot — 1 operation(s) for nonprofitaddresses.
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
@@ -283,7 +283,7 @@ apis:
   - type: OpenAPI
     url: openapi/chariot-nonprofitaddresses-api-openapi.yml
 - aid: chariot:chariot-nonprofitcontacts-api
-  name: Chariot nonprofitContacts API
+  name: Chariot Nonprofit Contacts API
   description: The nonprofitContacts API from Chariot — 1 operation(s) for nonprofitcontacts.
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
@@ -316,7 +316,7 @@ apis:
   - type: OpenAPI
     url: openapi/chariot-programs-api-openapi.yml
 - aid: chariot:chariot-properties-api
-  name: Chariot properties API
+  name: Chariot Properties API
   description: The properties API from Chariot — 4 operation(s) for properties.
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
@@ -328,7 +328,7 @@ apis:
   - type: OpenAPI
     url: openapi/chariot-properties-api-openapi.yml
 - aid: chariot:chariot-recurring-grants-api
-  name: Chariot recurring_grants API
+  name: Chariot Recurring Grants API
   description: The recurring_grants API from Chariot — 2 operation(s) for recurring_grants.
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
@@ -361,7 +361,7 @@ apis:
   - type: OpenAPI
     url: openapi/chariot-transactions-api-openapi.yml
 - aid: chariot:chariot-unintegrated-grants-api
-  name: Chariot unintegrated_grants API
+  name: Chariot Unintegrated Grants API
   description: The unintegrated_grants API from Chariot — 2 operation(s) for unintegrated_grants.
   humanURL: https://docs.givechariot.com/api
   baseURL: https://api.givechariot.com
