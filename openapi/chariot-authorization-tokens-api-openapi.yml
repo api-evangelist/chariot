@@ -273,203 +273,11 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    ForbiddenError:
-      description: Access denied
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Forbidden:
-              value:
-                type: about:blank
-                title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
-    BadRequestError:
-      description: The request is invalid or contains invalid parameters
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            BadRequest:
-              value:
-                type: about:blank
-                title: API Error
-                status: 400
-                detail: The request is invalid or contains invalid parameters.
-    PreconditionFailedError:
-      description: Precondition Failed
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            PreconditionFailed:
-              value:
-                type: about:blank
-                title: API Error
-                status: 412
-                detail: A precondition for the request was not met.
-    ListDonorAuthorizationTokensResponse:
-      description: The response for DonorAccounts.listAuthorizationTokens
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              results:
-                type: array
-                items:
-                  $ref: '#/components/schemas/DonorAuthorizationToken'
-              next_page_token:
-                type:
-                - string
-                - 'null'
-                description: A cursor token to use to retrieve the next page of results by making another API call to the same endpoint with the same parameters (only changing the page_token). If specified, then more results exist on the server that were not returned, otherwise no more results exist on the server.
-          examples:
-            Default:
-              value:
-                results:
-                - id: auth_token_01jpjenf5q6cawy43yxfcrxhct
-                  donor_account_id: donor_account_01jpjenf5q6cawy43yxfcrxhct
-                  status: verified
-                  created_at: '2026-04-01T12:00:00Z'
-                  expires_at: '2026-05-01T12:00:00Z'
-                  verified_at: '2026-04-02T18:30:00Z'
-                next_page_token: null
-    InternalServerError:
-      description: Internal Server Error
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            InternalServerError:
-              value:
-                type: about:blank
-                title: API Error
-                status: 500
-                detail: The server encountered an error processing your request.
-    ConflictError:
-      description: Resource Conflicts
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Conflict:
-              value:
-                type: about:blank
-                title: API Error
-                status: 409
-                detail: The request conflicts with the current state of the resource.
-    AuthenticationError:
-      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Unauthorized:
-              value:
-                type: about:blank
-                title: API Error
-                status: 401
-                detail: Authentication credentials were missing or invalid.
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
-    GoneError:
-      description: Resource Gone or Expired
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Gone:
-              value:
-                type: about:blank
-                title: API Error
-                status: 410
-                detail: The resource is no longer available.
-  requestBodies:
-    VerifyDonorAuthorizationTokenRequest:
-      description: The request to verify an Authorization Token by its `code` value.
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-            - code
-            properties:
-              code:
-                type: string
-                description: The token's secret code value as provided by the donor. Verification is case-insensitive and tolerant of whitespace and dashes.
-                example: DAFP-7K3X-9M4Q
-              external_id:
-                type: string
-                description: 'The DAF''s internal identifier for this Donor Account. If provided, will be set on the Donor Account as part of the verification. Maximum length: 255 characters.'
-                example: ACME-DAF-DONOR-1042
-    CreateDonorAuthorizationTokenRequest:
-      description: 'The request to create a new Authorization Token bound to a Donor Account.
-
-        All fields are optional — an empty body produces a token with default settings.'
-      required: false
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              expires_in:
-                type: integer
-                description: The number of seconds the token is valid for. Defaults to 30 days. Must be between 60 (1 minute) and 7,776,000 (90 days).
-                example: 2592000
-              metadata:
-                type: object
-                description: A map of arbitrary string keys and values to store information about the object.
-                additionalProperties:
-                  type: string
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
   schemas:
     DonorAuthorizationTokenStatus:
       type: string
@@ -480,14 +288,36 @@ components:
       - revoked
       - expired
       example: pending
-    DonorAccountStatus:
-      type: string
-      description: "The status of a [Donor Account](/api/donor-accounts).\n  * `pending`: The Donor Account has been created but the DAF has not yet approved or rejected it.\n  * `approved`: The DAF has verified the donor's identity and Grants from this account can be processed.\n  * `rejected`: The DAF has rejected the Donor Account. Grants from this account will not be processed."
-      enum:
-      - pending
-      - approved
-      - rejected
-      example: pending
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
     DonorAccount:
       type: object
       description: 'A Donor Account represents a DAFpay donor identity at a DAF.
@@ -629,36 +459,14 @@ components:
           description: A map of arbitrary string keys and values to store information about the object.
           additionalProperties:
             type: string
-    ProblemDetails:
-      type: object
-      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
-      required:
-      - type
-      - title
-      - status
-      - detail
-      properties:
-        type:
-          type: string
-          description: A URI reference identifying the problem type.
-          example: about:blank
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-          example: API Error
-        status:
-          type: integer
-          description: The HTTP status code for this error.
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence.
-          example: The request is invalid or contains invalid parameters.
-      example:
-        type: about:blank
-        title: API Error
-        status: 400
-        detail: The request is invalid or contains invalid parameters.
+    DonorAccountStatus:
+      type: string
+      description: "The status of a [Donor Account](/api/donor-accounts).\n  * `pending`: The Donor Account has been created but the DAF has not yet approved or rejected it.\n  * `approved`: The DAF has verified the donor's identity and Grants from this account can be processed.\n  * `rejected`: The DAF has rejected the Donor Account. Grants from this account will not be processed."
+      enum:
+      - pending
+      - approved
+      - rejected
+      example: pending
     DonorAuthorizationToken:
       type: object
       description: 'A Donor Authorization Token is a single-use binding credential that ties a [Donor Account](/api/donor-accounts) to a verified identity exchange between DAFpay and the DAF.
@@ -736,25 +544,45 @@ components:
           description: A map of arbitrary string keys and values to store information about the object.
           additionalProperties:
             type: string
+  requestBodies:
+    CreateDonorAuthorizationTokenRequest:
+      description: 'The request to create a new Authorization Token bound to a Donor Account.
+
+        All fields are optional — an empty body produces a token with default settings.'
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              expires_in:
+                type: integer
+                description: The number of seconds the token is valid for. Defaults to 30 days. Must be between 60 (1 minute) and 7,776,000 (90 days).
+                example: 2592000
+              metadata:
+                type: object
+                description: A map of arbitrary string keys and values to store information about the object.
+                additionalProperties:
+                  type: string
+    VerifyDonorAuthorizationTokenRequest:
+      description: The request to verify an Authorization Token by its `code` value.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            properties:
+              code:
+                type: string
+                description: The token's secret code value as provided by the donor. Verification is case-insensitive and tolerant of whitespace and dashes.
+                example: DAFP-7K3X-9M4Q
+              external_id:
+                type: string
+                description: 'The DAF''s internal identifier for this Donor Account. If provided, will be set on the Donor Account as part of the verification. Maximum length: 255 characters.'
+                example: ACME-DAF-DONOR-1042
   examples:
-    DonorAccountApprovedOutput:
-      summary: Approved donor account
-      value:
-        id: donor_account_01jpjenf5q6cawy43yxfcrxhct
-        status: approved
-        donor:
-          email: warrenBuffet@example.com
-          first_name: Warren
-          last_name: Buffet
-          phone: '+12125550100'
-        external_id: ACME-DAF-DONOR-1042
-        approval:
-          approved_at: '2026-04-02T18:30:00Z'
-          approved_by: daf:fid_01jpjenf5q6cawy43yxfcrxhct
-        rejection: null
-        disabled: false
-        created_at: '2026-04-01T12:00:00Z'
-        updated_at: '2026-04-02T18:30:00Z'
     DonorAuthorizationTokenOutput:
       summary: Authorization token (post-creation; code is omitted)
       value:
@@ -773,11 +601,183 @@ components:
         code: DAFP-7K3X-9M4Q
         created_at: '2026-04-01T12:00:00Z'
         expires_at: '2026-05-01T12:00:00Z'
-  headers:
-    X-Request-Id:
-      description: The unique identifier for the request
-      schema:
-        type: string
+    DonorAccountApprovedOutput:
+      summary: Approved donor account
+      value:
+        id: donor_account_01jpjenf5q6cawy43yxfcrxhct
+        status: approved
+        donor:
+          email: warrenBuffet@example.com
+          first_name: Warren
+          last_name: Buffet
+          phone: '+12125550100'
+        external_id: ACME-DAF-DONOR-1042
+        approval:
+          approved_at: '2026-04-02T18:30:00Z'
+          approved_by: daf:fid_01jpjenf5q6cawy43yxfcrxhct
+        rejection: null
+        disabled: false
+        created_at: '2026-04-01T12:00:00Z'
+        updated_at: '2026-04-02T18:30:00Z'
+  responses:
+    ListDonorAuthorizationTokensResponse:
+      description: The response for DonorAccounts.listAuthorizationTokens
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DonorAuthorizationToken'
+              next_page_token:
+                type:
+                - string
+                - 'null'
+                description: A cursor token to use to retrieve the next page of results by making another API call to the same endpoint with the same parameters (only changing the page_token). If specified, then more results exist on the server that were not returned, otherwise no more results exist on the server.
+          examples:
+            Default:
+              value:
+                results:
+                - id: auth_token_01jpjenf5q6cawy43yxfcrxhct
+                  donor_account_id: donor_account_01jpjenf5q6cawy43yxfcrxhct
+                  status: verified
+                  created_at: '2026-04-01T12:00:00Z'
+                  expires_at: '2026-05-01T12:00:00Z'
+                  verified_at: '2026-04-02T18:30:00Z'
+                next_page_token: null
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    GoneError:
+      description: Resource Gone or Expired
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Gone:
+              value:
+                type: about:blank
+                title: API Error
+                status: 410
+                detail: The resource is no longer available.
+    PreconditionFailedError:
+      description: Precondition Failed
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            PreconditionFailed:
+              value:
+                type: about:blank
+                title: API Error
+                status: 412
+                detail: A precondition for the request was not met.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+    ConflictError:
+      description: Resource Conflicts
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Conflict:
+              value:
+                type: about:blank
+                title: API Error
+                status: 409
+                detail: The request conflicts with the current state of the resource.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
   securitySchemes:
     bearerAuth:
       type: http

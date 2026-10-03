@@ -69,43 +69,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    ProblemDetails:
-      type: object
-      description: Error response following RFC 7807 Problem Details for HTTP APIs.
-      required:
-      - type
-      - title
-      - status
-      properties:
-        type:
-          type: string
-          description: A URI reference that identifies the problem type
-          example: about:blank
-        title:
-          type: string
-          description: A short human-readable summary of the problem type
-          example: Bad Request
-        status:
-          type: integer
-          description: The HTTP status code
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem
-          example: The startTime parameter must be before endTime
-        instance:
-          type: string
-          description: A URI reference that identifies the specific occurrence of the problem
-    Page:
-      type: object
-      description: Pagination metadata for list responses.
-      properties:
-        nextPageKey:
-          type: string
-          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
-        totalElements:
-          type: integer
-          description: Total number of elements across all pages
     DepositAccount:
       type: object
       description: A deposit (bank) account.
@@ -157,21 +120,6 @@ components:
           type: string
           format: date
           description: Date the account was closed (YYYY-MM-DD). Present only for closed accounts.
-    Currency:
-      type: object
-      description: Currency information.
-      required:
-      - currencyCode
-      properties:
-        currencyCode:
-          type: string
-          description: ISO 4217 currency code
-          example: USD
-    AccountCategory:
-      type: string
-      description: Category of account
-      enum:
-      - DEPOSIT_ACCOUNT
     ListAccountsResponse:
       type: object
       description: Paginated list of deposit accounts.
@@ -188,11 +136,70 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DepositAccount'
-    BalanceType:
+    Page:
+      type: object
+      description: Pagination metadata for list responses.
+      properties:
+        nextPageKey:
+          type: string
+          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
+        totalElements:
+          type: integer
+          description: Total number of elements across all pages
+    ProblemDetails:
+      type: object
+      description: Error response following RFC 7807 Problem Details for HTTP APIs.
+      required:
+      - type
+      - title
+      - status
+      properties:
+        type:
+          type: string
+          description: A URI reference that identifies the problem type
+          example: about:blank
+        title:
+          type: string
+          description: A short human-readable summary of the problem type
+          example: Bad Request
+        status:
+          type: integer
+          description: The HTTP status code
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem
+          example: The startTime parameter must be before endTime
+        instance:
+          type: string
+          description: A URI reference that identifies the specific occurrence of the problem
+    AccountStatus:
       type: string
-      description: Type of balance
+      description: Status of the account
       enum:
-      - ASSET
+      - OPEN
+      - CLOSED
+      - DELINQUENT
+      - NEGATIVECURRENTBALANCE
+      - PAID
+      - PENDINGCLOSE
+      - PENDINGOPEN
+      - RESTRICTED
+    AccountCategory:
+      type: string
+      description: Category of account
+      enum:
+      - DEPOSIT_ACCOUNT
+    Currency:
+      type: object
+      description: Currency information.
+      required:
+      - currencyCode
+      properties:
+        currencyCode:
+          type: string
+          description: ISO 4217 currency code
+          example: USD
     DepositAccountDetails:
       description: Detailed deposit account information including balances.
       allOf:
@@ -234,44 +241,19 @@ components:
           transferOut:
             type: boolean
             description: Whether the account supports outgoing transfers
-    AccountStatus:
-      type: string
-      description: Status of the account
-      enum:
-      - OPEN
-      - CLOSED
-      - DELINQUENT
-      - NEGATIVECURRENTBALANCE
-      - PAID
-      - PENDINGCLOSE
-      - PENDINGOPEN
-      - RESTRICTED
     AccountType:
       type: string
       description: Type of deposit account
       enum:
       - CHECKING
+    BalanceType:
+      type: string
+      description: Type of balance
+      enum:
+      - ASSET
   responses:
     NotFound:
       description: Resource not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    Unauthorized:
-      description: Missing or invalid OAuth 2.0 Bearer token
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    Forbidden:
-      description: Insufficient permissions or IP not whitelisted
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    BadRequest:
-      description: Invalid request parameters
       content:
         application/problem+json:
           schema:
@@ -282,15 +264,25 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Forbidden:
+      description: Insufficient permissions or IP not whitelisted
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Unauthorized:
+      description: Missing or invalid OAuth 2.0 Bearer token
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
   parameters:
-    AccountId:
-      name: id
-      in: path
-      required: true
-      description: Unique identifier for the account
-      schema:
-        type: string
-        format: uuid
     PageKey:
       name: pageKey
       in: query
@@ -309,6 +301,14 @@ components:
         minimum: 10
         maximum: 100
         default: 10
+    AccountId:
+      name: id
+      in: path
+      required: true
+      description: Unique identifier for the account
+      schema:
+        type: string
+        format: uuid
   securitySchemes:
     oauth2:
       type: oauth2

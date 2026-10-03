@@ -45,7 +45,53 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    InternalServerError:
+      description: Unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    NotFound:
+      description: Resource not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    PreconditionFailed:
+      description: A precondition for the request was not met
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Forbidden:
+      description: Insufficient permissions or IP not whitelisted
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Unauthorized:
+      description: Missing or invalid OAuth 2.0 Bearer token
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
   schemas:
+    PhoneNumberType:
+      type: string
+      description: Type of phone number
+      enum:
+      - HOME
+      - BUSINESS
+      - CELL
+      - FAX
+    CustomerRelationship:
+      type: string
+      description: Relationship of the holder to the account
+      enum:
+      - AUTHORIZED_USER
+      - BUSINESS
+      - PRIMARY
     ProblemDetails:
       type: object
       description: Error response following RFC 7807 Problem Details for HTTP APIs.
@@ -93,40 +139,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AccountPhone'
-    AccountAddress:
+    AccountHolderType:
+      type: string
+      description: Type of account holder
+      enum:
+      - BUSINESS
+      - CONSUMER
+    AccountPhone:
       type: object
-      description: A postal address.
+      description: A phone number.
       required:
-      - line1
-      - city
-      - region
-      - postalCode
-      - country
+      - type
+      - number
       properties:
-        line1:
-          type: string
-        line2:
-          type: string
-        line3:
-          type: string
-        city:
-          type: string
-        region:
-          type: string
-          description: State or region code
-        postalCode:
-          type: string
+        type:
+          $ref: '#/components/schemas/PhoneNumberType'
         country:
           type: string
-          description: ISO 3166-1 alpha-2 country code
-    PhoneNumberType:
-      type: string
-      description: Type of phone number
-      enum:
-      - HOME
-      - BUSINESS
-      - CELL
-      - FAX
+          description: Country calling code (e.g., "+1")
+        number:
+          type: string
+          description: Phone number
     PersonName:
       type: object
       description: A person's name.
@@ -143,28 +176,6 @@ components:
           type: string
         company:
           type: string
-    AccountPhone:
-      type: object
-      description: A phone number.
-      required:
-      - type
-      - number
-      properties:
-        type:
-          $ref: '#/components/schemas/PhoneNumberType'
-        country:
-          type: string
-          description: Country calling code (e.g., "+1")
-        number:
-          type: string
-          description: Phone number
-    CustomerRelationship:
-      type: string
-      description: Relationship of the holder to the account
-      enum:
-      - AUTHORIZED_USER
-      - BUSINESS
-      - PRIMARY
     BusinessCustomer:
       type: object
       description: Business customer information.
@@ -205,43 +216,32 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AccountPhone'
-    AccountHolderType:
-      type: string
-      description: Type of account holder
-      enum:
-      - BUSINESS
-      - CONSUMER
-  responses:
-    NotFound:
-      description: Resource not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    Unauthorized:
-      description: Missing or invalid OAuth 2.0 Bearer token
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    PreconditionFailed:
-      description: A precondition for the request was not met
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    Forbidden:
-      description: Insufficient permissions or IP not whitelisted
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    InternalServerError:
-      description: Unexpected server error
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
+    AccountAddress:
+      type: object
+      description: A postal address.
+      required:
+      - line1
+      - city
+      - region
+      - postalCode
+      - country
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        line3:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+          description: State or region code
+        postalCode:
+          type: string
+        country:
+          type: string
+          description: ISO 3166-1 alpha-2 country code
   parameters:
     AccountId:
       name: id
