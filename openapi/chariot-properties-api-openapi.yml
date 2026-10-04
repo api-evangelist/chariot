@@ -171,34 +171,28 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    PropertyValue:
+    PropertyOptionValue:
       type: object
+      description: A value for an enum or user property.
       required:
-      - type
+      - id
+      - name
       properties:
-        type:
-          $ref: '#/components/schemas/PropertyType'
-        text_value:
+        id:
           type: string
-          description: The text value of the property.
-        enum_value_id:
+          description: The unique identifier for the property value.
+        name:
           type: string
-          description: The unique identifier for the enum value.
-        user_value_id:
+          description: The human readable string for the property value.
+        description:
           type: string
-          description: The unique identifier for the user.
-        boolean_value:
-          type: boolean
-          description: The boolean value of the property.
-        date_value:
-          type: string
-          format: date-time
-          description: The date value of the property.
-        empty:
-          type: boolean
-          description: 'Whether the property value is empty.
-
-            Can use this to unset property values when assigning a property.'
+          description: A description of the property option.
+    ResourceType:
+      type: string
+      description: The API resource that the property is associated with.
+      enum:
+      - donation
+      - deposit
     PropertyType:
       type: string
       description: The data type of a property.
@@ -209,36 +203,6 @@ components:
       - boolean
       - date
       example: text
-    ProblemDetails:
-      type: object
-      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
-      required:
-      - type
-      - title
-      - status
-      - detail
-      properties:
-        type:
-          type: string
-          description: A URI reference identifying the problem type.
-          example: about:blank
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-          example: API Error
-        status:
-          type: integer
-          description: The HTTP status code for this error.
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence.
-          example: The request is invalid or contains invalid parameters.
-      example:
-        type: about:blank
-        title: API Error
-        status: 400
-        detail: The request is invalid or contains invalid parameters.
     Property:
       type: object
       description: A custom key-value pair that is associated with a donation.
@@ -270,45 +234,65 @@ components:
           type: integer
           format: int32
           description: The total number of options for enum and user properties. When this is greater than the length of `options`, use the [List Property Options](/api-reference/properties/list-options) endpoint to paginate through all options.
-    ResourceType:
-      type: string
-      description: The API resource that the property is associated with.
-      enum:
-      - donation
-      - deposit
-    PropertyOptionValue:
+    PropertyValue:
       type: object
-      description: A value for an enum or user property.
       required:
-      - id
-      - name
+      - type
       properties:
-        id:
+        type:
+          $ref: '#/components/schemas/PropertyType'
+        text_value:
           type: string
-          description: The unique identifier for the property value.
-        name:
+          description: The text value of the property.
+        enum_value_id:
           type: string
-          description: The human readable string for the property value.
-        description:
+          description: The unique identifier for the enum value.
+        user_value_id:
           type: string
-          description: A description of the property option.
+          description: The unique identifier for the user.
+        boolean_value:
+          type: boolean
+          description: The boolean value of the property.
+        date_value:
+          type: string
+          format: date-time
+          description: The date value of the property.
+        empty:
+          type: boolean
+          description: 'Whether the property value is empty.
+
+            Can use this to unset property values when assigning a property.'
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
   responses:
-    InternalServerError:
-      description: Internal Server Error
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            InternalServerError:
-              value:
-                type: about:blank
-                title: API Error
-                status: 500
-                detail: The server encountered an error processing your request.
     NotFoundError:
       description: Resource Not Found
       headers:
@@ -325,6 +309,22 @@ components:
                 title: API Error
                 status: 404
                 detail: The requested resource was not found.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
     ListPropertyOptionsResponse:
       description: The response for Properties.listOptions
       headers:
@@ -339,36 +339,6 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/PropertyOptionValue'
-              next_page_token:
-                type: string
-                description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
-    AssignPropertyResponse:
-      description: The response for Properties.assign
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              num_updated:
-                type: integer
-                description: The number of resources that were updated.
-    ListPropertiesResponse:
-      description: The response for Properties.list
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              results:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Property'
               next_page_token:
                 type: string
                 description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
@@ -388,6 +358,23 @@ components:
                 title: API Error
                 status: 401
                 detail: Authentication credentials were missing or invalid.
+    ListPropertiesResponse:
+      description: The response for Properties.list
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Property'
+              next_page_token:
+                type: string
+                description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
     BadRequestError:
       description: The request is invalid or contains invalid parameters
       headers:
@@ -404,8 +391,8 @@ components:
                 title: API Error
                 status: 400
                 detail: The request is invalid or contains invalid parameters.
-    ForbiddenError:
-      description: Access denied
+    InternalServerError:
+      description: Internal Server Error
       headers:
         X-Request-Id:
           $ref: '#/components/headers/X-Request-Id'
@@ -414,12 +401,25 @@ components:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
           examples:
-            Forbidden:
+            InternalServerError:
               value:
                 type: about:blank
                 title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
+                status: 500
+                detail: The server encountered an error processing your request.
+    AssignPropertyResponse:
+      description: The response for Properties.assign
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              num_updated:
+                type: integer
+                description: The number of resources that were updated.
   requestBodies:
     AssignPropertyRequest:
       description: The request to add a property value to a donation or deposit resource.

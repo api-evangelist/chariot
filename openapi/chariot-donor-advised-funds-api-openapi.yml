@@ -103,52 +103,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
-    InternalServerError:
-      description: Internal Server Error
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            InternalServerError:
-              value:
-                type: about:blank
-                title: API Error
-                status: 500
-                detail: The server encountered an error processing your request.
-    ListDafsResponse:
-      description: The response for Dafs.list
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              results:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Daf'
-              nextPageToken:
-                type: string
-                description: A cursor token to use to retrieve the next page of results by making another API call to the same endpoint with the same parameters (only substituting the pageToken with this value). If specified, then more results exist on the server that were not returned, otherwise no more results exist on the server.
-          example:
-            results:
-            - id: 0bf40881-8ee2-47fb-98ca-f58c7999aa34
-              orgName: National Philanthropic Trust
-              address: 123 Main St.
-              address2: Apt 100
-              city: New York
-              state: NY
-              zip: '12345'
-              supported: true
-              minimumGrantAmount: 5000
-              institutionDown: false
-            nextPageToken: c3f685f2-2dda-4956-815b-39867a5e5638
     NotFoundError:
       description: Resource Not Found
       headers:
@@ -197,42 +151,53 @@ components:
                 title: API Error
                 status: 400
                 detail: The request is invalid or contains invalid parameters.
-  headers:
-    X-Request-Id:
-      description: The unique identifier for the request
-      schema:
-        type: string
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
+    ListDafsResponse:
+      description: The response for Dafs.list
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Daf'
+              nextPageToken:
+                type: string
+                description: A cursor token to use to retrieve the next page of results by making another API call to the same endpoint with the same parameters (only substituting the pageToken with this value). If specified, then more results exist on the server that were not returned, otherwise no more results exist on the server.
+          example:
+            results:
+            - id: 0bf40881-8ee2-47fb-98ca-f58c7999aa34
+              orgName: National Philanthropic Trust
+              address: 123 Main St.
+              address2: Apt 100
+              city: New York
+              state: NY
+              zip: '12345'
+              supported: true
+              minimumGrantAmount: 5000
+              institutionDown: false
+            nextPageToken: c3f685f2-2dda-4956-815b-39867a5e5638
   schemas:
-    ProblemDetails:
-      type: object
-      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
-      required:
-      - type
-      - title
-      - status
-      - detail
-      properties:
-        type:
-          type: string
-          description: A URI reference identifying the problem type.
-          example: about:blank
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-          example: API Error
-        status:
-          type: integer
-          description: The HTTP status code for this error.
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence.
-          example: The request is invalid or contains invalid parameters.
-      example:
-        type: about:blank
-        title: API Error
-        status: 400
-        detail: The request is invalid or contains invalid parameters.
     Daf:
       type: object
       description: 'A Donor-Advised Fund, or `DAF` for short, is a special-purpose, tax-advantaged charitable account.
@@ -302,6 +267,41 @@ components:
           readOnly: true
           description: A flag to indicate if the institution is down.
           example: false
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
   examples:
     DafOutput:
       summary: NPT DAF

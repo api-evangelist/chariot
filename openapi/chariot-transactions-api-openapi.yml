@@ -50,62 +50,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    DepositTransactionType:
-      type: string
-      description: Type of deposit transaction
-      enum:
-      - ADJUSTMENT
-      - ATMDEPOSIT
-      - ATMWITHDRAWAL
-      - BILLPAYMENT
-      - CHECK
-      - DEPOSIT
-      - DIRECTDEPOSIT
-      - DIVIDEND
-      - FEE
-      - INTEREST
-      - POSCREDIT
-      - POSDEBIT
-      - PREAUTHORIZEDDEPOSIT
-      - PREAUTHORIZEDWITHDRAWAL
-      - TRANSFER
-      - WITHDRAWAL
-    Link:
-      type: object
-      description: A hyperlink reference.
-      required:
-      - href
-      properties:
-        href:
-          type: string
-          description: URI of the linked resource
-    Page:
-      type: object
-      description: Pagination metadata for list responses.
-      properties:
-        nextPageKey:
-          type: string
-          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
-        totalElements:
-          type: integer
-          description: Total number of elements across all pages
-    AccountCategory:
-      type: string
-      description: Category of account
-      enum:
-      - DEPOSIT_ACCOUNT
-    ListTransactionsResponse:
-      type: object
-      description: Paginated list of transactions.
-      required:
-      - transactions
-      properties:
-        page:
-          $ref: '#/components/schemas/Page'
-        transactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/DepositTransaction'
     LineItem:
       type: object
       description: A line item within a transaction.
@@ -121,6 +65,40 @@ components:
           type: string
         reference:
           type: string
+    Page:
+      type: object
+      description: Pagination metadata for list responses.
+      properties:
+        nextPageKey:
+          type: string
+          description: Cursor token to retrieve the next page of results. Absent when there are no more results.
+        totalElements:
+          type: integer
+          description: Total number of elements across all pages
+    ListTransactionsResponse:
+      type: object
+      description: Paginated list of transactions.
+      required:
+      - transactions
+      properties:
+        page:
+          $ref: '#/components/schemas/Page'
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepositTransaction'
+    TransactionReward:
+      type: object
+      description: Reward information associated with a transaction.
+      properties:
+        categoryId:
+          type: string
+        accrued:
+          type: number
+          format: double
+        adjusted:
+          type: number
+          format: double
     DepositTransaction:
       type: object
       description: A deposit account transaction.
@@ -195,6 +173,25 @@ components:
         checkNumber:
           type: integer
           description: Check number if applicable
+    FiAttribute:
+      type: object
+      description: A financial institution-specific attribute.
+      required:
+      - name
+      - value
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+    TransactionStatus:
+      type: string
+      description: Status of the transaction
+      enum:
+      - PENDING
+      - POSTED
+      - AUTHORIZATION
+      - MEMO
     ProblemDetails:
       type: object
       description: Error response following RFC 7807 Problem Details for HTTP APIs.
@@ -222,60 +219,47 @@ components:
         instance:
           type: string
           description: A URI reference that identifies the specific occurrence of the problem
-    TransactionStatus:
-      type: string
-      description: Status of the transaction
-      enum:
-      - PENDING
-      - POSTED
-      - AUTHORIZATION
-      - MEMO
-    TransactionReward:
+    Link:
       type: object
-      description: Reward information associated with a transaction.
+      description: A hyperlink reference.
+      required:
+      - href
       properties:
-        categoryId:
+        href:
           type: string
-        accrued:
-          type: number
-          format: double
-        adjusted:
-          type: number
-          format: double
+          description: URI of the linked resource
+    DepositTransactionType:
+      type: string
+      description: Type of deposit transaction
+      enum:
+      - ADJUSTMENT
+      - ATMDEPOSIT
+      - ATMWITHDRAWAL
+      - BILLPAYMENT
+      - CHECK
+      - DEPOSIT
+      - DIRECTDEPOSIT
+      - DIVIDEND
+      - FEE
+      - INTEREST
+      - POSCREDIT
+      - POSDEBIT
+      - PREAUTHORIZEDDEPOSIT
+      - PREAUTHORIZEDWITHDRAWAL
+      - TRANSFER
+      - WITHDRAWAL
+    AccountCategory:
+      type: string
+      description: Category of account
+      enum:
+      - DEPOSIT_ACCOUNT
     TransactionDirection:
       type: string
       description: Whether the transaction is a debit or credit
       enum:
       - DEBIT
       - CREDIT
-    FiAttribute:
-      type: object
-      description: A financial institution-specific attribute.
-      required:
-      - name
-      - value
-      properties:
-        name:
-          type: string
-        value:
-          type: string
   parameters:
-    PageKey:
-      name: pageKey
-      in: query
-      required: false
-      description: Cursor token for pagination. Pass the `nextPageKey` value from a previous response.
-      schema:
-        type: string
-        format: uuid
-    StartTime:
-      name: startTime
-      in: query
-      required: false
-      description: 'Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.'
-      schema:
-        type: string
-        format: date
     AccountId:
       name: id
       in: path
@@ -294,6 +278,22 @@ components:
         minimum: 10
         maximum: 100
         default: 10
+    StartTime:
+      name: startTime
+      in: query
+      required: false
+      description: 'Start date for filtering results (inclusive). Format: YYYY-MM-DD. Must be specified together with endTime or omitted entirely.'
+      schema:
+        type: string
+        format: date
+    PageKey:
+      name: pageKey
+      in: query
+      required: false
+      description: Cursor token for pagination. Pass the `nextPageKey` value from a previous response.
+      schema:
+        type: string
+        format: uuid
     EndTime:
       name: endTime
       in: query
@@ -303,6 +303,12 @@ components:
         type: string
         format: date
   responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
     BadRequest:
       description: Invalid request parameters
       content:
@@ -315,20 +321,14 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-    Unauthorized:
-      description: Missing or invalid OAuth 2.0 Bearer token
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    NotFound:
-      description: Resource not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
     InternalServerError:
       description: Unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Unauthorized:
+      description: Missing or invalid OAuth 2.0 Bearer token
       content:
         application/problem+json:
           schema:

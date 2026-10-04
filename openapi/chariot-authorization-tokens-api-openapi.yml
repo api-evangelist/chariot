@@ -273,20 +273,14 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  headers:
-    X-Request-Id:
-      description: The unique identifier for the request
-      schema:
-        type: string
   schemas:
-    DonorAuthorizationTokenStatus:
+    DonorAccountStatus:
       type: string
-      description: "The status of a [Donor Authorization Token](/api/authorization-tokens).\n  * `pending`: The token has been issued but not yet verified.\n  * `verified`: The token has been verified and can no longer be used.\n  * `revoked`: The token was explicitly revoked before being verified.\n  * `expired`: The token's `expires_at` has passed and it can no longer be verified."
+      description: "The status of a [Donor Account](/api/donor-accounts).\n  * `pending`: The Donor Account has been created but the DAF has not yet approved or rejected it.\n  * `approved`: The DAF has verified the donor's identity and Grants from this account can be processed.\n  * `rejected`: The DAF has rejected the Donor Account. Grants from this account will not be processed."
       enum:
       - pending
-      - verified
-      - revoked
-      - expired
+      - approved
+      - rejected
       example: pending
     ProblemDetails:
       type: object
@@ -459,14 +453,6 @@ components:
           description: A map of arbitrary string keys and values to store information about the object.
           additionalProperties:
             type: string
-    DonorAccountStatus:
-      type: string
-      description: "The status of a [Donor Account](/api/donor-accounts).\n  * `pending`: The Donor Account has been created but the DAF has not yet approved or rejected it.\n  * `approved`: The DAF has verified the donor's identity and Grants from this account can be processed.\n  * `rejected`: The DAF has rejected the Donor Account. Grants from this account will not be processed."
-      enum:
-      - pending
-      - approved
-      - rejected
-      example: pending
     DonorAuthorizationToken:
       type: object
       description: 'A Donor Authorization Token is a single-use binding credential that ties a [Donor Account](/api/donor-accounts) to a verified identity exchange between DAFpay and the DAF.
@@ -544,6 +530,174 @@ components:
           description: A map of arbitrary string keys and values to store information about the object.
           additionalProperties:
             type: string
+    DonorAuthorizationTokenStatus:
+      type: string
+      description: "The status of a [Donor Authorization Token](/api/authorization-tokens).\n  * `pending`: The token has been issued but not yet verified.\n  * `verified`: The token has been verified and can no longer be used.\n  * `revoked`: The token was explicitly revoked before being verified.\n  * `expired`: The token's `expires_at` has passed and it can no longer be verified."
+      enum:
+      - pending
+      - verified
+      - revoked
+      - expired
+      example: pending
+  responses:
+    PreconditionFailedError:
+      description: Precondition Failed
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            PreconditionFailed:
+              value:
+                type: about:blank
+                title: API Error
+                status: 412
+                detail: A precondition for the request was not met.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    GoneError:
+      description: Resource Gone or Expired
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Gone:
+              value:
+                type: about:blank
+                title: API Error
+                status: 410
+                detail: The resource is no longer available.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Unauthorized:
+              value:
+                type: about:blank
+                title: API Error
+                status: 401
+                detail: Authentication credentials were missing or invalid.
+    ListDonorAuthorizationTokensResponse:
+      description: The response for DonorAccounts.listAuthorizationTokens
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DonorAuthorizationToken'
+              next_page_token:
+                type:
+                - string
+                - 'null'
+                description: A cursor token to use to retrieve the next page of results by making another API call to the same endpoint with the same parameters (only changing the page_token). If specified, then more results exist on the server that were not returned, otherwise no more results exist on the server.
+          examples:
+            Default:
+              value:
+                results:
+                - id: auth_token_01jpjenf5q6cawy43yxfcrxhct
+                  donor_account_id: donor_account_01jpjenf5q6cawy43yxfcrxhct
+                  status: verified
+                  created_at: '2026-04-01T12:00:00Z'
+                  expires_at: '2026-05-01T12:00:00Z'
+                  verified_at: '2026-04-02T18:30:00Z'
+                next_page_token: null
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
+    ConflictError:
+      description: Resource Conflicts
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Conflict:
+              value:
+                type: about:blank
+                title: API Error
+                status: 409
+                detail: The request conflicts with the current state of the resource.
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
   requestBodies:
     CreateDonorAuthorizationTokenRequest:
       description: 'The request to create a new Authorization Token bound to a Donor Account.
@@ -583,24 +737,6 @@ components:
                 description: 'The DAF''s internal identifier for this Donor Account. If provided, will be set on the Donor Account as part of the verification. Maximum length: 255 characters.'
                 example: ACME-DAF-DONOR-1042
   examples:
-    DonorAuthorizationTokenOutput:
-      summary: Authorization token (post-creation; code is omitted)
-      value:
-        id: auth_token_01jpjenf5q6cawy43yxfcrxhct
-        donor_account_id: donor_account_01jpjenf5q6cawy43yxfcrxhct
-        status: verified
-        created_at: '2026-04-01T12:00:00Z'
-        expires_at: '2026-05-01T12:00:00Z'
-        verified_at: '2026-04-02T18:30:00Z'
-    DonorAuthorizationTokenCreatedOutput:
-      summary: Newly created authorization token (code is only present on creation)
-      value:
-        id: auth_token_01jpjenf5q6cawy43yxfcrxhct
-        donor_account_id: donor_account_01jpjenf5q6cawy43yxfcrxhct
-        status: pending
-        code: DAFP-7K3X-9M4Q
-        created_at: '2026-04-01T12:00:00Z'
-        expires_at: '2026-05-01T12:00:00Z'
     DonorAccountApprovedOutput:
       summary: Approved donor account
       value:
@@ -619,165 +755,29 @@ components:
         disabled: false
         created_at: '2026-04-01T12:00:00Z'
         updated_at: '2026-04-02T18:30:00Z'
-  responses:
-    ListDonorAuthorizationTokensResponse:
-      description: The response for DonorAccounts.listAuthorizationTokens
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              results:
-                type: array
-                items:
-                  $ref: '#/components/schemas/DonorAuthorizationToken'
-              next_page_token:
-                type:
-                - string
-                - 'null'
-                description: A cursor token to use to retrieve the next page of results by making another API call to the same endpoint with the same parameters (only changing the page_token). If specified, then more results exist on the server that were not returned, otherwise no more results exist on the server.
-          examples:
-            Default:
-              value:
-                results:
-                - id: auth_token_01jpjenf5q6cawy43yxfcrxhct
-                  donor_account_id: donor_account_01jpjenf5q6cawy43yxfcrxhct
-                  status: verified
-                  created_at: '2026-04-01T12:00:00Z'
-                  expires_at: '2026-05-01T12:00:00Z'
-                  verified_at: '2026-04-02T18:30:00Z'
-                next_page_token: null
-    BadRequestError:
-      description: The request is invalid or contains invalid parameters
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            BadRequest:
-              value:
-                type: about:blank
-                title: API Error
-                status: 400
-                detail: The request is invalid or contains invalid parameters.
-    ForbiddenError:
-      description: Access denied
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Forbidden:
-              value:
-                type: about:blank
-                title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
-    GoneError:
-      description: Resource Gone or Expired
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Gone:
-              value:
-                type: about:blank
-                title: API Error
-                status: 410
-                detail: The resource is no longer available.
-    PreconditionFailedError:
-      description: Precondition Failed
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            PreconditionFailed:
-              value:
-                type: about:blank
-                title: API Error
-                status: 412
-                detail: A precondition for the request was not met.
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
-    ConflictError:
-      description: Resource Conflicts
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Conflict:
-              value:
-                type: about:blank
-                title: API Error
-                status: 409
-                detail: The request conflicts with the current state of the resource.
-    InternalServerError:
-      description: Internal Server Error
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            InternalServerError:
-              value:
-                type: about:blank
-                title: API Error
-                status: 500
-                detail: The server encountered an error processing your request.
-    AuthenticationError:
-      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Unauthorized:
-              value:
-                type: about:blank
-                title: API Error
-                status: 401
-                detail: Authentication credentials were missing or invalid.
+    DonorAuthorizationTokenOutput:
+      summary: Authorization token (post-creation; code is omitted)
+      value:
+        id: auth_token_01jpjenf5q6cawy43yxfcrxhct
+        donor_account_id: donor_account_01jpjenf5q6cawy43yxfcrxhct
+        status: verified
+        created_at: '2026-04-01T12:00:00Z'
+        expires_at: '2026-05-01T12:00:00Z'
+        verified_at: '2026-04-02T18:30:00Z'
+    DonorAuthorizationTokenCreatedOutput:
+      summary: Newly created authorization token (code is only present on creation)
+      value:
+        id: auth_token_01jpjenf5q6cawy43yxfcrxhct
+        donor_account_id: donor_account_01jpjenf5q6cawy43yxfcrxhct
+        status: pending
+        code: DAFP-7K3X-9M4Q
+        created_at: '2026-04-01T12:00:00Z'
+        expires_at: '2026-05-01T12:00:00Z'
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http

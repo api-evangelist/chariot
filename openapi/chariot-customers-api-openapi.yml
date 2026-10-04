@@ -70,14 +70,14 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-    InternalServerError:
-      description: Unexpected server error
+    Forbidden:
+      description: Insufficient permissions or IP not whitelisted
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-    Forbidden:
-      description: Insufficient permissions or IP not whitelisted
+    InternalServerError:
+      description: Unexpected server error
       content:
         application/problem+json:
           schema:
@@ -89,6 +89,32 @@ components:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
   schemas:
+    AccountAddress:
+      type: object
+      description: A postal address.
+      required:
+      - line1
+      - city
+      - region
+      - postalCode
+      - country
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        line3:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+          description: State or region code
+        postalCode:
+          type: string
+        country:
+          type: string
+          description: ISO 3166-1 alpha-2 country code
     Page:
       type: object
       description: Pagination metadata for list responses.
@@ -99,6 +125,76 @@ components:
         totalElements:
           type: integer
           description: Total number of elements across all pages
+    CustomerListResponse:
+      type: object
+      description: Paginated list of customers.
+      required:
+      - customers
+      properties:
+        page:
+          $ref: '#/components/schemas/Page'
+        customers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Customer'
+    CustomerType:
+      type: string
+      description: Type of customer
+      enum:
+      - BUSINESS
+      - INDIVIDUAL
+    BusinessCustomer:
+      type: object
+      description: Business customer information.
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: Legal business name
+        registeredId:
+          type: string
+          description: Registered identifier (e.g., EIN)
+    Customer:
+      type: object
+      description: A customer (organization) associated with an account.
+      required:
+      - customerId
+      - name
+      - type
+      properties:
+        customerId:
+          type: string
+          description: Unique identifier for the customer
+        name:
+          $ref: '#/components/schemas/PersonName'
+        taxId:
+          type: string
+          description: Tax identification number (e.g., EIN)
+        type:
+          $ref: '#/components/schemas/CustomerType'
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountAddress'
+        businessCustomer:
+          $ref: '#/components/schemas/BusinessCustomer'
+    PersonName:
+      type: object
+      description: A person's name.
+      properties:
+        first:
+          type: string
+        middle:
+          type: string
+        last:
+          type: string
+        suffix:
+          type: string
+        prefix:
+          type: string
+        company:
+          type: string
     ProblemDetails:
       type: object
       description: Error response following RFC 7807 Problem Details for HTTP APIs.
@@ -126,102 +222,6 @@ components:
         instance:
           type: string
           description: A URI reference that identifies the specific occurrence of the problem
-    PersonName:
-      type: object
-      description: A person's name.
-      properties:
-        first:
-          type: string
-        middle:
-          type: string
-        last:
-          type: string
-        suffix:
-          type: string
-        prefix:
-          type: string
-        company:
-          type: string
-    CustomerListResponse:
-      type: object
-      description: Paginated list of customers.
-      required:
-      - customers
-      properties:
-        page:
-          $ref: '#/components/schemas/Page'
-        customers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Customer'
-    Customer:
-      type: object
-      description: A customer (organization) associated with an account.
-      required:
-      - customerId
-      - name
-      - type
-      properties:
-        customerId:
-          type: string
-          description: Unique identifier for the customer
-        name:
-          $ref: '#/components/schemas/PersonName'
-        taxId:
-          type: string
-          description: Tax identification number (e.g., EIN)
-        type:
-          $ref: '#/components/schemas/CustomerType'
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountAddress'
-        businessCustomer:
-          $ref: '#/components/schemas/BusinessCustomer'
-    BusinessCustomer:
-      type: object
-      description: Business customer information.
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          description: Legal business name
-        registeredId:
-          type: string
-          description: Registered identifier (e.g., EIN)
-    CustomerType:
-      type: string
-      description: Type of customer
-      enum:
-      - BUSINESS
-      - INDIVIDUAL
-    AccountAddress:
-      type: object
-      description: A postal address.
-      required:
-      - line1
-      - city
-      - region
-      - postalCode
-      - country
-      properties:
-        line1:
-          type: string
-        line2:
-          type: string
-        line3:
-          type: string
-        city:
-          type: string
-        region:
-          type: string
-          description: State or region code
-        postalCode:
-          type: string
-        country:
-          type: string
-          description: ISO 3166-1 alpha-2 country code
   parameters:
     AccountId:
       name: id
