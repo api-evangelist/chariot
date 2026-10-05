@@ -1,0 +1,12 @@
+{
+ "url": "https://docs.givechariot.com/openapi/fdx-api-reference-2.yaml",
+ "requested_url": "https://docs.givechariot.com/openapi/fdx-api-reference-2.yaml",
+ "status": 200,
+ "content_type": "application/x-yaml; charset=utf-8",
+ "bytes": 36223,
+ "sha256": "d4912ab1c36eb80cfc6c54c0d3918e7c7f2ec87da0bd19cc93654049c3acf2a8",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
