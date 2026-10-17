@@ -120,22 +120,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
-    ForbiddenError:
-      description: Access denied
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Forbidden:
-              value:
-                type: about:blank
-                title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
     AuthenticationError:
       description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
       headers:
@@ -152,6 +136,22 @@ components:
                 title: API Error
                 status: 401
                 detail: Authentication credentials were missing or invalid.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
     BadRequestError:
       description: The request is invalid or contains invalid parameters
       headers:
@@ -185,6 +185,36 @@ components:
                 status: 500
                 detail: The server encountered an error processing your request.
   schemas:
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
     Address:
       type: object
       required:
@@ -217,36 +247,6 @@ components:
           type: string
           description: State, county, province, or region
           example: NY
-    ProblemDetails:
-      type: object
-      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
-      required:
-      - type
-      - title
-      - status
-      - detail
-      properties:
-        type:
-          type: string
-          description: A URI reference identifying the problem type.
-          example: about:blank
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-          example: API Error
-        status:
-          type: integer
-          description: The HTTP status code for this error.
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence.
-          example: The request is invalid or contains invalid parameters.
-      example:
-        type: about:blank
-        title: API Error
-        status: 400
-        detail: The request is invalid or contains invalid parameters.
   headers:
     X-Request-Id:
       description: The unique identifier for the request

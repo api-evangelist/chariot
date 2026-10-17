@@ -106,38 +106,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
-    ForbiddenError:
-      description: Access denied
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Forbidden:
-              value:
-                type: about:blank
-                title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
     AuthenticationError:
       description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
       headers:
@@ -154,6 +122,52 @@ components:
                 title: API Error
                 status: 401
                 detail: Authentication credentials were missing or invalid.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    ListFinancialAccountsResponse:
+      description: The response for FinancialAccounts.list
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FinancialAccount'
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
     BadRequestError:
       description: The request is invalid or contains invalid parameters
       headers:
@@ -186,26 +200,37 @@ components:
                 title: API Error
                 status: 500
                 detail: The server encountered an error processing your request.
-    ListFinancialAccountsResponse:
-      description: The response for FinancialAccounts.list
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              results:
-                type: array
-                items:
-                  $ref: '#/components/schemas/FinancialAccount'
-  headers:
-    X-Request-Id:
-      description: The unique identifier for the request
-      schema:
-        type: string
   schemas:
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
     FinancialAccount:
       type: object
       description: 'A financial account represents a financial, depository (bank) account managed by Chariot.
@@ -268,36 +293,11 @@ components:
           format: date-time
           description: The time the balance was retrieved
           example: '2020-01-31T23:00:00Z'
-    ProblemDetails:
-      type: object
-      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
-      required:
-      - type
-      - title
-      - status
-      - detail
-      properties:
-        type:
-          type: string
-          description: A URI reference identifying the problem type.
-          example: about:blank
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-          example: API Error
-        status:
-          type: integer
-          description: The HTTP status code for this error.
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence.
-          example: The request is invalid or contains invalid parameters.
-      example:
-        type: about:blank
-        title: API Error
-        status: 400
-        detail: The request is invalid or contains invalid parameters.
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http

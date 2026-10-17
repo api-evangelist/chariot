@@ -113,38 +113,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
-    ForbiddenError:
-      description: Access denied
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Forbidden:
-              value:
-                type: about:blank
-                title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
     AuthenticationError:
       description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
       headers:
@@ -161,6 +129,38 @@ components:
                 title: API Error
                 status: 401
                 detail: Authentication credentials were missing or invalid.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
     BadRequestError:
       description: The request is invalid or contains invalid parameters
       headers:
@@ -207,59 +207,14 @@ components:
         metadata:
           tag1: value1
   headers:
-    X-Request-Id:
-      description: The unique identifier for the request
-      schema:
-        type: string
     Location:
       description: The URI of the created object
       schema:
         type: string
-  requestBodies:
-    CreateConnectRequest:
-      description: The request to create a new Connect object for a nonprofit.
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-            - organization_id
-            - contact
-            properties:
-              organization_id:
-                type: string
-                description: The unique identifier for the organization
-                example: org_1234567890
-              contact:
-                type: object
-                required:
-                - email
-                properties:
-                  email:
-                    type: string
-                    description: The email address for the nonprofit account contact
-                    example: ben.give@co.com
-                  phone:
-                    type: string
-                    description: The phone number for the nonprofit account contact
-                    example: '9127772424'
-                  first_name:
-                    type: string
-                    description: The first name of the nonprofit account contact that manages this Connect
-                    example: Ben
-                  last_name:
-                    type: string
-                    description: The last name of the nonprofit account contact that manages this Connect
-                    example: Give
-              name:
-                type: string
-                description: A human readable name of the Connect, optional.
-              metadata:
-                type: object
-                description: A map of arbitrary string keys and values to store information about the object.
-                additionalProperties:
-                  type: string
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
   schemas:
     Connect:
       type: object
@@ -343,6 +298,51 @@ components:
         title: API Error
         status: 400
         detail: The request is invalid or contains invalid parameters.
+  requestBodies:
+    CreateConnectRequest:
+      description: The request to create a new Connect object for a nonprofit.
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - organization_id
+            - contact
+            properties:
+              organization_id:
+                type: string
+                description: The unique identifier for the organization
+                example: org_1234567890
+              contact:
+                type: object
+                required:
+                - email
+                properties:
+                  email:
+                    type: string
+                    description: The email address for the nonprofit account contact
+                    example: ben.give@co.com
+                  phone:
+                    type: string
+                    description: The phone number for the nonprofit account contact
+                    example: '9127772424'
+                  first_name:
+                    type: string
+                    description: The first name of the nonprofit account contact that manages this Connect
+                    example: Ben
+                  last_name:
+                    type: string
+                    description: The last name of the nonprofit account contact that manages this Connect
+                    example: Give
+              name:
+                type: string
+                description: A human readable name of the Connect, optional.
+              metadata:
+                type: object
+                description: A map of arbitrary string keys and values to store information about the object.
+                additionalProperties:
+                  type: string
   securitySchemes:
     bearerAuth:
       type: http

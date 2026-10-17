@@ -46,6 +46,14 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    PhoneNumberType:
+      type: string
+      description: Type of phone number
+      enum:
+      - HOME
+      - BUSINESS
+      - CELL
+      - FAX
     AccountHolder:
       type: object
       description: An account holder with their contact details.
@@ -74,6 +82,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AccountPhone'
+    CustomerRelationship:
+      type: string
+      description: Relationship of the holder to the account
+      enum:
+      - AUTHORIZED_USER
+      - BUSINESS
+      - PRIMARY
     AccountAddress:
       type: object
       description: A postal address.
@@ -100,41 +115,6 @@ components:
         country:
           type: string
           description: ISO 3166-1 alpha-2 country code
-    AccountPhone:
-      type: object
-      description: A phone number.
-      required:
-      - type
-      - number
-      properties:
-        type:
-          $ref: '#/components/schemas/PhoneNumberType'
-        country:
-          type: string
-          description: Country calling code (e.g., "+1")
-        number:
-          type: string
-          description: Phone number
-    BusinessCustomer:
-      type: object
-      description: Business customer information.
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          description: Legal business name
-        registeredId:
-          type: string
-          description: Registered identifier (e.g., EIN)
-    PhoneNumberType:
-      type: string
-      description: Type of phone number
-      enum:
-      - HOME
-      - BUSINESS
-      - CELL
-      - FAX
     PersonName:
       type: object
       description: A person's name.
@@ -151,39 +131,12 @@ components:
           type: string
         company:
           type: string
-    CustomerRelationship:
-      type: string
-      description: Relationship of the holder to the account
-      enum:
-      - AUTHORIZED_USER
-      - BUSINESS
-      - PRIMARY
     AccountHolderType:
       type: string
       description: Type of account holder
       enum:
       - BUSINESS
       - CONSUMER
-    GetAccountContactResponse:
-      type: object
-      description: Contact information associated with an account.
-      properties:
-        holders:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountHolder'
-        emails:
-          type: array
-          items:
-            type: string
-        addresses:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountAddress'
-        telephones:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountPhone'
     ProblemDetails:
       type: object
       description: Error response following RFC 7807 Problem Details for HTTP APIs.
@@ -211,27 +164,74 @@ components:
         instance:
           type: string
           description: A URI reference that identifies the specific occurrence of the problem
+    GetAccountContactResponse:
+      type: object
+      description: Contact information associated with an account.
+      properties:
+        holders:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountHolder'
+        emails:
+          type: array
+          items:
+            type: string
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountAddress'
+        telephones:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountPhone'
+    BusinessCustomer:
+      type: object
+      description: Business customer information.
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: Legal business name
+        registeredId:
+          type: string
+          description: Registered identifier (e.g., EIN)
+    AccountPhone:
+      type: object
+      description: A phone number.
+      required:
+      - type
+      - number
+      properties:
+        type:
+          $ref: '#/components/schemas/PhoneNumberType'
+        country:
+          type: string
+          description: Country calling code (e.g., "+1")
+        number:
+          type: string
+          description: Phone number
   responses:
-    NotFound:
-      description: Resource not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-    PreconditionFailed:
-      description: A precondition for the request was not met
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
     Forbidden:
       description: Insufficient permissions or IP not whitelisted
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
+    NotFound:
+      description: Resource not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
     InternalServerError:
       description: Unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    PreconditionFailed:
+      description: A precondition for the request was not met
       content:
         application/problem+json:
           schema:

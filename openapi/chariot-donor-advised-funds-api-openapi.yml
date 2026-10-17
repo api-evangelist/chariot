@@ -103,22 +103,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
     AuthenticationError:
       description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
       headers:
@@ -135,8 +119,8 @@ components:
                 title: API Error
                 status: 401
                 detail: Authentication credentials were missing or invalid.
-    BadRequestError:
-      description: The request is invalid or contains invalid parameters
+    NotFoundError:
+      description: Resource Not Found
       headers:
         X-Request-Id:
           $ref: '#/components/headers/X-Request-Id'
@@ -145,12 +129,12 @@ components:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
           examples:
-            BadRequest:
+            NotFound:
               value:
                 type: about:blank
                 title: API Error
-                status: 400
-                detail: The request is invalid or contains invalid parameters.
+                status: 404
+                detail: The requested resource was not found.
     InternalServerError:
       description: Internal Server Error
       headers:
@@ -167,6 +151,22 @@ components:
                 title: API Error
                 status: 500
                 detail: The server encountered an error processing your request.
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
     ListDafsResponse:
       description: The response for Dafs.list
       headers:
@@ -197,7 +197,51 @@ components:
               minimumGrantAmount: 5000
               institutionDown: false
             nextPageToken: c3f685f2-2dda-4956-815b-39867a5e5638
+  examples:
+    DafOutput:
+      summary: NPT DAF
+      value:
+        id: 0bf40881-8ee2-47fb-98ca-f58c7999aa34
+        orgName: National Philanthropic Trust
+        address: 123 Main St.
+        address2: Apt 100
+        city: New York City
+        state: New York
+        zip: '12345'
+        supported: true
+        minimumGrantAmount: 25000
+        institutionDown: false
   schemas:
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
     Daf:
       type: object
       description: 'A Donor-Advised Fund, or `DAF` for short, is a special-purpose, tax-advantaged charitable account.
@@ -267,55 +311,11 @@ components:
           readOnly: true
           description: A flag to indicate if the institution is down.
           example: false
-    ProblemDetails:
-      type: object
-      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
-      required:
-      - type
-      - title
-      - status
-      - detail
-      properties:
-        type:
-          type: string
-          description: A URI reference identifying the problem type.
-          example: about:blank
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-          example: API Error
-        status:
-          type: integer
-          description: The HTTP status code for this error.
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence.
-          example: The request is invalid or contains invalid parameters.
-      example:
-        type: about:blank
-        title: API Error
-        status: 400
-        detail: The request is invalid or contains invalid parameters.
   headers:
     X-Request-Id:
       description: The unique identifier for the request
       schema:
         type: string
-  examples:
-    DafOutput:
-      summary: NPT DAF
-      value:
-        id: 0bf40881-8ee2-47fb-98ca-f58c7999aa34
-        orgName: National Philanthropic Trust
-        address: 123 Main St.
-        address2: Apt 100
-        city: New York City
-        state: New York
-        zip: '12345'
-        supported: true
-        minimumGrantAmount: 25000
-        institutionDown: false
   securitySchemes:
     bearerAuth:
       type: http

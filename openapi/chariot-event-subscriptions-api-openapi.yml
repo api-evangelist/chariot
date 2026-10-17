@@ -148,136 +148,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  schemas:
-    EventCategory:
-      type: string
-      description: 'The category of the event. This is useful for filtering events.
-
-
-        Event names follow the pattern `{resource}.{event_type}` where `event_type` is either `created` or `updated`. Status transitions (for example, a Donor Account moving to `approved` or `rejected`) are emitted as `{resource}.updated` events — fetch the object to read its current status.
-
-        '
-      enum:
-      - grant.created
-      - grant.updated
-      - unintegrated_grant.created
-      - unintegrated_grant.updated
-      - donor_account.created
-      - donor_account.updated
-      - authorization_token.created
-      - authorization_token.updated
-      - grant_request.created
-      - grant_request.updated
-      - disbursement.created
-      - disbursement.updated
-      - inbound_transfer.created
-      - inbound_transfer.updated
-      - donation.created
-      - donation.updated
-      - deposit.created
-      - deposit.updated
-      - verification_request.created
-      - verification_request.updated
-    EventSubscription:
-      type: object
-      description: 'Webhooks are event notifications we send to you by HTTPS POST requests.
-
-        Event Subscriptions are how you configure your application to listen for them.
-
-        '
-      required:
-      - url
-      properties:
-        id:
-          type: string
-          description: The unique identifier for the event subscription
-          example: 4d06d393-1f14-46cf-b02d-8db17d7ed06a
-          readOnly: true
-        created_at:
-          type: string
-          format: date-time
-          description: The date and time the event subscription was created
-          example: '2024-01-14T12:48:56.37Z'
-          readOnly: true
-        status:
-          $ref: '#/components/schemas/EventSubscriptionStatus'
-        url:
-          type: string
-          description: The webhook url where we'll send notifications.
-          example: https://example.com/webhook
-        category:
-          $ref: '#/components/schemas/EventCategory'
-    EventSubscriptionStatus:
-      type: string
-      description: "The status of the event subscription.\nThis indicates if we'll send notifications to this subscription\n  * active: subscription is active and events will be delivered normally\n  * disabled: subscription is temporarily disabled and events will not be delivered\n  * deleted: subscription has been deleted and events will not be delivered\n  * requires_attention: subscription has been disabled due to delivery failures and events will not be delivered"
-      enum:
-      - active
-      - disabled
-      - deleted
-      - requires_attention
-    ProblemDetails:
-      type: object
-      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
-      required:
-      - type
-      - title
-      - status
-      - detail
-      properties:
-        type:
-          type: string
-          description: A URI reference identifying the problem type.
-          example: about:blank
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-          example: API Error
-        status:
-          type: integer
-          description: The HTTP status code for this error.
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence.
-          example: The request is invalid or contains invalid parameters.
-      example:
-        type: about:blank
-        title: API Error
-        status: 400
-        detail: The request is invalid or contains invalid parameters.
   responses:
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
-    ForbiddenError:
-      description: Access denied
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Forbidden:
-              value:
-                type: about:blank
-                title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
     AuthenticationError:
       description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
       headers:
@@ -311,6 +182,38 @@ components:
               nextPageToken:
                 type: string
                 description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
     BadRequestError:
       description: The request is invalid or contains invalid parameters
       headers:
@@ -343,15 +246,6 @@ components:
                 title: API Error
                 status: 500
                 detail: The server encountered an error processing your request.
-  headers:
-    X-Request-Id:
-      description: The unique identifier for the request
-      schema:
-        type: string
-    Location:
-      description: The URI of the created object
-      schema:
-        type: string
   requestBodies:
     CreateEventSubscriptionRequest:
       description: The request body for creating an event subscription
@@ -396,6 +290,112 @@ components:
                 - active
                 - disabled
                 - deleted
+  schemas:
+    EventCategory:
+      type: string
+      description: 'The category of the event. This is useful for filtering events.
+
+
+        Event names follow the pattern `{resource}.{event_type}` where `event_type` is either `created` or `updated`. Status transitions (for example, a Donor Account moving to `approved` or `rejected`) are emitted as `{resource}.updated` events — fetch the object to read its current status.
+
+        '
+      enum:
+      - grant.created
+      - grant.updated
+      - unintegrated_grant.created
+      - unintegrated_grant.updated
+      - donor_account.created
+      - donor_account.updated
+      - authorization_token.created
+      - authorization_token.updated
+      - grant_request.created
+      - grant_request.updated
+      - disbursement.created
+      - disbursement.updated
+      - inbound_transfer.created
+      - inbound_transfer.updated
+      - donation.created
+      - donation.updated
+      - deposit.created
+      - deposit.updated
+      - verification_request.created
+      - verification_request.updated
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
+    EventSubscription:
+      type: object
+      description: 'Webhooks are event notifications we send to you by HTTPS POST requests.
+
+        Event Subscriptions are how you configure your application to listen for them.
+
+        '
+      required:
+      - url
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the event subscription
+          example: 4d06d393-1f14-46cf-b02d-8db17d7ed06a
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time the event subscription was created
+          example: '2024-01-14T12:48:56.37Z'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/EventSubscriptionStatus'
+        url:
+          type: string
+          description: The webhook url where we'll send notifications.
+          example: https://example.com/webhook
+        category:
+          $ref: '#/components/schemas/EventCategory'
+    EventSubscriptionStatus:
+      type: string
+      description: "The status of the event subscription.\nThis indicates if we'll send notifications to this subscription\n  * active: subscription is active and events will be delivered normally\n  * disabled: subscription is temporarily disabled and events will not be delivered\n  * deleted: subscription has been deleted and events will not be delivered\n  * requires_attention: subscription has been disabled due to delivery failures and events will not be delivered"
+      enum:
+      - active
+      - disabled
+      - deleted
+      - requires_attention
+  headers:
+    Location:
+      description: The URI of the created object
+      schema:
+        type: string
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http

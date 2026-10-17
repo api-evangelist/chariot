@@ -100,38 +100,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
-    NotFoundError:
-      description: Resource Not Found
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            NotFound:
-              value:
-                type: about:blank
-                title: API Error
-                status: 404
-                detail: The requested resource was not found.
-    ForbiddenError:
-      description: Access denied
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            Forbidden:
-              value:
-                type: about:blank
-                title: API Error
-                status: 403
-                detail: You do not have permission to access this resource.
     AuthenticationError:
       description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
       headers:
@@ -148,6 +116,70 @@ components:
                 title: API Error
                 status: 401
                 detail: Authentication credentials were missing or invalid.
+    ForbiddenError:
+      description: Access denied
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            Forbidden:
+              value:
+                type: about:blank
+                title: API Error
+                status: 403
+                detail: You do not have permission to access this resource.
+    NotFoundError:
+      description: Resource Not Found
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            NotFound:
+              value:
+                type: about:blank
+                title: API Error
+                status: 404
+                detail: The requested resource was not found.
+    InternalServerError:
+      description: Internal Server Error
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            InternalServerError:
+              value:
+                type: about:blank
+                title: API Error
+                status: 500
+                detail: The server encountered an error processing your request.
+    BadRequestError:
+      description: The request is invalid or contains invalid parameters
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            BadRequest:
+              value:
+                type: about:blank
+                title: API Error
+                status: 400
+                detail: The request is invalid or contains invalid parameters.
     ListUnintegratedGrantsResponse:
       description: The response for UnintegratedGrants.list
       headers:
@@ -174,57 +206,7 @@ components:
               updatedAt: '2021-08-11 15:34:00.000'
               amount: 15000
             nextPageToken: c3f685f2-2dda-4956-815b-39867a5e5638
-    BadRequestError:
-      description: The request is invalid or contains invalid parameters
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            BadRequest:
-              value:
-                type: about:blank
-                title: API Error
-                status: 400
-                detail: The request is invalid or contains invalid parameters.
-    InternalServerError:
-      description: Internal Server Error
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/ProblemDetails'
-          examples:
-            InternalServerError:
-              value:
-                type: about:blank
-                title: API Error
-                status: 500
-                detail: The server encountered an error processing your request.
   schemas:
-    GrantAddress:
-      type: object
-      properties:
-        line1:
-          type: string
-          description: 'Address line 1 (e.g. street, PO Box, or company name). Maximum length: 255 characters.'
-        line2:
-          type: string
-          description: 'Address line 2 (e.g. apartment, suite, unit, or building). Maximum length: 255 characters.'
-        city:
-          type: string
-          description: 'City, district, suburb, town, or village.. Maximum length: 255 characters.'
-        state:
-          type: string
-          description: 'State, county, province, or region. Maximum length: 255 characters.'
-        postalCode:
-          type: string
-          description: 'ZIP or postal code. Maximum length: 255 characters.'
     UnintegratedGrant:
       type: object
       description: 'An Unintegrated Grant represents a grant requested through a provider that Chariot does not support.
@@ -361,11 +343,24 @@ components:
         title: API Error
         status: 400
         detail: The request is invalid or contains invalid parameters.
-  headers:
-    X-Request-Id:
-      description: The unique identifier for the request
-      schema:
-        type: string
+    GrantAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+          description: 'Address line 1 (e.g. street, PO Box, or company name). Maximum length: 255 characters.'
+        line2:
+          type: string
+          description: 'Address line 2 (e.g. apartment, suite, unit, or building). Maximum length: 255 characters.'
+        city:
+          type: string
+          description: 'City, district, suburb, town, or village.. Maximum length: 255 characters.'
+        state:
+          type: string
+          description: 'State, county, province, or region. Maximum length: 255 characters.'
+        postalCode:
+          type: string
+          description: 'ZIP or postal code. Maximum length: 255 characters.'
   examples:
     UnintegratedGrantOutput:
       summary: Simple unintegrated grant output
@@ -376,6 +371,11 @@ components:
         createdAt: '2021-08-10 15:00:00.000'
         updatedAt: '2021-08-11 15:34:00.000'
         amount: 15000
+  headers:
+    X-Request-Id:
+      description: The unique identifier for the request
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http

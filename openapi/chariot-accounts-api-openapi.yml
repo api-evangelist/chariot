@@ -69,16 +69,11 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    Currency:
-      type: object
-      description: Currency information.
-      required:
-      - currencyCode
-      properties:
-        currencyCode:
-          type: string
-          description: ISO 4217 currency code
-          example: USD
+    AccountType:
+      type: string
+      description: Type of deposit account
+      enum:
+      - CHECKING
     Page:
       type: object
       description: Pagination metadata for list responses.
@@ -89,11 +84,105 @@ components:
         totalElements:
           type: integer
           description: Total number of elements across all pages
-    AccountCategory:
+    BalanceType:
       type: string
-      description: Category of account
+      description: Type of balance
       enum:
-      - DEPOSIT_ACCOUNT
+      - ASSET
+    ListAccountsResponse:
+      type: object
+      description: Paginated list of deposit accounts.
+      required:
+      - accounts
+      properties:
+        organizationId:
+          type: string
+          format: uuid
+          description: The organization that owns the accounts. Equivalent to the customerId returned by GET /customers/current.
+        page:
+          $ref: '#/components/schemas/Page'
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepositAccount'
+    ProblemDetails:
+      type: object
+      description: Error response following RFC 7807 Problem Details for HTTP APIs.
+      required:
+      - type
+      - title
+      - status
+      properties:
+        type:
+          type: string
+          description: A URI reference that identifies the problem type
+          example: about:blank
+        title:
+          type: string
+          description: A short human-readable summary of the problem type
+          example: Bad Request
+        status:
+          type: integer
+          description: The HTTP status code
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem
+          example: The startTime parameter must be before endTime
+        instance:
+          type: string
+          description: A URI reference that identifies the specific occurrence of the problem
+    DepositAccountDetails:
+      description: Detailed deposit account information including balances.
+      allOf:
+      - $ref: '#/components/schemas/DepositAccount'
+      - type: object
+        required:
+        - currentBalance
+        - availableBalance
+        - balanceType
+        - routingTransitNumber
+        properties:
+          currentBalance:
+            type: number
+            format: double
+            description: Current balance of the account
+          availableBalance:
+            type: number
+            format: double
+            description: Available balance of the account
+          balanceAsOf:
+            type: string
+            format: date-time
+            description: Timestamp of when the balance was calculated
+          lineOfBusiness:
+            type: string
+            description: Line of business for the account
+          routingTransitNumber:
+            type: string
+            description: Routing transit number (RTN) for the account
+          balanceType:
+            $ref: '#/components/schemas/BalanceType'
+          interestRate:
+            type: number
+            format: double
+            description: Interest rate for the account
+          transferIn:
+            type: boolean
+            description: Whether the account supports incoming transfers
+          transferOut:
+            type: boolean
+            description: Whether the account supports outgoing transfers
+    Currency:
+      type: object
+      description: Currency information.
+      required:
+      - currencyCode
+      properties:
+        currencyCode:
+          type: string
+          description: ISO 4217 currency code
+          example: USD
     DepositAccount:
       type: object
       description: A deposit (bank) account.
@@ -145,11 +234,6 @@ components:
           type: string
           format: date
           description: Date the account was closed (YYYY-MM-DD). Present only for closed accounts.
-    BalanceType:
-      type: string
-      description: Type of balance
-      enum:
-      - ASSET
     AccountStatus:
       type: string
       description: Status of the account
@@ -162,104 +246,20 @@ components:
       - PENDINGCLOSE
       - PENDINGOPEN
       - RESTRICTED
-    AccountType:
+    AccountCategory:
       type: string
-      description: Type of deposit account
+      description: Category of account
       enum:
-      - CHECKING
-    ListAccountsResponse:
-      type: object
-      description: Paginated list of deposit accounts.
-      required:
-      - accounts
-      properties:
-        organizationId:
-          type: string
-          format: uuid
-          description: The organization that owns the accounts. Equivalent to the customerId returned by GET /customers/current.
-        page:
-          $ref: '#/components/schemas/Page'
-        accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/DepositAccount'
-    DepositAccountDetails:
-      description: Detailed deposit account information including balances.
-      allOf:
-      - $ref: '#/components/schemas/DepositAccount'
-      - type: object
-        required:
-        - currentBalance
-        - availableBalance
-        - balanceType
-        - routingTransitNumber
-        properties:
-          currentBalance:
-            type: number
-            format: double
-            description: Current balance of the account
-          availableBalance:
-            type: number
-            format: double
-            description: Available balance of the account
-          balanceAsOf:
-            type: string
-            format: date-time
-            description: Timestamp of when the balance was calculated
-          lineOfBusiness:
-            type: string
-            description: Line of business for the account
-          routingTransitNumber:
-            type: string
-            description: Routing transit number (RTN) for the account
-          balanceType:
-            $ref: '#/components/schemas/BalanceType'
-          interestRate:
-            type: number
-            format: double
-            description: Interest rate for the account
-          transferIn:
-            type: boolean
-            description: Whether the account supports incoming transfers
-          transferOut:
-            type: boolean
-            description: Whether the account supports outgoing transfers
-    ProblemDetails:
-      type: object
-      description: Error response following RFC 7807 Problem Details for HTTP APIs.
-      required:
-      - type
-      - title
-      - status
-      properties:
-        type:
-          type: string
-          description: A URI reference that identifies the problem type
-          example: about:blank
-        title:
-          type: string
-          description: A short human-readable summary of the problem type
-          example: Bad Request
-        status:
-          type: integer
-          description: The HTTP status code
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem
-          example: The startTime parameter must be before endTime
-        instance:
-          type: string
-          description: A URI reference that identifies the specific occurrence of the problem
+      - DEPOSIT_ACCOUNT
   responses:
-    NotFound:
-      description: Resource not found
+    Forbidden:
+      description: Insufficient permissions or IP not whitelisted
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
-    Forbidden:
-      description: Insufficient permissions or IP not whitelisted
+    NotFound:
+      description: Resource not found
       content:
         application/problem+json:
           schema:
@@ -283,19 +283,19 @@ components:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
   parameters:
-    AccountId:
-      name: id
-      in: path
-      required: true
-      description: Unique identifier for the account
-      schema:
-        type: string
-        format: uuid
     PageKey:
       name: pageKey
       in: query
       required: false
       description: Cursor token for pagination. Pass the `nextPageKey` value from a previous response.
+      schema:
+        type: string
+        format: uuid
+    AccountId:
+      name: id
+      in: path
+      required: true
+      description: Unique identifier for the account
       schema:
         type: string
         format: uuid

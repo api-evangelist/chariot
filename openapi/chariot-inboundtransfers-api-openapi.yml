@@ -241,8 +241,8 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
-    NotFoundError:
-      description: Resource Not Found
+    AuthenticationError:
+      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
       headers:
         X-Request-Id:
           $ref: '#/components/headers/X-Request-Id'
@@ -251,12 +251,12 @@ components:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
           examples:
-            NotFound:
+            Unauthorized:
               value:
                 type: about:blank
                 title: API Error
-                status: 404
-                detail: The requested resource was not found.
+                status: 401
+                detail: Authentication credentials were missing or invalid.
     ConflictError:
       description: Resource Conflicts
       headers:
@@ -289,8 +289,25 @@ components:
                 title: API Error
                 status: 403
                 detail: You do not have permission to access this resource.
-    AuthenticationError:
-      description: Unauthorized. The request is missing the security (OAuth2 Bearer token) requirements and the server is unable to verify the identify of the caller.
+    ListInboundTransfersResponse:
+      description: The response for InboundTransfers.list
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              results:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InboundTransfer'
+              nextPageToken:
+                type: string
+                description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
+    NotFoundError:
+      description: Resource Not Found
       headers:
         X-Request-Id:
           $ref: '#/components/headers/X-Request-Id'
@@ -299,12 +316,12 @@ components:
           schema:
             $ref: '#/components/schemas/ProblemDetails'
           examples:
-            Unauthorized:
+            NotFound:
               value:
                 type: about:blank
                 title: API Error
-                status: 401
-                detail: Authentication credentials were missing or invalid.
+                status: 404
+                detail: The requested resource was not found.
     PreconditionFailedError:
       description: Precondition Failed
       headers:
@@ -353,54 +370,7 @@ components:
                 title: API Error
                 status: 500
                 detail: The server encountered an error processing your request.
-    ListInboundTransfersResponse:
-      description: The response for InboundTransfers.list
-      headers:
-        X-Request-Id:
-          $ref: '#/components/headers/X-Request-Id'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              results:
-                type: array
-                items:
-                  $ref: '#/components/schemas/InboundTransfer'
-              nextPageToken:
-                type: string
-                description: "A cursor token to use to retrieve the next page of results by making another API call\n to the same endpoint with the same parameters (only changing the pageToken). If\n specified, then more results exist on the server that were not returned, otherwise\n no more results exist on the server."
   schemas:
-    ProblemDetails:
-      type: object
-      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
-      required:
-      - type
-      - title
-      - status
-      - detail
-      properties:
-        type:
-          type: string
-          description: A URI reference identifying the problem type.
-          example: about:blank
-        title:
-          type: string
-          description: A short, human-readable summary of the problem type.
-          example: API Error
-        status:
-          type: integer
-          description: The HTTP status code for this error.
-          example: 400
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence.
-          example: The request is invalid or contains invalid parameters.
-      example:
-        type: about:blank
-        title: API Error
-        status: 400
-        detail: The request is invalid or contains invalid parameters.
     InboundTransfer:
       type: object
       description: An inbound transfer represents a transfer of funds from an external bank account to a financial account.
@@ -454,17 +424,47 @@ components:
           description: The date and time the inbound transfer was last updated
           example: '2020-01-31T23:00:00Z'
           readOnly: true
+    ProblemDetails:
+      type: object
+      description: RFC 7807 problem-details error (media type application/problem+json). The `status` field is an integer HTTP status code.
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type.
+          example: about:blank
+        title:
+          type: string
+          description: A short, human-readable summary of the problem type.
+          example: API Error
+        status:
+          type: integer
+          description: The HTTP status code for this error.
+          example: 400
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence.
+          example: The request is invalid or contains invalid parameters.
+      example:
+        type: about:blank
+        title: API Error
+        status: 400
+        detail: The request is invalid or contains invalid parameters.
   headers:
-    X-Request-Id:
-      description: The unique identifier for the request
-      schema:
-        type: string
     Location:
       description: The URI of the created object
       schema:
         type: string
     Idempotency-Key:
       description: Idempotency key for the request
+      schema:
+        type: string
+    X-Request-Id:
+      description: The unique identifier for the request
       schema:
         type: string
   requestBodies:
