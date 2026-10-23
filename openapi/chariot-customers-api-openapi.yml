@@ -242,3 +242,9 @@ components:
           scopes:
             read:bank_accounts: Read access to bank account data
             sync:connected_accounts: Sync access to connected account data
+x-provenance:
+  method: harvested
+  publisher: Chariot
+  source: https://docs.givechariot.com/openapi/fdx-api-reference-2.yaml
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
